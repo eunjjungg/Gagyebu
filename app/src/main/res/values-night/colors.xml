@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="test">#000000</color>
+
+    <!--Bar Chart View-->
+    <color name="barChartBar">#3F3F3F</color>
+    <color name="barChartText">#FFFFFF</color>
+
+    <!--Box Report View-->
+    <color name="boxBasic">#3F3F3F</color>
+    <color name="boxEmphasis">#787878</color>
+    <color name="boxText">#FFFFFF</color>
+    <color name="boxDividingLine">#999999</color>
+
+    <!--Pie Chart View-->
+    <color name="pieChartBackground">#252525</color>
+    <color name="pieChartText">#FFFFFF</color>
+    <color name="pieChartDividingLine">#999999</color>
+    <color name="pieChart0">#4D4D4D</color>
+    <color name="pieChart1">#818181</color>
+    <color name="pieChart2">#ABABAB</color>
+    <color name="pieChart3">#C9C9C9</color>
+    <color name="pieChart4">#FCFCFC</color>
 </resources>

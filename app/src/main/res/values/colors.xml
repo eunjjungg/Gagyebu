@@ -8,4 +8,25 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="test">#FF7A7A</color>
+
+    <!--Bar Chart View-->
+    <color name="barChartBar">#EFF4EB</color>
+    <color name="barChartText">#000000</color>
+
+    <!--Box Report View-->
+    <color name="boxBasic">#EFF4EB</color>
+    <color name="boxEmphasis">#C6CAC1</color>
+    <color name="boxText">#000000</color>
+    <color name="boxDividingLine">#E0E0E0</color>
+
+    <!--Pie Chart View-->
+    <color name="pieChartBackground">#EFF4EB</color>
+    <color name="pieChartText">#000000</color>
+    <color name="pieChartDividingLine">#E0E0E0</color>
+    <color name="pieChart0">#4A4E46</color>
+    <color name="pieChart1">#696D66</color>
+    <color name="pieChart2">#7E827A</color>
+    <color name="pieChart3">#A8ACA4</color>
+    <color name="pieChart4">#C6CAC1</color>
+
 </resources>
