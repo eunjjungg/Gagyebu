@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.App
+import com.intern.gagyebu.FilterSelectDialog
 import com.intern.gagyebu.YearMonthPickerDialog
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.room.AppDatabase
@@ -38,6 +39,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d("YearMonthPickerTest", year.toString() + month.toString())
             }
             datePicker.show(supportFragmentManager, "DatePicker")
+        }
+
+        binding.spend.setOnClickListener{
+            val picker = FilterSelectDialog()
+            picker.show(supportFragmentManager, "DatePicker")
         }
 
         binding.recyclerview.layoutManager =
