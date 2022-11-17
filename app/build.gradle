@@ -7,7 +7,7 @@ plugins {
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/jun/gagyebu/debug.keystore')
+            storeFile file('../../gagyebu/debug.keystore')
             keyAlias 'AndroidDebugKey'
         }
     }
