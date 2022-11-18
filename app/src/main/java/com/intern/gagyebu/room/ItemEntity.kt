@@ -15,8 +15,3 @@ data class ItemEntity (
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }
-
-inline class IsOrder(val type: Int)
-val sortDay = IsOrder(0)
-val sortInSpend = IsOrder(1)
-val sortInIncome = IsOrder(2)

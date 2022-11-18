@@ -1,6 +1,9 @@
 package com.intern.gagyebu.main
 
+import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -18,6 +21,9 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
     private var _isFiltering = MutableStateFlow<String>("none")
     private var _isOrder = MutableStateFlow<String>("none")
 
+    private lateinit var _itemflow: MutableLiveData<List<ItemEntity>>
+    val itemFlow01: LiveData<List<ItemEntity>> = _itemflow
+
     val incomeValue: LiveData<Int> = _date.flatMapLatest {
         itemRepository.totalIncome(it)
     }.asLiveData()
@@ -26,15 +32,14 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
         itemRepository.totalSpend(it)
     }.asLiveData()
 
-
     val itemFlow: LiveData<List<ItemEntity>> = _date.flatMapLatest {
+        Log.d("val", _isFiltering.value)
         if(_isFiltering.value == "none" && _isOrder.value == "none"){
             itemRepository.itemFlow(_date.value)
         }else{
             itemRepository.orderItem(_date.value, _isFiltering.value, _isOrder.value)
         }
     }.asLiveData()
-
 
     fun setDate(value: Array<Int>) {
         _date.value = value
@@ -47,6 +52,4 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
     fun setOrder(value: String) {
         _isOrder.value = value
     }
-
-
 }

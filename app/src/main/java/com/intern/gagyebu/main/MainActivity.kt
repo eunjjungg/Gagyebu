@@ -3,18 +3,16 @@ package com.intern.gagyebu.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.App
-import com.intern.gagyebu.FilterSelectDialog
+import com.intern.gagyebu.OptionDialogListener
+import com.intern.gagyebu.OptionSelectDialog
 import com.intern.gagyebu.YearMonthPickerDialog
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
-import java.util.Calendar
-import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -32,10 +30,12 @@ class MainActivity : AppCompatActivity() {
             binding.id.text = "$newValue" + "월 잔고"
         }*/
 
+        //해당 년/월의 수입 총합 observing
         viewModel.incomeValue.observe(this) {
             binding.income.text = it.toString()
         }
 
+        //해당 년/월의 자출 총합 observing
         viewModel.spendValue.observe(this) {
             binding.spend.text = it.toString()
         }
@@ -44,9 +44,8 @@ class MainActivity : AppCompatActivity() {
         binding.id.setOnClickListener {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
-                Log.d("YearMonthPickerTest", year.toString() + month.toString())
                 //monthValue = month
-                binding.id.text = "$year"+"년"+"$month"+"월"+"잔고"
+                binding.id.text = "$year" + "년" + "$month" + "월" + "잔고"
                 viewModel.setDate(arrayOf(year, month))
             }
             datePicker.show(supportFragmentManager, "DatePicker")
@@ -54,8 +53,15 @@ class MainActivity : AppCompatActivity() {
 
         //정렬 다이얼로그
         binding.spend.setOnClickListener {
-            val picker = FilterSelectDialog()
-            picker.show(supportFragmentManager, "DatePicker")
+            val optionPicker = OptionSelectDialog()
+            optionPicker.setListener(object : OptionDialogListener{
+                override fun option(filter: String, order: String) {
+                    Log.d("log", filter+order)
+                    viewModel.setFilter(filter)
+                }
+            })
+
+            optionPicker.show(supportFragmentManager, "OptionPicker")
         }
 
         //recyclerView init

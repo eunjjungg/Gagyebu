@@ -7,11 +7,9 @@ class ItemRepo constructor(
 private val ItemDao: ItemDao
 ) {
 
-
     fun itemFlow(date: Array<Int>): Flow<List<ItemEntity>>{
         return ItemDao.sortDay(date[0], date[1])
     }
-
 
     fun totalIncome(date: Array<Int>): Flow<Int>{
         return ItemDao.incomeTotal(date[0], date[1])
