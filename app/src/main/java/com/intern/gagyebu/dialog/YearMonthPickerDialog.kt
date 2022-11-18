@@ -1,4 +1,4 @@
-package com.intern.gagyebu
+package com.intern.gagyebu.dialog
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog.OnDateSetListener

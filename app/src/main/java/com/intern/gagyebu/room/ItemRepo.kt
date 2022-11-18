@@ -1,40 +1,27 @@
 package com.intern.gagyebu.room
 
-import android.util.Log
+import com.intern.gagyebu.ItemGetOption
 import kotlinx.coroutines.flow.Flow
 
 class ItemRepo constructor(
 private val ItemDao: ItemDao
 ) {
 
-
-    fun itemFlow(month : Int): Flow<List<ItemEntity>>{
-        return ItemDao.sortDay(month)
-    }
-        //get() = ItemDao.sortDay(month)
-
-    fun totalIncome(month : Int): Flow<Int>{
-        return ItemDao.incomeTotal(month)
+    fun totalIncome(data: ItemGetOption): Flow<Int>{
+        return ItemDao.incomeTotal(data.year, data.month)
     }
 
-    fun totalSpend(month : Int): Flow<Int>{
-        return ItemDao.spendTotal(month)
+    fun totalSpend(data: ItemGetOption): Flow<Int>{
+        return ItemDao.spendTotal(data.year, data.month)
     }
 
-
-    fun orderItem(isOrder: IsOrder): Flow<List<ItemEntity>> {
-
-        val item = when(isOrder){
-            sortInSpend -> {
-                Log.d("item", "spend")
-                ItemDao.sortInSpend(10, "amount")
-            }
-
-            sortInIncome -> {
-                Log.d("item", "income")
-                ItemDao.sortInIncome(10, "amount")
-            }
-            else -> {ItemDao.sortDay(10)}
+    fun itemGet(data: ItemGetOption): Flow<List<ItemEntity>> {
+        val item = if (data.filter == "all"){
+            ItemDao.sortDay(data.year, data.month, data.order)
+        } else if (data.filter == "spend") {
+            ItemDao.sortInSpend(data.year, data.month, data.order)
+        } else {
+            ItemDao.sortInIncome(data.year, data.month, data.order)
         }
         return item
     }
