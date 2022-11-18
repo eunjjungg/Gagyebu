@@ -29,6 +29,14 @@ interface ItemDao{
             "CASE :order WHEN 'amount' THEN amount END DESC")
     fun sortInIncome(month: Int, order: String) : Flow<List<ItemEntity>>
 
+    //해당월 수입 전체
+    @Query("SELECT SUM(amount) FROM ItemEntity WHERE category = '수입' AND month = :month")
+    fun incomeTotal(month: Int) : Flow<Int>
+
+    //해당월 지출 전체
+    @Query("SELECT SUM(amount) FROM ItemEntity WHERE NOT category = '수입' AND month = :month")
+    fun spendTotal(month: Int) : Flow<Int>
+
     @Query("DELETE FROM ItemEntity WHERE id = :ID")
     fun deleteItem(ID: Int)
 }

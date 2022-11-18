@@ -10,6 +10,14 @@ private val ItemDao: ItemDao
     val itemFlow: Flow<List<ItemEntity>>
         get() = ItemDao.sortDay(10)
 
+    fun totalIncome(month : Int): Flow<Int>{
+        return ItemDao.incomeTotal(month)
+    }
+
+    fun totalSpend(month : Int): Flow<Int>{
+        return ItemDao.spendTotal(month)
+    }
+
 
     fun orderItem(isOrder: IsOrder): Flow<List<ItemEntity>> {
 

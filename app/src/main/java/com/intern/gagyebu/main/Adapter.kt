@@ -1,5 +1,6 @@
 package com.intern.gagyebu.main
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
 import com.intern.gagyebu.room.ItemEntity
 
-class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()){
+class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val plant = getItem(position)
@@ -18,7 +19,9 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PlantViewHolder(
             RecyclerviewItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     class PlantViewHolder(
@@ -28,6 +31,14 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
         fun bind(itemList: ItemEntity) {
             binding.apply {
                 item = itemList
+                if (itemList.category == "수입") {
+                    color.setBackgroundColor(Color.BLUE)
+                } else {
+                    color.setBackgroundColor(Color.RED)
+                }
+
+                date.text = "${itemList.year}" + "${itemList.month}" + "${itemList.day}"
+
                 executePendingBindings()
             }
         }
