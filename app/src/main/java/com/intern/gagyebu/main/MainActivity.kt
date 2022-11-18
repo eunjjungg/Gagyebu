@@ -3,6 +3,7 @@ package com.intern.gagyebu.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,8 @@ import com.intern.gagyebu.YearMonthPickerDialog
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
+import java.util.Calendar
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -25,6 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.initValue()
 
+        var monthValue: Int by Delegates.observable(Calendar.YEAR) { property, oldValue, newValue ->
+            viewModel.setDate(newValue)
+            binding.id.text = "$newValue" + "월 잔고"
+        }
+
         viewModel.incomeValue.observe(this) {
             binding.income.text = it.toString()
         }
@@ -33,19 +41,23 @@ class MainActivity : AppCompatActivity() {
             binding.spend.text = it.toString()
         }
 
-        binding.id.setOnClickListener{
+        //달력 다이얼로그
+        binding.id.setOnClickListener {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
                 Log.d("YearMonthPickerTest", year.toString() + month.toString())
+                monthValue = month
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }
 
-        binding.spend.setOnClickListener{
+        //정렬 다이얼로그
+        binding.spend.setOnClickListener {
             val picker = FilterSelectDialog()
             picker.show(supportFragmentManager, "DatePicker")
         }
 
+        //recyclerView init
         binding.recyclerview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val adapter = Adapter()
@@ -53,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         subscribeUi(adapter, viewModel)
     }
 
+    //adapter diff observe 등록
     private fun subscribeUi(adapter: Adapter, viewModel: MainViewModel) {
         viewModel.itemFlow.observe(this) { value ->
             adapter.submitList(value)

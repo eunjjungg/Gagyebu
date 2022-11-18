@@ -7,8 +7,11 @@ class ItemRepo constructor(
 private val ItemDao: ItemDao
 ) {
 
-    val itemFlow: Flow<List<ItemEntity>>
-        get() = ItemDao.sortDay(10)
+
+    fun itemFlow(month : Int): Flow<List<ItemEntity>>{
+        return ItemDao.sortDay(month)
+    }
+        //get() = ItemDao.sortDay(month)
 
     fun totalIncome(month : Int): Flow<Int>{
         return ItemDao.incomeTotal(month)
