@@ -33,11 +33,11 @@ class OptionSelectDialog : DialogFragment() {
 
         binding.filterGroup.setOnCheckedChangeListener { group, checkedId ->
             filter = when (checkedId) {
-                binding.filterIncome.id -> "none"
+                binding.filterIncome.id -> "income"
 
-                binding.filterSpend.id ->  "income"
+                binding.filterSpend.id ->  "spend"
 
-                else -> "none"
+                else -> "all"
             }
         }
 
@@ -45,7 +45,7 @@ class OptionSelectDialog : DialogFragment() {
             order = when (checkedId) {
                 binding.orderAmount.id -> "amount"
 
-                else -> "none"
+                else -> "day"
             }
         }
 

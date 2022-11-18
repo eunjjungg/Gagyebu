@@ -6,13 +6,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.intern.gagyebu.App
-import com.intern.gagyebu.OptionDialogListener
-import com.intern.gagyebu.OptionSelectDialog
-import com.intern.gagyebu.YearMonthPickerDialog
+import com.intern.gagyebu.*
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -23,6 +21,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
+
+        val calendar: Calendar = Calendar.getInstance()
+
+        val itemGetOption = ItemGetOption(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1,"all", "date")
+        viewModel.setData(itemGetOption)
 
         /*
         var monthValue: Int by Delegates.observable(Calendar.YEAR) { property, oldValue, newValue ->
@@ -46,18 +49,25 @@ class MainActivity : AppCompatActivity() {
             datePicker.setListener { _, year, month, _ ->
                 //monthValue = month
                 binding.id.text = "$year" + "년" + "$month" + "월" + "잔고"
-                viewModel.setDate(arrayOf(year, month))
+
+                itemGetOption.year = year
+                itemGetOption.month = month
+
+                viewModel.setData(itemGetOption)
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }
 
-        //정렬 다이얼로그
+        //옵션 다이얼로그
         binding.spend.setOnClickListener {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener{
                 override fun option(filter: String, order: String) {
                     Log.d("log", filter+order)
-                    viewModel.setFilter(filter)
+                    //viewModel.setFilter(filter)
+                    itemGetOption.filter = filter
+                    itemGetOption.order = order
+                    viewModel.setData(itemGetOption)
                 }
             })
 
