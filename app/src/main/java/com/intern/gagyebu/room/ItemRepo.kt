@@ -8,34 +8,30 @@ private val ItemDao: ItemDao
 ) {
 
 
-    fun itemFlow(month : Int): Flow<List<ItemEntity>>{
-        return ItemDao.sortDay(month)
-    }
-        //get() = ItemDao.sortDay(month)
-
-    fun totalIncome(month : Int): Flow<Int>{
-        return ItemDao.incomeTotal(month)
-    }
-
-    fun totalSpend(month : Int): Flow<Int>{
-        return ItemDao.spendTotal(month)
+    fun itemFlow(date: Array<Int>): Flow<List<ItemEntity>>{
+        return ItemDao.sortDay(date[0], date[1])
     }
 
 
-    fun orderItem(isOrder: IsOrder): Flow<List<ItemEntity>> {
+    fun totalIncome(date: Array<Int>): Flow<Int>{
+        return ItemDao.incomeTotal(date[0], date[1])
+    }
 
-        val item = when(isOrder){
-            sortInSpend -> {
-                Log.d("item", "spend")
-                ItemDao.sortInSpend(10, "amount")
-            }
+    fun totalSpend(date: Array<Int>): Flow<Int>{
+        return ItemDao.spendTotal(date[0], date[1])
+    }
 
-            sortInIncome -> {
-                Log.d("item", "income")
-                ItemDao.sortInIncome(10, "amount")
-            }
-            else -> {ItemDao.sortDay(10)}
+
+    fun orderItem(date: Array<Int>,filter:String, sort:String): Flow<List<ItemEntity>> {
+
+        lateinit var item: Flow<List<ItemEntity>>
+
+        item = if (filter == "income"){
+            ItemDao.sortInIncome(date[0], date[1], sort)
+        }else{
+            ItemDao.sortInSpend(date[0], date[1], sort)
         }
+
         return item
     }
 }

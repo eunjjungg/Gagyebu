@@ -1,56 +1,52 @@
 package com.intern.gagyebu.main
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import androidx.lifecycle.asLiveData
-import com.intern.gagyebu.room.IsOrder
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
-import com.intern.gagyebu.room.sortDay
+import java.util.Calendar
 
 class MainViewModel internal constructor(private val itemRepository: ItemRepo):
     ViewModel() {
+    private val calendar: Calendar = Calendar.getInstance()
 
-    private val itemListData = MutableStateFlow<IsOrder>(sortDay)
-    private val selectMonth = MutableStateFlow<Int>(10)
+    //test
+    private var _date = MutableStateFlow<Array<Int>>(arrayOf(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1))
+    private var _isFiltering = MutableStateFlow<String>("none")
+    private var _isOrder = MutableStateFlow<String>("none")
 
-    val incomeValue: LiveData<Int> = selectMonth.flatMapLatest {
+    val incomeValue: LiveData<Int> = _date.flatMapLatest {
         itemRepository.totalIncome(it)
     }.asLiveData()
 
-    val spendValue: LiveData<Int> = selectMonth.flatMapLatest {
+    val spendValue: LiveData<Int> = _date.flatMapLatest {
         itemRepository.totalSpend(it)
     }.asLiveData()
 
-    val itemFlow: LiveData<List<ItemEntity>> = selectMonth.flatMapLatest {
-        itemRepository.itemFlow(it)
-    }.asLiveData()
 
-    /*
-    val itemFlow: LiveData<List<ItemEntity>> = itemListData.flatMapLatest { isorder ->
-        if(isorder == sortDay) {
-            itemRepository.itemFlow
+    val itemFlow: LiveData<List<ItemEntity>> = _date.flatMapLatest {
+        if(_isFiltering.value == "none" && _isOrder.value == "none"){
+            itemRepository.itemFlow(_date.value)
         }else{
-            itemRepository.orderItem(isorder)
+            itemRepository.orderItem(_date.value, _isFiltering.value, _isOrder.value)
         }
     }.asLiveData()
 
-    fun setOrder(value: Int) {
-        itemListData.value = IsOrder(value)
+
+    fun setDate(value: Array<Int>) {
+        _date.value = value
     }
 
-     */
-
-    fun setDate(value: Int) {
-        selectMonth.value = value
+    fun setFilter(value: String) {
+        _isFiltering.value = value
     }
 
-    fun initValue(){
-        itemListData.value = IsOrder(0)
+    fun setOrder(value: String) {
+        _isOrder.value = value
     }
+
 
 }

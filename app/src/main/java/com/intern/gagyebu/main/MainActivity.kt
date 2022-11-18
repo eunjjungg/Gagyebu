@@ -26,12 +26,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        viewModel.initValue()
-
+        /*
         var monthValue: Int by Delegates.observable(Calendar.YEAR) { property, oldValue, newValue ->
             viewModel.setDate(newValue)
             binding.id.text = "$newValue" + "월 잔고"
-        }
+        }*/
 
         viewModel.incomeValue.observe(this) {
             binding.income.text = it.toString()
@@ -46,7 +45,9 @@ class MainActivity : AppCompatActivity() {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
                 Log.d("YearMonthPickerTest", year.toString() + month.toString())
-                monthValue = month
+                //monthValue = month
+                binding.id.text = "$year"+"년"+"$month"+"월"+"잔고"
+                viewModel.setDate(arrayOf(year, month))
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }
