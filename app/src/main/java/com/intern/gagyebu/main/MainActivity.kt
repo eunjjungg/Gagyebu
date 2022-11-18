@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.*
 import com.intern.gagyebu.databinding.ActivityMainBinding
+import com.intern.gagyebu.dialog.OptionDialogListener
+import com.intern.gagyebu.dialog.OptionSelectDialog
+import com.intern.gagyebu.dialog.YearMonthPickerDialog
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
 import java.util.*
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         //옵션 다이얼로그
         binding.spend.setOnClickListener {
             val optionPicker = OptionSelectDialog()
-            optionPicker.setListener(object : OptionDialogListener{
+            optionPicker.setListener(object : OptionDialogListener {
                 override fun option(filter: String, order: String) {
                     Log.d("log", filter+order)
                     //viewModel.setFilter(filter)
