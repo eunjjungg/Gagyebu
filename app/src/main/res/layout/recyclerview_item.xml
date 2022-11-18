@@ -14,7 +14,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_margin="5dp"
         app:cardBackgroundColor="#f7f2f3"
         app:cardCornerRadius="10dp"
@@ -22,32 +22,38 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/date"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:textSize="20dp" />
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/date"
-                android:layout_alignParentStart="true"
-                android:text="@{item.title}"
-                android:textSize="35dp" />
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2022-02-02"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{item.title, default=제목}"
+                    android:textSize="35dp" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/color"
                 android:layout_alignParentEnd="true"
-                android:text="@{Integer.toString(item.amount)}"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/color"
+                android:text="@{Integer.toString(item.amount), default=123,456}"
                 android:textSize="35dp" />
 
             <ImageView
