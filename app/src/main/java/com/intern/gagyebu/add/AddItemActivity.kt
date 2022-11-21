@@ -2,11 +2,13 @@ package com.intern.gagyebu.add
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.DatePickerBindingAdapter
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
@@ -22,7 +24,7 @@ class AddItemActivity : AppCompatActivity(){
 
     private val viewModel: AddViewModel by viewModels()
     private val database = AppDatabase.getDatabase(App.context())
-    private val cal = Calendar.getInstance()
+    private val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -32,6 +34,15 @@ class AddItemActivity : AppCompatActivity(){
 
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
+        }
+
+        viewModel.date.observe(this){
+            binding.date.text = it
+        }
+
+        viewModel.enableSave.observe(this){
+            Log.d("clickable", it.toString())
+            binding.save.isEnabled = it
         }
 
         binding.spinner.adapter = ArrayAdapter<Category>(
@@ -45,12 +56,9 @@ class AddItemActivity : AppCompatActivity(){
         is AddViewModel.Event.InputDate -> {
             val datePickerDialog = DatePickerDialog(
                 this, { _, year, month, day ->
-                    viewModel.dateString.set("$year/${month+1}/$day")
-                    viewModel.inputYear.set(year)
-                    viewModel.inputMonth.set(month+1)
-                    viewModel.inputDay.set(day)
+                    viewModel._date.value = "$year-${month+1}-$day"
                 },
-                cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)
             )
             datePickerDialog.show()
         }

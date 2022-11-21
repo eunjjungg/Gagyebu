@@ -1,5 +1,6 @@
 package com.intern.gagyebu.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.*
+import com.intern.gagyebu.add.AddItemActivity
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
@@ -44,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         //해당 년/월의 자출 총합 observing
         viewModel.spendValue.observe(this) {
             binding.spend.text = it.toString()
+        }
+
+        binding.save.setOnClickListener{
+            startActivity(Intent(this,AddItemActivity::class.java))
         }
 
         //달력 다이얼로그

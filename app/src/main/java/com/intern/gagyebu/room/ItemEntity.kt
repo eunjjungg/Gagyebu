@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class ItemEntity (
+data class ItemEntity(
     var amount: Int,
     var title: String,
     var year: Int,

@@ -2,29 +2,35 @@ package com.intern.gagyebu.add
 
 import android.view.View
 import android.widget.AdapterView
+import androidx.databinding.InverseMethod
 import androidx.databinding.ObservableField
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.intern.gagyebu.room.ItemEntity
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class AddViewModel: ViewModel() {
 
-    var dateString = ObservableField<String>("date")
+    val _date = MutableLiveData<String>()
+    val _title = MutableLiveData<String>()
+    val _amount = MutableLiveData<String>()
 
-    var inputYear = ObservableField<Int>()
-    var inputMonth = ObservableField<Int>()
-    var inputDay = ObservableField<Int>()
+    val date: LiveData<String>
+        get() = _date
 
-    val inputAmount = ObservableField<String>()
-    val inputTitle = ObservableField<String>()
-
-    private val _category = ObservableField<String>()
+    val _category = ObservableField<String>()
 
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    val enableSave = combine(
+        _title.asFlow(),
+        _amount.asFlow(),
+        _date.asFlow()
+    ) { title, amount, date -> title.isNotBlank() && amount.isNotBlank() && date.isNotBlank()}.onStart { emit(false) }.asLiveData()
 
     fun inputDate(view: View) {
         event(Event.InputDate("date"))
@@ -38,22 +44,25 @@ class AddViewModel: ViewModel() {
 
     fun save(view: View) {
         try {
-            val amount = inputAmount.get()?.let { Integer.valueOf(it) }
-            val title = inputTitle.get()
-            val category = _category.get()
-            val year = inputYear.get()
-            val month = inputMonth.get()
-            val day = inputDay.get()
+            val amount = _amount.value?.let { Integer.parseInt(it) }
+            val title = _title.value
+            val date = _date.value?.split("-")
 
-            val item = ItemEntity(amount!!, title!!, year!!, month!!, day!!, category!!)
+            val year = Integer.parseInt(date!![0])
+            val month = Integer.parseInt(date[1])
+            val day = Integer.parseInt(date[2])
 
+
+            val item = ItemEntity(amount = amount!!, title = title!!, year = year, month = month, day = day, _category.toString())
             event(Event.Save(item))
-        }catch (e: NullPointerException){
+
+
+        } catch (e: NullPointerException) {
             event(Event.Error("입력을 확인해주세요"))
         }
     }
 
-    private fun event(event: Event){
+    private fun event(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)
         }
