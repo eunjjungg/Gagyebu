@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //옵션 다이얼로그
-        binding.spend.setOnClickListener {
+        binding.filter.setOnClickListener {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener {
                 override fun option(filter: String, order: String) {

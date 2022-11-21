@@ -22,8 +22,8 @@ class YearMonthPickerDialog : DialogFragment() {
         val builder = AlertDialog.Builder(activity)
         val binding = YearMonthPickerBinding.inflate(requireActivity().layoutInflater)
 
-        val monthPicker = binding.pickerMonth as NumberPicker
-        val yearPicker = binding.pickerYear as NumberPicker
+        val monthPicker = binding.pickerMonth
+        val yearPicker = binding.pickerYear
         binding.btnCancel.setOnClickListener {
             this@YearMonthPickerDialog.dialog?.cancel()
         }
