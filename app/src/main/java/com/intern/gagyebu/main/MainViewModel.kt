@@ -1,20 +1,25 @@
 package com.intern.gagyebu.main
 
-import android.util.Log
-import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.intern.gagyebu.ItemGetOption
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import kotlinx.coroutines.flow.*
+import java.util.*
 
 class MainViewModel internal constructor(private val itemRepository: ItemRepo):
     ViewModel() {
 
-    private var _queryData = MutableStateFlow<ItemGetOption>(ItemGetOption(0,0,"null", "null"))
-    private var _date = ObservableField<String>()
-    var date = ObservableField<String>()
-    get() = _date
+    private val calendar: Calendar = Calendar.getInstance()
+
+    private val itemGetOption = ItemGetOption(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH) + 1,
+        "all",
+        "date"
+    )
+
+    private var _queryData = MutableStateFlow<ItemGetOption>(itemGetOption)
 
     val incomeValue: LiveData<Int> = _queryData.flatMapLatest {
         itemRepository.totalIncome(it)
@@ -34,11 +39,11 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
         itemRepository.itemGet(it)
     }.asLiveData()
 
-    fun setData(data: ItemGetOption) {
-        _queryData.value = data.copy()
-        _date.set("${data.year}" + "년" + "${data.month}" + "월")
-        Log.d("gi", _date.get().toString())
+    fun changeData (year : Int, month:Int){
+        _queryData.value = itemGetOption.copy(year = year, month = month)
     }
-
+    fun changeOption (filter : String, order:String){
+        _queryData.value = itemGetOption.copy(filter = filter, order = order)
+    }
 
 }

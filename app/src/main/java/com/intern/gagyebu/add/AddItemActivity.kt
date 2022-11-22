@@ -2,7 +2,6 @@ package com.intern.gagyebu.add
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -12,34 +11,33 @@ import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.ActivityAddItemBinding
+import com.intern.gagyebu.main.MainActivity
 import com.intern.gagyebu.room.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-class AddItemActivity : AppCompatActivity(){
+class AddItemActivity : AppCompatActivity() {
 
-    private val viewModel: AddActivutyViewModel by viewModels()
+    private val viewModel: AddActivityViewModel by viewModels()
     private val database = AppDatabase.getDatabase(App.context())
     private val calendar = Calendar.getInstance()
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding =
             DataBindingUtil.setContentView<ActivityAddItemBinding>(this, R.layout.activity_add_item)
         binding.addViewModel = viewModel
 
+        binding.date.text = getString(R.string.show_date_full, MainActivity.YEAR, MainActivity.MONTH, MainActivity.DATE)
+        viewModel.selectDate(MainActivity.YEAR, MainActivity.MONTH, MainActivity.DATE)
+
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
         }
 
-        viewModel.date.observe(this){
-            binding.date.text = it
-        }
-
-        viewModel.enableSave.observe(this){
-            Log.d("clickable", it.toString())
+        viewModel.enableSave.observe(this) {
             binding.save.isEnabled = it
         }
 
@@ -48,25 +46,31 @@ class AddItemActivity : AppCompatActivity(){
             android.R.layout.simple_spinner_item,
             enumValues<Category>()
         )
-    }
 
-    private fun handleEvent(event: AddActivutyViewModel.Event) = when (event) {
-        is AddActivutyViewModel.Event.InputDate -> {
+        binding.date.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
-                this, { _, year, month, day ->
-                    viewModel._date.value = "$year-${month+1}-$day"
+                this,
+                { _, year, month, day ->
+                    viewModel.selectDate(year, month + 1, day)
+
+                    binding.date.text = getString(R.string.show_date_full, year, month+1, day)
                 },
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DATE)
             )
             datePickerDialog.show()
         }
-        is AddActivutyViewModel.Event.Save ->{
+    }
+
+    private fun handleEvent(event: AddActivityViewModel.Event) = when (event) {
+        is AddActivityViewModel.Event.Save -> {
             CoroutineScope(Dispatchers.IO).launch {
                 database.itemDao().saveItem(event.value)
             }
             finish()
         }
-        is AddActivutyViewModel.Event.Error ->{
+        is AddActivityViewModel.Event.Error -> {
             Toast.makeText(this, event.value, Toast.LENGTH_SHORT).show()
         }
     }
