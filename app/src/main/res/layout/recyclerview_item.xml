@@ -12,6 +12,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:padding="20dp"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -25,6 +26,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -42,11 +44,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{item.title, default=제목}"
-                    android:textSize="35dp" />
+                    android:textSize="30dp" />
             </LinearLayout>
 
 
             <TextView
+                android:layout_marginEnd="30dp"
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +57,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/color"
                 android:text="@{Integer.toString(item.amount), default=123,456}"
-                android:textSize="35dp" />
+                android:textSize="20dp" />
 
             <ImageView
                 android:id="@+id/color"

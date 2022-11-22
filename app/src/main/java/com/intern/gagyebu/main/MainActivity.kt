@@ -1,18 +1,26 @@
 package com.intern.gagyebu.main
 
+import android.app.DatePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.*
+import com.intern.gagyebu.add.AddActivutyViewModel
+import com.intern.gagyebu.add.AddItemActivity
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,40 +32,45 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
-
+        binding.mainViewModel = viewModel
         val calendar: Calendar = Calendar.getInstance()
 
-        val itemGetOption = ItemGetOption(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1,"all", "date")
+        val itemGetOption = ItemGetOption(
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH) + 1,
+            "all",
+            "date"
+        )
         viewModel.setData(itemGetOption)
 
-        /*
-        var monthValue: Int by Delegates.observable(Calendar.YEAR) { property, oldValue, newValue ->
-            viewModel.setDate(newValue)
-            binding.id.text = "$newValue" + "월 잔고"
-        }*/
-
-        //해당 년/월의 수입 총합 observing
+        //해당 년/월의 수입 observing
         viewModel.incomeValue.observe(this) {
-            binding.income.text = it.toString()
+            binding.income.text = it.toString() + " 원"
         }
 
-        //해당 년/월의 자출 총합 observing
+        //해당 년/월의 지출 observing
         viewModel.spendValue.observe(this) {
-            binding.spend.text = it.toString()
+            binding.spend.text = it.toString() + " 원"
+        }
+
+        //해당 년/월의 총합 observing
+        viewModel.totalValue.observe(this) {
+            binding.total.text = it.toString() + " 원"
+        }
+
+        binding.save.setOnClickListener {
+            startActivity(Intent(this, AddItemActivity::class.java))
         }
 
         //달력 다이얼로그
         binding.id.setOnClickListener {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
-                //monthValue = month
-                binding.id.text = "$year" + "년" + "$month" + "월" + "잔고"
-
                 itemGetOption.year = year
                 itemGetOption.month = month
-
                 viewModel.setData(itemGetOption)
             }
+
             datePicker.show(supportFragmentManager, "DatePicker")
         }
 
@@ -66,8 +79,6 @@ class MainActivity : AppCompatActivity() {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener {
                 override fun option(filter: String, order: String) {
-                    Log.d("log", filter+order)
-                    //viewModel.setFilter(filter)
                     itemGetOption.filter = filter
                     itemGetOption.order = order
                     viewModel.setData(itemGetOption)

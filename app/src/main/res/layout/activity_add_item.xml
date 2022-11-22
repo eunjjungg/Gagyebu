@@ -6,7 +6,7 @@
     <data>
         <variable
             name="addViewModel"
-            type="com.intern.gagyebu.add.AddViewModel" />
+            type="com.intern.gagyebu.add.AddActivutyViewModel" />
 
     </data>
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="@{addViewModel.dateString}"
+            android:text="@{addViewModel.date}"
             android:onClick="@{addViewModel::inputDate}"/>
 
         <EditText
@@ -31,7 +31,7 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="title"
-            android:text="@={addViewModel.inputTitle}"/>
+            android:text="@={addViewModel._title}"/>
 
         <EditText
             android:id="@+id/amount"
@@ -40,7 +40,7 @@
             android:ems="10"
             android:inputType="number"
             android:hint="amount"
-            android:text="@={addViewModel.inputAmount}"/>
+            android:text="@={addViewModel._amount}"/>
 
 
         <Spinner
@@ -50,6 +50,7 @@
             android:onItemSelected="@{addViewModel::onSelectItem}"/>
 
         <Button
+            android:enabled="false"
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

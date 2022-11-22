@@ -5,12 +5,12 @@ import android.content.Context
 
 class App : Application() {
 
-    init{
+    init {
         instance = this
     }
 
     companion object {
-        var instance: App? = null
+        private var instance: App? = null
         fun context() : Context {
             return instance!!.applicationContext
         }
