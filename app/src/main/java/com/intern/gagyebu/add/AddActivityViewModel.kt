@@ -11,10 +11,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class AddActivutyViewModel : ViewModel() {
+class AddActivityViewModel : ViewModel() {
 
-    private var _date = MutableLiveData<String>()
-    private val _category = ObservableField<String>()
+    private val category = ObservableField<String>()
 
     var title = MutableLiveData<String>()
     var amount = MutableLiveData<String>()
@@ -38,7 +37,7 @@ class AddActivutyViewModel : ViewModel() {
 
     fun onSelectItem(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         if (parent != null) {
-            _category.set("${parent.selectedItem}")
+            category.set("${parent.selectedItem}")
         }
     }
 
@@ -58,7 +57,7 @@ class AddActivutyViewModel : ViewModel() {
                 year = year,
                 month = month,
                 day = day,
-                _category.toString()
+                category = category.get()!!
             )
             event(Event.Save(item))
 

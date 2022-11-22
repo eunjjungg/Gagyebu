@@ -29,6 +29,10 @@ private val ItemDao: ItemDao
         return item
     }
 
+    fun itemDelete(id: Int){
+        ItemDao.deleteItem(id)
+    }
+
     private fun <T: Int?> Flow<T?>.filterNull(): Flow<T> = transform { value ->
         if (value != null){
             return@transform emit(value)

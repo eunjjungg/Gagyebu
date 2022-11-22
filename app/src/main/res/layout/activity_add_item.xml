@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="addViewModel"
-            type="com.intern.gagyebu.add.AddActivutyViewModel" />
+            type="com.intern.gagyebu.add.AddActivityViewModel" />
 
     </data>
 
@@ -27,33 +28,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="title"
-            android:text="@={addViewModel.title}"/>
+            android:inputType="textPersonName"
+            android:text="@={addViewModel.title}" />
 
         <EditText
             android:id="@+id/amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number"
             android:hint="amount"
-            android:text="@={addViewModel.amount}"/>
+            android:inputType="number"
+            android:text="@={addViewModel.amount}" />
 
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onItemSelected="@{addViewModel::onSelectItem}"/>
+            android:onItemSelected="@{addViewModel::onSelectItem}" />
 
         <Button
-            android:enabled="false"
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="save"
-            android:onClick="@{addViewModel::save}"/>
+            android:enabled="false"
+            android:onClick="@{addViewModel::save}"
+            android:text="save" />
 
     </LinearLayout>
 </layout>

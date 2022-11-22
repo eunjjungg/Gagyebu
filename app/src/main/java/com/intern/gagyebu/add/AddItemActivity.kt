@@ -2,7 +2,6 @@ package com.intern.gagyebu.add
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -21,7 +20,7 @@ import java.util.Calendar
 
 class AddItemActivity : AppCompatActivity() {
 
-    private val viewModel: AddActivutyViewModel by viewModels()
+    private val viewModel: AddActivityViewModel by viewModels()
     private val database = AppDatabase.getDatabase(App.context())
     private val calendar = Calendar.getInstance()
 
@@ -31,7 +30,7 @@ class AddItemActivity : AppCompatActivity() {
             DataBindingUtil.setContentView<ActivityAddItemBinding>(this, R.layout.activity_add_item)
         binding.addViewModel = viewModel
 
-        binding.date.text = getString(R.string.show_input_date, MainActivity.YEAR, MainActivity.MONTH, MainActivity.DATE)
+        binding.date.text = getString(R.string.show_date_full, MainActivity.YEAR, MainActivity.MONTH, MainActivity.DATE)
         viewModel.selectDate(MainActivity.YEAR, MainActivity.MONTH, MainActivity.DATE)
 
         lifecycleScope.launch {
@@ -54,7 +53,7 @@ class AddItemActivity : AppCompatActivity() {
                 { _, year, month, day ->
                     viewModel.selectDate(year, month + 1, day)
 
-                    binding.date.text = getString(R.string.show_input_date, year, month+1, day)
+                    binding.date.text = getString(R.string.show_date_full, year, month+1, day)
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -64,14 +63,14 @@ class AddItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleEvent(event: AddActivutyViewModel.Event) = when (event) {
-        is AddActivutyViewModel.Event.Save -> {
+    private fun handleEvent(event: AddActivityViewModel.Event) = when (event) {
+        is AddActivityViewModel.Event.Save -> {
             CoroutineScope(Dispatchers.IO).launch {
                 database.itemDao().saveItem(event.value)
             }
             finish()
         }
-        is AddActivutyViewModel.Event.Error -> {
+        is AddActivityViewModel.Event.Error -> {
             Toast.makeText(this, event.value, Toast.LENGTH_SHORT).show()
         }
     }

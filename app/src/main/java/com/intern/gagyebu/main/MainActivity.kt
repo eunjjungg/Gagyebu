@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val factory = MainViewModelFactory(ItemRepo(database.itemDao()))
 
     companion object {
-        val calendar: Calendar = Calendar.getInstance()
+        private val calendar: Calendar = Calendar.getInstance()
         val YEAR = calendar.get(Calendar.YEAR)
         val MONTH = calendar.get(Calendar.MONTH) + 1
         val DATE = calendar.get(Calendar.DATE)
