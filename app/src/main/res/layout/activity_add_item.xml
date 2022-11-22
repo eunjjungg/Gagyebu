@@ -20,9 +20,7 @@
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="@{addViewModel.date}"
-            android:onClick="@{addViewModel::inputDate}"/>
+            android:ems="10" />
 
         <EditText
             android:id="@+id/title"
@@ -31,7 +29,7 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="title"
-            android:text="@={addViewModel._title}"/>
+            android:text="@={addViewModel.title}"/>
 
         <EditText
             android:id="@+id/amount"
@@ -40,7 +38,7 @@
             android:ems="10"
             android:inputType="number"
             android:hint="amount"
-            android:text="@={addViewModel._amount}"/>
+            android:text="@={addViewModel.amount}"/>
 
 
         <Spinner

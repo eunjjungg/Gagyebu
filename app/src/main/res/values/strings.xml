@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Gagyebu</string>
+    <string name="show_date" formatted="true">%1$d년 %2$d월 가계부</string>
+    <string name="show_won" formatted="true">%1$s 원</string>
+    <string name="show_input_date" formatted="true">%1$d년 %2$d월 %3$d일</string>
+
 </resources>

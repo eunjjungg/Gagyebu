@@ -16,10 +16,9 @@
     tools:context=".main.MainActivity">
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/calender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@={mainViewModel.date}"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/total"
 
@@ -39,7 +38,7 @@
         app:layout_constraintBottom_toTopOf="@+id/card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
+        app:layout_constraintTop_toBottomOf="@+id/calender" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
