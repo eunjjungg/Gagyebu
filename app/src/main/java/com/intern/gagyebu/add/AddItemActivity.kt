@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.adapters.DatePickerBindingAdapter
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
@@ -19,10 +18,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-
 class AddItemActivity : AppCompatActivity(){
 
-    private val viewModel: AddViewModel by viewModels()
+    private val viewModel: AddActivutyViewModel by viewModels()
     private val database = AppDatabase.getDatabase(App.context())
     private val calendar = Calendar.getInstance()
 
@@ -52,8 +50,8 @@ class AddItemActivity : AppCompatActivity(){
         )
     }
 
-    private fun handleEvent(event: AddViewModel.Event) = when (event) {
-        is AddViewModel.Event.InputDate -> {
+    private fun handleEvent(event: AddActivutyViewModel.Event) = when (event) {
+        is AddActivutyViewModel.Event.InputDate -> {
             val datePickerDialog = DatePickerDialog(
                 this, { _, year, month, day ->
                     viewModel._date.value = "$year-${month+1}-$day"
@@ -62,13 +60,13 @@ class AddItemActivity : AppCompatActivity(){
             )
             datePickerDialog.show()
         }
-        is AddViewModel.Event.Save ->{
+        is AddActivutyViewModel.Event.Save ->{
             CoroutineScope(Dispatchers.IO).launch {
                 database.itemDao().saveItem(event.value)
             }
             finish()
         }
-        is AddViewModel.Event.Error ->{
+        is AddActivutyViewModel.Event.Error ->{
             Toast.makeText(this, event.value, Toast.LENGTH_SHORT).show()
         }
     }

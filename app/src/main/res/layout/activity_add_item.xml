@@ -6,7 +6,7 @@
     <data>
         <variable
             name="addViewModel"
-            type="com.intern.gagyebu.add.AddViewModel" />
+            type="com.intern.gagyebu.add.AddActivutyViewModel" />
 
     </data>
 

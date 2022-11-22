@@ -1,18 +1,21 @@
 package com.intern.gagyebu.room
 
+import android.util.Log
+import androidx.lifecycle.asLiveData
 import com.intern.gagyebu.ItemGetOption
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.*
 
 class ItemRepo constructor(
 private val ItemDao: ItemDao
 ) {
 
-    fun totalIncome(data: ItemGetOption): Flow<Int>{
-        return ItemDao.incomeTotal(data.year, data.month)
+    fun totalIncome(data: ItemGetOption): Flow<Int> {
+        return ItemDao.incomeTotal(data.year, data.month).filterNull()
     }
 
     fun totalSpend(data: ItemGetOption): Flow<Int>{
-        return ItemDao.spendTotal(data.year, data.month)
+        return ItemDao.spendTotal(data.year, data.month).filterNull()
     }
 
     fun itemGet(data: ItemGetOption): Flow<List<ItemEntity>> {
@@ -25,4 +28,13 @@ private val ItemDao: ItemDao
         }
         return item
     }
+
+    private fun <T: Int?> Flow<T?>.filterNull(): Flow<T> = transform { value ->
+        if (value != null){
+            return@transform emit(value)
+        }else{
+            return@transform emit(0 as T)
+        }
+    }
+
 }

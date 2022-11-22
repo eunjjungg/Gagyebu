@@ -2,7 +2,6 @@ package com.intern.gagyebu.add
 
 import android.view.View
 import android.widget.AdapterView
-import androidx.databinding.InverseMethod
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.intern.gagyebu.room.ItemEntity
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class AddViewModel: ViewModel() {
+class AddActivutyViewModel: ViewModel() {
 
     val _date = MutableLiveData<String>()
     val _title = MutableLiveData<String>()
