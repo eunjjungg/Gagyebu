@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.*
 import com.intern.gagyebu.add.AddItemActivity
+import com.intern.gagyebu.add.AddItemActivity2
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         //저장버튼 (test)
         binding.save.setOnClickListener {
-            startActivity(Intent(this, AddItemActivity::class.java))
+            startActivity(Intent(this, AddItemActivity2::class.java))
         }
 
         //달력 다이얼로그
