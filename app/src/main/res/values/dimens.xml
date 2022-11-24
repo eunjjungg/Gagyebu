@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--activity yearly-->
+    <dimen name="yearlyTitleMargin">12dp</dimen>
+    <dimen name="yearlyTitlePadding">20dp</dimen>
+    <dimen name="yearlyTitleTextSize">20dp</dimen>
+
+    <!--Bar Chart View-->
+
+
+    <!--Box Report View-->
+
+
+    <!--Pie Chart View-->
+
+</resources>
