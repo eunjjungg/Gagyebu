@@ -19,6 +19,13 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
         "date"
     )
 
+    private var _date: MutableLiveData<String> = MutableLiveData()
+    val date: LiveData<String> get() = _date
+
+    fun updateDate(date: String) {
+        _date.value = date
+    }
+
     private var _queryData = MutableStateFlow<ItemGetOption>(itemGetOption)
 
     val incomeValue: LiveData<Int> = _queryData.flatMapLatest {

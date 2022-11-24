@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         private val calendar: Calendar = Calendar.getInstance()
         val YEAR = calendar.get(Calendar.YEAR)
         val MONTH = calendar.get(Calendar.MONTH) + 1
-        val DATE = calendar.get(Calendar.DATE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +50,11 @@ class MainActivity : AppCompatActivity() {
             binding.total.text = getString(R.string.show_won, "$it")
         }
 
+        //달력 text observing
+        viewModel.date.observe(this) {
+            binding.calender.text = it
+        }
+
         //저장버튼 (test)
         binding.save.setOnClickListener {
             startActivity(Intent(this, AddItemActivity::class.java))
@@ -61,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
                 viewModel.changeData(year, month)
-                binding.calender.text = getString(R.string.show_date, year, month)
+                viewModel.updateDate(getString(R.string.show_date, year, month))
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }

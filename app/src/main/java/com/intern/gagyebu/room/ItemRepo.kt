@@ -3,7 +3,10 @@ package com.intern.gagyebu.room
 import android.util.Log
 import androidx.lifecycle.asLiveData
 import com.intern.gagyebu.ItemGetOption
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 
 class ItemRepo constructor(
@@ -33,6 +36,8 @@ private val ItemDao: ItemDao
         ItemDao.deleteItem(id)
     }
 
+}
+
     private fun <T: Int?> Flow<T?>.filterNull(): Flow<T> = transform { value ->
         if (value != null){
             return@transform emit(value)
@@ -40,5 +45,3 @@ private val ItemDao: ItemDao
             return@transform emit(0 as T)
         }
     }
-
-}

@@ -1,68 +1,107 @@
 package com.intern.gagyebu.add
 
-import android.view.View
-import android.widget.AdapterView
-import androidx.databinding.ObservableField
+import android.util.Log
 import androidx.lifecycle.*
+import com.intern.gagyebu.App
+import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemEntity
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 class AddActivityViewModel : ViewModel() {
 
-    private val category = ObservableField<String>()
+    private var _date: MutableLiveData<String> = MutableLiveData()
+    val date: LiveData<String> get() = _date
 
-    var title = MutableLiveData<String>()
-    var amount = MutableLiveData<String>()
+    private var _title: MutableLiveData<String> = MutableLiveData()
+    val title: LiveData<String> get() = _title
 
-    private var year = 0
-    private var month = 0
-    private var day = 0
+    private var _amount: MutableLiveData<String> = MutableLiveData()
+    val amount: LiveData<String> get() = _amount
+
+    private var _category: MutableLiveData<String> = MutableLiveData("수입")
+    val category: LiveData<String> get() = _category
+
+    fun updateTitle(title: String) {
+        _title.value = title
+    }
+
+    fun updateAmount(amount: String) {
+        _amount.value = amount
+    }
+
+    fun updateCategory(category: String) {
+        _category.value = category
+    }
+
+    fun updateDate(date: String) {
+        _date.value = date
+    }
+
 
     private val _eventFlow = MutableSharedFlow<Event>()
 
     val eventFlow = _eventFlow.asSharedFlow()
 
-    val enableSave = combine(
+    val areInputsValid = combine(
         title.asFlow(),
         amount.asFlow(),
-    ) { title, amount -> title.isNotBlank() && amount.isNotBlank()}.onStart {
+        date.asFlow()
+    ) { title, amount, date -> title.isNotBlank() && amount.isNotBlank() && date.isNotBlank() }.onStart {
         emit(
             false
         )
     }.asLiveData()
 
-    fun onSelectItem(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-        if (parent != null) {
-            category.set("${parent.selectedItem}")
-        }
-    }
-
-    fun selectDate(year: Int, month: Int, day: Int) {
-        this.year = year
-        this.month = month
-        this.day = day
-    }
-
-    fun save(view: View) {
+    suspend fun save() {
         try {
-            val amount = amount.value?.let { Integer.parseInt(it) }
-            val title = title.value
-            val item = ItemEntity(
-                amount = amount!!,
-                title = title!!,
-                year = year,
-                month = month,
-                day = day,
-                category = category.get()!!
-            )
-            event(Event.Save(item))
+            val dateArr =
+                date.value?.let {date -> date.split("-").map { it.toInt() }.toIntArray()}
+                    ?: throw java.lang.IllegalArgumentException("날짜을 확인해주세요")
 
-        } catch (e: NullPointerException) {
-            event(Event.Error("입력을 확인해주세요"))
+            val title = title.value?.let { it.trim() }
+                ?: throw java.lang.IllegalArgumentException("제목을 확인해주세요")
+
+            val amount = amount.value?.let {
+                if (it[0] == '0' || it.length > 8) {
+                    throw java.lang.IllegalArgumentException("금액을 확인해주세요")
+                } else {
+                        Integer.parseInt(it)
+                }
+
+            } ?: throw java.lang.IllegalArgumentException("금액을 확인해주세요")
+            val category =
+                category.value ?: throw java.lang.IllegalArgumentException("카테고리를 확인해주세요")
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    withTimeout(2000) {
+                        launch {
+                            AppDatabase.getDatabase(App.context()).itemDao().saveItem(
+                                ItemEntity(
+                                    amount = amount,
+                                    title = title,
+                                    year = dateArr[0],
+                                    month = dateArr[1],
+                                    day = dateArr[2],
+                                    category = category
+                                )
+                            )
+                            event(Event.Done("저장 완료"))
+                        }
+                    }
+
+                } catch (e: TimeoutCancellationException) {
+                    event(Event.Error("저장 실패"))
+                }
+            }
+
+
+        } catch (e: IllegalArgumentException) {
+            e.message?.let { event(Event.Error(it)) } ?: event(Event.Error("오류가 발생하였습니다."))
         }
     }
 
@@ -74,6 +113,6 @@ class AddActivityViewModel : ViewModel() {
 
     sealed class Event {
         data class Error(val value: String) : Event()
-        data class Save(val value: ItemEntity) : Event()
+        data class Done(val value: String) : Event()
     }
 }
