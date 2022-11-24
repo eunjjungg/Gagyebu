@@ -59,17 +59,19 @@ class AddActivityViewModel : ViewModel() {
     suspend fun save() {
         try {
             val dateArr =
-                date.value?.let { date -> date.split("-").map { it.toInt() }.toIntArray() }
+                date.value?.let {date -> date.split("-").map { it.toInt() }.toIntArray()}
                     ?: throw java.lang.IllegalArgumentException("날짜을 확인해주세요")
 
             val title = title.value?.let { it.trim() }
                 ?: throw java.lang.IllegalArgumentException("제목을 확인해주세요")
+
             val amount = amount.value?.let {
                 if (it[0] == '0' || it.length > 8) {
                     throw java.lang.IllegalArgumentException("금액을 확인해주세요")
                 } else {
-                    it
+                        Integer.parseInt(it)
                 }
+
             } ?: throw java.lang.IllegalArgumentException("금액을 확인해주세요")
             val category =
                 category.value ?: throw java.lang.IllegalArgumentException("카테고리를 확인해주세요")
@@ -80,7 +82,7 @@ class AddActivityViewModel : ViewModel() {
                         launch {
                             AppDatabase.getDatabase(App.context()).itemDao().saveItem(
                                 ItemEntity(
-                                    amount = Integer.parseInt(amount),
+                                    amount = amount,
                                     title = title,
                                     year = dateArr[0],
                                     month = dateArr[1],
