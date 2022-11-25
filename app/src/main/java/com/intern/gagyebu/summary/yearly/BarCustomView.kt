@@ -19,6 +19,7 @@ class BarCustomView: View {
     private var viewBound: RectF = RectF()
     private var drawBound: RectF = RectF()
     private var progress: Float = 0f
+    var animator: ValueAnimator? = null
 
     private val paint = Paint().apply {
         flags = Paint.ANTI_ALIAS_FLAG
@@ -71,8 +72,8 @@ class BarCustomView: View {
     private fun animationProcess() {
         val sec = 1000L
         val animationDuration = sec * percentage
-        val animator = ValueAnimator.ofFloat(0f, percentage)
-        animator.apply {
+        animator = ValueAnimator.ofFloat(0f, percentage)
+        animator!!.apply {
             duration = animationDuration.toLong()
             interpolator = DecelerateInterpolator()
             addUpdateListener { valueAnimator ->
@@ -80,11 +81,17 @@ class BarCustomView: View {
                 invalidate()
             }
         }
-        animator.start()
+        animator!!.start()
     }
 
     fun setPercentage(inputPercentage: Float) {
         percentage = inputPercentage
         animationProcess()
+    }
+
+    fun destroyAnimator() {
+        animator?.let {
+            it.cancel()
+        }
     }
 }

@@ -43,6 +43,7 @@ class BarChartAdapter: RecyclerView.Adapter<BarChartAdapter.ViewHolder>() {
 
             Log.d("adapter ccheck", item.toString())
             binding.tvMonth.text = YearlySummaryViewModel.months[item.month]
+            binding.viewPercentage.destroyAnimator()
             binding.viewPercentage.setPercentage(item.percentage)
         }
     }
