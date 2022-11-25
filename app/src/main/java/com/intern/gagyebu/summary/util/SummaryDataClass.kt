@@ -1,6 +1,9 @@
 package com.intern.gagyebu.summary.util
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
+import kotlinx.parcelize.Parcelize
 
 data class SumOfCategory(
     @ColumnInfo(name = "category")
@@ -28,3 +31,9 @@ data class ReportViewInfo(
     val cost2: String?,
     val cost3: String?
 )
+
+@Parcelize
+data class DateInfo(
+    val year: Int,
+    val month: Int
+): Parcelable

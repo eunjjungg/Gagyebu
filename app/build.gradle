@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+
+    //parcel
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -66,7 +69,8 @@ dependencies {
     //coroutine-viewmodelScope
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 
-    // ViewModel
+    //ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+
 
 }
