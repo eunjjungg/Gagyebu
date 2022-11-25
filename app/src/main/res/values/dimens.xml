@@ -6,7 +6,9 @@
     <dimen name="yearlyTitleTextSize">20dp</dimen>
 
     <!--Bar Chart View-->
-
+    <dimen name="barChartMarginHorizontal">24dp</dimen>
+    <dimen name="barChartMarginVertical">12dp</dimen>
+    <dimen name="barChartTextSize">12dp</dimen>
 
     <!--Box Report View-->
 

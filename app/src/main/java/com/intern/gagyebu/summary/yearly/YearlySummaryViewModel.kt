@@ -1,6 +1,5 @@
 package com.intern.gagyebu.summary.yearly
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -59,6 +58,7 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
     }
 
     fun getYearReportData() {
+        isEmpty.value = false
         viewModelScope.launch {
             getYearMonthAmountData(titleYear.value!!)
             getYearCategoryData(titleYear.value!!)
@@ -115,13 +115,13 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
 
                 withContext(Dispatchers.Main){
                     reportViewData.value =
-                        refactorRawToReportData(maxCategory, monthListGroupByMaxCategory)
+                        convertRawToReportData(maxCategory, monthListGroupByMaxCategory)
                 }
             }
         }.await()
     }
 
-    private fun refactorRawToReportData(
+    private fun convertRawToReportData(
         maxCategory: SumOfCategory, monthList: List<MonthlyCategory>
     ): ReportViewInfo {
         val theme = "${maxCategory.category}"
