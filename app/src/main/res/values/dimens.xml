@@ -14,6 +14,8 @@
     <dimen name="boxTitleMarginHorizontal">16dp</dimen>
     <dimen name="boxTitleMarginVertical">32dp</dimen>
     <dimen name="boxTitleTextSize">16dp</dimen>
+    <dimen name="boxTextSize">8dp</dimen>
+    <dimen name="boxRounded">8dp</dimen>
 
     <!--Pie Chart View-->
 

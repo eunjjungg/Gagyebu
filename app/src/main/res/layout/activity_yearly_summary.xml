@@ -64,6 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/barChartMarginHorizontal"
                 android:layout_marginVertical="@dimen/barChartMarginVertical"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintTop_toBottomOf="@+id/linearTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
