@@ -28,7 +28,7 @@ object ItemRepo {
         return item
     }
 
-    fun itemDelete(id: Int){
+    fun deleteItem(id: Int){
         CoroutineScope(Dispatchers.IO).launch {
             ItemDao.deleteItem(id)
         }
@@ -45,7 +45,6 @@ object ItemRepo {
             ItemDao.updateItem(itemEntity)
         }
     }
-
 }
 
     private fun <T: Int?> Flow<T?>.filterNull(): Flow<T> = transform { value ->

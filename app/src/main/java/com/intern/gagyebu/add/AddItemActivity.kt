@@ -33,7 +33,6 @@ import com.intern.gagyebu.R
 import com.intern.gagyebu.add.ui.theme.GagyebuTheme
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.sin
 
 class AddItemActivity : ComponentActivity() {
     private lateinit var viewModel: AddActivityViewModel
@@ -124,7 +123,7 @@ class AddItemActivity : ComponentActivity() {
                             }
 
                             Button(
-                                onClick = {viewModel.save()},
+                                onClick = {viewModel.setData()},
                                 enabled = areInputsValid
                             ) {
                                 Text(

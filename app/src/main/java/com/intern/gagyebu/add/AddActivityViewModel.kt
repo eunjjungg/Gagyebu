@@ -58,7 +58,7 @@ class AddActivityViewModel : ViewModel() {
         )
     }.asLiveData()
 
-    fun save() {
+    fun setData() {
         try {
             val dateArr =
                 date.value?.let { date -> date.split("-").map { it.toInt() }.toIntArray() }
@@ -88,7 +88,7 @@ class AddActivityViewModel : ViewModel() {
                     day = dateArr[2],
                     category = category
                 )
-                save(itemEntity)
+                setData(itemEntity)
 
             } else {
                 val itemEntity = ItemEntity(
@@ -110,7 +110,7 @@ class AddActivityViewModel : ViewModel() {
         }
     }
 
-    private fun save(itemEntity: ItemEntity) {
+    private fun setData(itemEntity: ItemEntity) {
         isrunning.value = true
         CoroutineScope(Dispatchers.IO).launch {
             try {
