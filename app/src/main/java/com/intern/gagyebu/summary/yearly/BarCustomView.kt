@@ -69,8 +69,8 @@ class BarCustomView: View {
     }
 
     private fun animationProcess() {
-        val sec2 = 2000L
-        val animationDuration = sec2 * percentage
+        val sec = 1000L
+        val animationDuration = sec * percentage
         val animator = ValueAnimator.ofFloat(0f, percentage)
         animator.apply {
             duration = animationDuration.toLong()
