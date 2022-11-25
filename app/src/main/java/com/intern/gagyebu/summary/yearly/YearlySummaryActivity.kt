@@ -1,7 +1,5 @@
 package com.intern.gagyebu.summary.yearly
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
@@ -14,9 +12,6 @@ import com.intern.gagyebu.room.ItemRepository
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.ReportViewInfo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
     R.layout.activity_yearly_summary
@@ -45,6 +40,7 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
             binding.tvBoxTitle.text = String.format(resources.getString(R.string.boxTitle_year), viewModel.titleYear.value)
             binding.tvBoxSubTitle.text = String.format(resources.getString(R.string.boxSubTitle_year), viewModel.titleYear.value)
         })
+
 
         this.viewModel.isEmpty.observe(this@YearlySummaryActivity, Observer {
             if(viewModel.isEmpty.value!!) {
@@ -96,7 +92,6 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
                 override fun onItemClicked(month: Int) {
                     TODO("Not yet implemented")
                 }
-
             })
         }
     }
