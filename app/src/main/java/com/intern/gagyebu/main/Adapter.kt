@@ -1,8 +1,7 @@
 package com.intern.gagyebu.main
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,15 +9,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.intern.gagyebu.App
 import com.intern.gagyebu.R
+import com.intern.gagyebu.add.AddItemActivity
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
-import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
@@ -65,17 +60,21 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                     builder.setItems(array) { dialog, which ->
                         when (which) {
                             0 -> {
-                                Log.d("long", "수정")
+                                val intent = Intent(this.root.context, AddItemActivity::class.java)
+                                intent.putExtra("ID", itemList.id)
+                                intent.putExtra("DATE", date.text)
+                                intent.putExtra("TITLE", itemList.title)
+                                intent.putExtra("AMOUNT", itemList.amount)
+                                intent.putExtra("CATEGORY", itemList.category)
+
+                                this.root.context.startActivity(intent)
                             }
 
                             1 -> AlertDialog.Builder(this.root.context).apply {
                                 this.setTitle("삭제")
                                 this.setMessage("정말 삭제할까요?")
                                 this.setPositiveButton("삭제") { _, _ ->
-                                    val database = AppDatabase.getDatabase(App.context())
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        database.itemDao().deleteItem(itemList.id)
-                                    }
+                                    ItemRepo.deleteItem(itemList.id)
                                 }
                                 this.setNegativeButton("취소") { _, _ ->
                                     dialog.cancel()

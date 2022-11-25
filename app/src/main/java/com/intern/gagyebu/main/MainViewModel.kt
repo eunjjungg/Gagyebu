@@ -49,6 +49,7 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
     fun changeData (year : Int, month:Int){
         _queryData.value = itemGetOption.copy(year = year, month = month)
     }
+
     fun changeOption (filter : String, order:String){
         _queryData.value = itemGetOption.copy(filter = filter, order = order)
     }

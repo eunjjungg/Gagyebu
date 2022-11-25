@@ -2,6 +2,7 @@ package com.intern.gagyebu.room
 
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @androidx.room.Dao
@@ -35,6 +36,11 @@ interface ItemDao{
     @Query("SELECT SUM(amount) FROM ItemEntity WHERE NOT category = '수입' AND year= :year AND month = :month")
     fun spendTotal(year: Int, month: Int) : Flow<Int>
 
+    //데이터 삭제
     @Query("DELETE FROM ItemEntity WHERE id = :ID")
     fun deleteItem(ID: Int)
+
+    //데이터 업데이드
+    @Update
+    fun updateItem(itemEntity: ItemEntity)
 }

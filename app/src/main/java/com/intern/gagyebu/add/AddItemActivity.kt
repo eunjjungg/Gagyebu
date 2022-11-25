@@ -33,18 +33,23 @@ import com.intern.gagyebu.R
 import com.intern.gagyebu.add.ui.theme.GagyebuTheme
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.sin
 
 class AddItemActivity : ComponentActivity() {
     private lateinit var viewModel: AddActivityViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
         viewModel = ViewModelProvider(this)[AddActivityViewModel::class.java]
+
+        if (intent.hasExtra("ID")) {
+            viewModel.initUpdate(intent)
+        }
+
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
         }
 
-        super.onCreate(savedInstanceState)
         setContent {
             val areInputsValid by viewModel.areInputsValid.observeAsState(false)
 
@@ -53,12 +58,6 @@ class AddItemActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    /**
-                     * text = mutableStateOf.. 변경 안됨.
-                     * 값 변경되면 setContent 재실행 -> 초기화됨
-                     * 따라서 remember 이용하여 값 복구할 수 있도록
-                     */
-
                     /**
                      * text = mutableStateOf.. 변경 안됨.
                      * 값 변경되면 setContent 재실행 -> 초기화됨
@@ -124,7 +123,7 @@ class AddItemActivity : ComponentActivity() {
                             }
 
                             Button(
-                                onClick = {  lifecycleScope.launch(){viewModel.save()} },
+                                onClick = {viewModel.setData()},
                                 enabled = areInputsValid
                             ) {
                                 Text(
@@ -151,7 +150,7 @@ class AddItemActivity : ComponentActivity() {
                 Icon(Icons.Outlined.Add, null, modifier = Modifier)
 
                 Text(
-                    text = "내역 추가",
+                    text = viewModel.activityTitle,
                     modifier = Modifier,
                     style = LocalTextStyle.current.merge(
                         TextStyle(
