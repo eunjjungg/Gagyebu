@@ -46,8 +46,6 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
             barChartInfoList = viewModel.barChartData.value!!.subList(1, 12)
             barChartAdapter.barChartInfo = barChartInfoList
             binding.rcvBarChart.adapter!!.notifyDataSetChanged()
-            Log.d("ccheck bar", viewModel.barChartData.value.toString())
-
         })
 
         this.viewModel.reportViewData.observe(this@YearlySummaryActivity, Observer {
