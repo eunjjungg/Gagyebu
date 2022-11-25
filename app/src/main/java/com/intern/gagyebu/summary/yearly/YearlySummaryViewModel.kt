@@ -58,6 +58,7 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
     }
 
     fun getYearReportData() {
+        isEmpty.value = false
         viewModelScope.launch {
             getYearMonthAmountData(titleYear.value!!)
             getYearCategoryData(titleYear.value!!)

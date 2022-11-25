@@ -3,6 +3,7 @@ package com.intern.gagyebu.summary.yearly
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -42,15 +43,29 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
             viewModel.getYearReportData()
         })
 
+        this.viewModel.isEmpty.observe(this@YearlySummaryActivity, Observer {
+            if(viewModel.isEmpty.value!!) {
+                barChartInfoList =  mutableListOf<BarChartInfo>()
+                resetRecyclerViewAdapter()
+                binding.rcvBarChart.visibility = View.GONE
+            } else {
+                binding.rcvBarChart.visibility = View.VISIBLE
+            }
+        })
+
         this.viewModel.barChartData.observe(this@YearlySummaryActivity, Observer {
             barChartInfoList = viewModel.barChartData.value!!.subList(1, 12)
-            barChartAdapter.barChartInfo = barChartInfoList
-            binding.rcvBarChart.adapter!!.notifyDataSetChanged()
+            resetRecyclerViewAdapter()
         })
 
         this.viewModel.reportViewData.observe(this@YearlySummaryActivity, Observer {
             Log.d("ccheck report", viewModel.reportViewData.value.toString())
         })
+    }
+
+    private fun resetRecyclerViewAdapter() {
+        barChartAdapter.barChartInfo = barChartInfoList
+        binding.rcvBarChart.adapter!!.notifyDataSetChanged()
     }
 
     private fun setRecyclerView() {
