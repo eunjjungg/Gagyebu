@@ -18,8 +18,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val database = AppDatabase.getDatabase(App.context())
-    private val factory = MainViewModelFactory(ItemRepo(database.itemDao()))
+    //private val database = AppDatabase.getDatabase(App.context())
+    private val factory = MainViewModelFactory(ItemRepo)
 
     companion object {
         private val calendar: Calendar = Calendar.getInstance()

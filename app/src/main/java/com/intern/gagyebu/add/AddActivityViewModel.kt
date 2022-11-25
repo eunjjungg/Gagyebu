@@ -1,15 +1,11 @@
 package com.intern.gagyebu.add
 
-import android.util.Log
+import android.content.Intent
 import androidx.lifecycle.*
-import com.intern.gagyebu.App
-import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemEntity
+import com.intern.gagyebu.room.ItemRepo
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 
 class AddActivityViewModel : ViewModel() {
 
@@ -24,6 +20,12 @@ class AddActivityViewModel : ViewModel() {
 
     private var _category: MutableLiveData<String> = MutableLiveData("수입")
     val category: LiveData<String> get() = _category
+
+    var activityTitle: String = "항목 저장"
+
+    var ID: Int = 0
+
+    private var isrunning: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun updateTitle(title: String) {
         _title.value = title
@@ -41,25 +43,25 @@ class AddActivityViewModel : ViewModel() {
         _date.value = date
     }
 
-
     private val _eventFlow = MutableSharedFlow<Event>()
 
     val eventFlow = _eventFlow.asSharedFlow()
 
-    val areInputsValid = combine(
+    var areInputsValid = combine(
         title.asFlow(),
         amount.asFlow(),
-        date.asFlow()
-    ) { title, amount, date -> title.isNotBlank() && amount.isNotBlank() && date.isNotBlank() }.onStart {
+        date.asFlow(),
+        isrunning.asFlow()
+    ) { title, amount, date, isrunning -> title.isNotBlank() && amount.isNotBlank() && date.isNotBlank() && isrunning == false }.onStart {
         emit(
             false
         )
     }.asLiveData()
 
-    suspend fun save() {
+    fun save() {
         try {
             val dateArr =
-                date.value?.let {date -> date.split("-").map { it.toInt() }.toIntArray()}
+                date.value?.let { date -> date.split("-").map { it.toInt() }.toIntArray() }
                     ?: throw java.lang.IllegalArgumentException("날짜을 확인해주세요")
 
             val title = title.value?.let { it.trim() }
@@ -69,34 +71,37 @@ class AddActivityViewModel : ViewModel() {
                 if (it[0] == '0' || it.length > 8) {
                     throw java.lang.IllegalArgumentException("금액을 확인해주세요")
                 } else {
-                        Integer.parseInt(it)
+                    Integer.parseInt(it)
                 }
 
             } ?: throw java.lang.IllegalArgumentException("금액을 확인해주세요")
             val category =
                 category.value ?: throw java.lang.IllegalArgumentException("카테고리를 확인해주세요")
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    withTimeout(2000) {
-                        launch {
-                            AppDatabase.getDatabase(App.context()).itemDao().saveItem(
-                                ItemEntity(
-                                    amount = amount,
-                                    title = title,
-                                    year = dateArr[0],
-                                    month = dateArr[1],
-                                    day = dateArr[2],
-                                    category = category
-                                )
-                            )
-                            event(Event.Done("저장 완료"))
-                        }
-                    }
+            if (activityTitle == "항목 저장") {
+                val itemEntity = ItemEntity(
+                    id = 0,
+                    amount = amount,
+                    title = title,
+                    year = dateArr[0],
+                    month = dateArr[1],
+                    day = dateArr[2],
+                    category = category
+                )
+                save(itemEntity)
 
-                } catch (e: TimeoutCancellationException) {
-                    event(Event.Error("저장 실패"))
-                }
+            } else {
+                val itemEntity = ItemEntity(
+                    id = ID,
+                    amount = amount,
+                    title = title,
+                    year = dateArr[0],
+                    month = dateArr[1],
+                    day = dateArr[2],
+                    category = category
+                )
+
+                update(itemEntity)
             }
 
 
@@ -105,10 +110,56 @@ class AddActivityViewModel : ViewModel() {
         }
     }
 
+    private fun save(itemEntity: ItemEntity) {
+        isrunning.value = true
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                withTimeout(5000) {
+                    launch {
+                        ItemRepo.saveItem(itemEntity)
+                        event(Event.Done("저장 완료"))
+                    }
+                }
+
+            } catch (e: TimeoutCancellationException) {
+                isrunning.value = false
+                event(Event.Error("저장 실패"))
+            }
+        }
+    }
+
+    private fun update(itemEntity: ItemEntity) {
+        isrunning.value = true
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                withTimeout(2000) {
+                    launch {
+                        ItemRepo.updateItem(itemEntity)
+                        event(Event.Done("수정 완료"))
+                    }
+                }
+
+            } catch (e: TimeoutCancellationException) {
+                isrunning.value = false
+                event(Event.Error("수정 실패"))
+            }
+        }
+    }
+
+
     private fun event(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)
         }
+    }
+
+    fun initUpdate(intent: Intent) {
+        _date.value = intent.getStringExtra("DATE")
+        _title.value = intent.getStringExtra("TITLE")
+        _amount.value = intent.getIntExtra("AMOUNT", 0).toString()
+        _category.value = intent.getStringExtra("CATEGORY")
+        activityTitle = "항목 수정"
+        ID = intent.getIntExtra("ID", 0)
     }
 
     sealed class Event {

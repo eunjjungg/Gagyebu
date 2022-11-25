@@ -1,17 +1,13 @@
 package com.intern.gagyebu.room
 
-import android.util.Log
-import androidx.lifecycle.asLiveData
+import com.intern.gagyebu.App
 import com.intern.gagyebu.ItemGetOption
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class ItemRepo constructor(
-private val ItemDao: ItemDao
-) {
+object ItemRepo {
+
+    private val ItemDao = AppDatabase.getDatabase(App.context()).itemDao()
 
     fun totalIncome(data: ItemGetOption): Flow<Int> {
         return ItemDao.incomeTotal(data.year, data.month).filterNull()
@@ -33,7 +29,21 @@ private val ItemDao: ItemDao
     }
 
     fun itemDelete(id: Int){
-        ItemDao.deleteItem(id)
+        CoroutineScope(Dispatchers.IO).launch {
+            ItemDao.deleteItem(id)
+        }
+    }
+
+    fun saveItem(itemEntity: ItemEntity){
+        CoroutineScope(Dispatchers.IO).launch {
+            ItemDao.saveItem(itemEntity)
+        }
+    }
+
+    fun updateItem(itemEntity: ItemEntity){
+        CoroutineScope(Dispatchers.IO).launch {
+            ItemDao.updateItem(itemEntity)
+        }
     }
 
 }
