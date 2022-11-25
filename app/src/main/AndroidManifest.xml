@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Gagyebu"
         tools:targetApi="31">
         <activity
-            android:name=".MonthlySummaryActivity"
+            android:name=".summary.monthly.MonthlySummaryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

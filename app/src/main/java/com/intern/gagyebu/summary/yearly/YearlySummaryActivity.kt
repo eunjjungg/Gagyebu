@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.yearly
 
+import android.content.Intent
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -8,8 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.ActivityYearlySummaryBinding
 import com.intern.gagyebu.room.ItemRepository
+import com.intern.gagyebu.summary.monthly.MonthlySummaryActivity
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.BaseActivity
+import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.ReportViewInfo
 
 class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
@@ -91,7 +94,9 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
             barChartInfo = barChartInfoList
             setOnItemClickListener(object : BarChartClickListener {
                 override fun onItemClicked(month: Int) {
-
+                    Intent(this@YearlySummaryActivity, MonthlySummaryActivity::class.java).apply {
+                        putExtra("dateInfo", DateInfo(viewModel.titleYear.value!!, month))
+                    }.also { startActivity(it) }
                 }
             })
         }
