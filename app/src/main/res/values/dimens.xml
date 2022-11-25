@@ -11,7 +11,13 @@
     <dimen name="barChartTextSize">12dp</dimen>
 
     <!--Box Report View-->
-
+    <dimen name="boxTitleMarginHorizontal">16dp</dimen>
+    <dimen name="boxTitleMarginVertical">52dp</dimen>
+    <dimen name="boxTitleTextSize">16dp</dimen>
+    <dimen name="boxSubTitleTextSize">12dp</dimen>
+    <dimen name="boxTextSize">4dp</dimen>
+    <dimen name="boxRounded">8dp</dimen>
+    <dimen name="boxViewMarginVertical">16dp</dimen>
 
     <!--Pie Chart View-->
 

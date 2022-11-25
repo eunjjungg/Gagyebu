@@ -58,7 +58,6 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
     }
 
     fun getYearReportData() {
-        isEmpty.value = false
         viewModelScope.launch {
             getYearMonthAmountData(titleYear.value!!)
             getYearCategoryData(titleYear.value!!)
@@ -83,6 +82,7 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
             return
             //todo empty page 처리 필요?
         }
+        isEmpty.value = false
 
         for(i in 1..sumOfMoney.size - 1) {
             percentageOfEachMonth[i] = Math.round(sumOfMoney[i] / sumOfMoney.max().toFloat() * 100) / 100f
@@ -114,6 +114,7 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
                 )
 
                 withContext(Dispatchers.Main){
+                    isEmpty.value = false
                     reportViewData.value =
                         convertRawToReportData(maxCategory, monthListGroupByMaxCategory)
                 }

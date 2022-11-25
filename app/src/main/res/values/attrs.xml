@@ -5,4 +5,13 @@
         <attr name="percentage" format="float"/>
     </declare-styleable>
 
+    <declare-styleable name="BoxCustomView">
+        <attr name="boxCount" format="integer"/>
+        <attr name="boxTextSize" format="dimension"/>
+        <attr name="spacingBtwBoxes" format="dimension"/>
+        <attr name="boxBackgroundColor" format="color"/>
+        <attr name="boxBackgroundThemeColor" format="color"/>
+        <attr name="inputTextCostTheme" format="string"/>
+    </declare-styleable>
+
 </resources>

@@ -13,6 +13,7 @@ import com.intern.gagyebu.databinding.ActivityYearlySummaryBinding
 import com.intern.gagyebu.room.ItemRepository
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.BaseActivity
+import com.intern.gagyebu.summary.util.ReportViewInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,15 +42,25 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
     private fun setObserver() {
         this.viewModel.titleYear.observe(this@YearlySummaryActivity, Observer {
             viewModel.getYearReportData()
+            binding.tvBoxTitle.text = String.format(resources.getString(R.string.boxTitle_year), viewModel.titleYear.value)
+            binding.tvBoxSubTitle.text = String.format(resources.getString(R.string.boxSubTitle_year), viewModel.titleYear.value)
         })
 
         this.viewModel.isEmpty.observe(this@YearlySummaryActivity, Observer {
             if(viewModel.isEmpty.value!!) {
-                barChartInfoList =  mutableListOf<BarChartInfo>()
+                //barChartInfoList =  mutableListOf<BarChartInfo>()
                 resetRecyclerViewAdapter()
                 binding.rcvBarChart.visibility = View.GONE
+                binding.linearBoxTitle.visibility = View.GONE
+                binding.tvBoxSubTitle.visibility = View.GONE
+                binding.boxCustomView.visibility = View.GONE
+                binding.boxBottomLine.visibility = View.GONE
             } else {
                 binding.rcvBarChart.visibility = View.VISIBLE
+                binding.linearBoxTitle.visibility = View.VISIBLE
+                binding.tvBoxSubTitle.visibility = View.VISIBLE
+                binding.boxCustomView.visibility = View.VISIBLE
+                binding.boxBottomLine.visibility = View.VISIBLE
             }
         })
 
@@ -60,6 +71,7 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
 
         this.viewModel.reportViewData.observe(this@YearlySummaryActivity, Observer {
             Log.d("ccheck report", viewModel.reportViewData.value.toString())
+            binding.boxCustomView.setTextAttribute(viewModel.reportViewData.value as ReportViewInfo)
         })
     }
 
