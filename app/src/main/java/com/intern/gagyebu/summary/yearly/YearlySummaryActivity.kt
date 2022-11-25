@@ -66,7 +66,9 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
         })
 
         this.viewModel.barChartData.observe(this@YearlySummaryActivity, Observer {
-            barChartInfoList = viewModel.barChartData.value!!.subList(1, 12)
+            barChartInfoList = viewModel.barChartData.value!!.subList (
+                1, viewModel.barChartData.value!!.size
+            )
             resetRecyclerViewAdapter()
         })
 
