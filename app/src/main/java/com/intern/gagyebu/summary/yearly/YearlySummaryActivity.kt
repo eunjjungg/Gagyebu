@@ -41,6 +41,7 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
     private fun setObserver() {
         this.viewModel.titleYear.observe(this@YearlySummaryActivity, Observer {
             viewModel.getYearReportData()
+            binding.tvBoxTitle.text = String.format(resources.getString(R.string.boxTitle_year), viewModel.titleYear.value)
         })
 
         this.viewModel.isEmpty.observe(this@YearlySummaryActivity, Observer {
@@ -48,8 +49,10 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
                 barChartInfoList =  mutableListOf<BarChartInfo>()
                 resetRecyclerViewAdapter()
                 binding.rcvBarChart.visibility = View.GONE
+                binding.linearBoxTitle.visibility = View.GONE
             } else {
                 binding.rcvBarChart.visibility = View.VISIBLE
+                binding.linearBoxTitle.visibility = View.VISIBLE
             }
         })
 
