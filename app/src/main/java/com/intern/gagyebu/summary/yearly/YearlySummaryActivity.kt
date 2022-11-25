@@ -81,7 +81,6 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
     }
 
     private fun setRecyclerView() {
-        barChartAdapter.barChartInfo = barChartInfoList
         binding.rcvBarChart.apply {
             layoutManager = LinearLayoutManager(
                 this@YearlySummaryActivity,
@@ -89,6 +88,16 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
                 false
             )
             adapter = barChartAdapter
+        }
+
+        barChartAdapter.apply {
+            barChartInfo = barChartInfoList
+            setOnItemClickListener(object : BarChartClickListener{
+                override fun onItemClicked(month: Int) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         }
     }
 
