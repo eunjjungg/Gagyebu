@@ -13,7 +13,6 @@
     <color name="boxDividingLine">#999999</color>
 
     <!--Pie Chart View-->
-    <color name="pieChartViewTransparent">#4D000000</color>
     <color name="pieChartBackground">#252525</color>
     <color name="pieChartText">#FFFFFF</color>
     <color name="pieChartDividingLine">#999999</color>
