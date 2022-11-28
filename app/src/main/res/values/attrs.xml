@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BarCustomView">
+        <attr name="percentage" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="BoxCustomView">
+        <attr name="boxCount" format="integer"/>
+        <attr name="boxTextSize" format="dimension"/>
+        <attr name="spacingBtwBoxes" format="dimension"/>
+        <attr name="boxBackgroundColor" format="color"/>
+        <attr name="boxBackgroundThemeColor" format="color"/>
+        <attr name="inputTextCostTheme" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="PieChartView">
+    </declare-styleable>
+
+</resources>
