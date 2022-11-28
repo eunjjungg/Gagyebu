@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">Gagyebu</string>
+
+    <!--Box Report View-->
+    <string name="boxSubTitle_year">%d 가장 많이 소비한 금액</string>
+    <string name="boxAverage_percentageInt">평균보다 %d 만큼 소비</string>
+    <string name="boxList_month_amount">%1$s : %2$s원</string>
+
+    <!--Pie Chart View-->
+    <string name="pieTitle_month">%s Report</string>
+
     <string name="show_date" formatted="true">%1$d년 %2$d월 가계부</string>
     <string name="show_won" formatted="true">%1$s 원</string>
     <string name="show_date_full" formatted="true">%1$d-%2$d-%3$d</string>
