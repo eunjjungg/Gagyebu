@@ -4,7 +4,7 @@ enum class Options {
     DEFAULT,
     INCOME,
     SPEND,
-    AMOUNT,
-    DATE
+    amount,
+    day
 
 }

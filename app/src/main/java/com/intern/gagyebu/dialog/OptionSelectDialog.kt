@@ -4,6 +4,7 @@ import android.app.AlertDialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 import com.intern.gagyebu.databinding.OptionSelectBinding
 
@@ -21,7 +22,7 @@ class OptionSelectDialog : DialogFragment() {
         val binding = OptionSelectBinding.inflate(requireActivity().layoutInflater)
 
         var filter: String = Options.DEFAULT.toString()
-        var order = Options.AMOUNT.toString()
+        var order = Options.day.toString()
 
         builder.setTitle("필터링")
 
@@ -33,14 +34,17 @@ class OptionSelectDialog : DialogFragment() {
 
                 else -> Options.DEFAULT.toString()
             }
+            Log.d("filter",checkedId.toString())
         }
 
         binding.orderGroup.setOnCheckedChangeListener { group, checkedId ->
             order = when (checkedId) {
-                binding.orderAmount.id -> Options.AMOUNT.toString()
+                binding.orderAmount.id -> Options.amount.toString()
 
-                else -> Options.DATE.toString()
+                else -> Options.day.toString()
+
             }
+            Log.d("order",checkedId.toString())
         }
 
         binding.confirm.setOnClickListener{
