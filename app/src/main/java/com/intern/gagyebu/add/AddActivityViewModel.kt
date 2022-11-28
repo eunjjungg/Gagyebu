@@ -116,7 +116,7 @@ class AddActivityViewModel : ViewModel() {
             try {
                 withTimeout(5000) {
                     launch {
-                        delay(4000)
+                        //delay(4000)
                         ItemRepo.saveItem(itemEntity)
                         event(Event.Done("저장 완료"))
                     }

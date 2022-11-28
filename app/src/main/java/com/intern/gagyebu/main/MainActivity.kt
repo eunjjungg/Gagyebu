@@ -3,7 +3,7 @@ package com.intern.gagyebu.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +13,6 @@ import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
-import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
 import java.util.*
 
@@ -43,30 +42,12 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerview.adapter = adapter
         subscribeUi(adapter, viewModel)
 
-        //해당 년/월의 수입 observing
-        viewModel.incomeValue.observe(this) {
-            binding.income.text = getString(R.string.show_won, "$it")
+        binding.composeView.setContent {
+            MaterialTheme() {
+                MonthlyDescription(viewModel)
+            }
         }
 
-        //해당 년/월의 지출 observing
-        viewModel.spendValue.observe(this) {
-            binding.spend.text = getString(R.string.show_won, "$it")
-        }
-
-        //해당 년/월의 총합 observing
-        viewModel.totalValue.observe(this) {
-            binding.total.text = getString(R.string.show_won, "$it")
-        }
-
-        //달력 text observing
-        viewModel.date.observe(this) {
-            binding.calender.text = it
-        }
-
-        //저장버튼 (test)
-        binding.save.setOnClickListener {
-            startActivity(Intent(this, AddItemActivity::class.java))
-        }
 
         //달력 다이얼로그
         binding.calender.setOnClickListener {
@@ -77,6 +58,8 @@ class MainActivity : AppCompatActivity() {
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }
+
+
 
         //옵션 다이얼로그
         binding.filter.setOnClickListener {
