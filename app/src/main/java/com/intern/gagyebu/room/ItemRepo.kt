@@ -2,6 +2,7 @@ package com.intern.gagyebu.room
 
 import com.intern.gagyebu.App
 import com.intern.gagyebu.ItemGetOption
+import com.intern.gagyebu.dialog.Options
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -18,12 +19,16 @@ object ItemRepo {
     }
 
     fun itemGet(data: ItemGetOption): Flow<List<ItemEntity>> {
-        val item = if (data.filter == "all"){
-            ItemDao.sortDay(data.year, data.month, data.order)
-        } else if (data.filter == "spend") {
-            ItemDao.sortInSpend(data.year, data.month, data.order)
-        } else {
-            ItemDao.sortInIncome(data.year, data.month, data.order)
+        val item = when (data.filter) {
+            Options.DEFAULT.toString() -> {
+                ItemDao.sortDay(data.year, data.month, data.order)
+            }
+            Options.SPEND.toString() -> {
+                ItemDao.sortInSpend(data.year, data.month, data.order)
+            }
+            else -> {
+                ItemDao.sortInIncome(data.year, data.month, data.order)
+            }
         }
         return item
     }

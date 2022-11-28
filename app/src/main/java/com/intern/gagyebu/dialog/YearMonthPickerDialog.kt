@@ -24,10 +24,10 @@ class YearMonthPickerDialog : DialogFragment() {
 
         val monthPicker = binding.pickerMonth
         val yearPicker = binding.pickerYear
-        binding.btnCancel.setOnClickListener {
+        binding.cancel.setOnClickListener {
             this@YearMonthPickerDialog.dialog?.cancel()
         }
-        binding.btnConfirm.setOnClickListener {
+        binding.confirm.setOnClickListener {
             customListener!!.onDateSet(null, yearPicker.value, monthPicker.value, 0)
             this@YearMonthPickerDialog.dialog?.cancel()
         }

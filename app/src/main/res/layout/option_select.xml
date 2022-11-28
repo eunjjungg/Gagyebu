@@ -4,6 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/filter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        android:text="내역"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/filter_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RadioGroup
         android:id="@+id/filter_group"
         android:layout_width="match_parent"
@@ -11,29 +25,40 @@
         android:gravity="center"
         android:orientation="horizontal"
 
-        app:layout_constraintBottom_toTopOf="@+id/order_group"
+        app:layout_constraintBottom_toTopOf="@+id/sort_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/filter_title">
 
         <RadioButton
+            android:checked="true"
             android:id="@+id/filter_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Theme.Gagyebu.OptionSelect"
             android:text="전체" />
 
         <RadioButton
             android:id="@+id/filter_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Theme.Gagyebu.OptionSelect"
             android:text="수입" />
 
         <RadioButton
             android:id="@+id/filter_spend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Theme.Gagyebu.OptionSelect"
             android:text="지출" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/sort_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="정렬방식"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/order_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_group" />
 
     <RadioGroup
         android:id="@+id/order_group"
@@ -45,26 +70,27 @@
         app:layout_constraintBottom_toTopOf="@+id/consum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_group">
+        app:layout_constraintTop_toBottomOf="@+id/sort_title">
 
         <RadioButton
+            android:checked="true"
             android:id="@+id/order_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Theme.Gagyebu.OptionSelect"
             android:text="금액" />
 
         <RadioButton
             android:id="@+id/order_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Theme.Gagyebu.OptionSelect"
             android:text="날짜" />
 
     </RadioGroup>
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:id="@+id/consum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,14 +101,22 @@
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:textColor="#000000"
             android:text="cancel" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
 
         <Button
             android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:textColor="#000000"
             android:text="confirm" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
