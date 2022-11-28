@@ -14,7 +14,16 @@
         android:theme="@style/Theme.Gagyebu"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".add.AddItemActivity"
+            android:exported="false"
+            android:label="@string/title_activity_test"
+            android:theme="@style/Theme.Gagyebu">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
