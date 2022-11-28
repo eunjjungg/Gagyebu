@@ -14,5 +14,45 @@
         android:layout_height="match_parent"
         tools:context=".summary.monthly.MonthlySummaryActivity">
 
+        <View
+            android:id="@+id/pieChartBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/pieChartBackground"
+            android:layout_marginVertical="@dimen/pieBackgroundMarginVertical"
+            android:layout_marginHorizontal="@dimen/pieBackgroundMarginHorizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/pieChartDividingLine"
+            app:layout_constraintStart_toStartOf="@id/pieChartBg"
+            app:layout_constraintEnd_toEndOf="@id/pieChartBg"
+            app:layout_constraintTop_toTopOf="@id/pieChartBg"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/pieChartDividingLine"
+            app:layout_constraintStart_toStartOf="@id/pieChartBg"
+            app:layout_constraintEnd_toEndOf="@id/pieChartBg"
+            app:layout_constraintTop_toBottomOf="@id/pieChartBg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pieTitle_month"
+            android:layout_marginVertical="@dimen/pieTitleMarginVertical"
+            android:textSize="@dimen/pieTitleTextSize"
+            style="@style/Theme.Gagyebu.Emphasis"
+            app:layout_constraintTop_toTopOf="@id/pieChartBg"
+            app:layout_constraintStart_toStartOf="@id/pieChartBg"
+            app:layout_constraintEnd_toEndOf="@id/pieChartBg"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

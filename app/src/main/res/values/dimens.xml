@@ -20,5 +20,9 @@
     <dimen name="boxViewMarginVertical">16dp</dimen>
 
     <!--Pie Chart View-->
+    <dimen name="pieBackgroundMarginVertical">100dp</dimen>
+    <dimen name="pieBackgroundMarginHorizontal">40dp</dimen>
+    <dimen name="pieTitleMarginVertical">24dp</dimen>
+    <dimen name="pieTitleTextSize">20dp</dimen>
 
 </resources>
