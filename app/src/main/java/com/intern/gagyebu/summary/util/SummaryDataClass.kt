@@ -31,6 +31,13 @@ data class ReportViewInfo(
     val cost3: String?
 )
 
+data class CategoryInfoOfMonth(
+    @ColumnInfo(name = "category")
+    val category: String,
+    @ColumnInfo(name = "sum(amount)")
+    val sum: Int
+)
+
 @Parcelize
 data class DateInfo(
     val year: Int,
