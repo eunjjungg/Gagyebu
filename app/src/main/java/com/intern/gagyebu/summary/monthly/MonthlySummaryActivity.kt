@@ -12,6 +12,7 @@ import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.summary.yearly.YearlySummaryViewModel
+import com.intern.gagyebu.summary.yearly.YearlySummaryViewModel.Companion.months
 
 class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
     R.layout.activity_monthly_summary
@@ -31,6 +32,7 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
 
     override fun onCreateAction() {
         getParcel()
+        binding.setTitle()
         setObserver()
         viewModel.getMonthlyReportData(year, month)
     }
@@ -46,5 +48,12 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
         this.viewModel.pieChartData.observe(this@MonthlySummaryActivity, Observer {
             binding.pieChart.setPercentage(viewModel.pieChartData.value!!)
         })
+    }
+
+    private fun ActivityMonthlySummaryBinding.setTitle() {
+        title.text = String.format(
+            resources.getString(R.string.pieTitle_month),
+            months[month]
+        )
     }
 }
