@@ -123,7 +123,7 @@ class AddItemActivity : ComponentActivity() {
                             }
 
                             Button(
-                                onClick = {viewModel.setData()},
+                                onClick = {viewModel.saveData()},
                                 enabled = areInputsValid
                             ) {
                                 Text(

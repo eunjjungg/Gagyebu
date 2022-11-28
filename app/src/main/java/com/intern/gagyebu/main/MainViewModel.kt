@@ -17,7 +17,7 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH) + 1,
         Options.DEFAULT.toString(),
-        Options.DATE.toString()
+        Options.day.toString()
     )
 
     private var _date: MutableLiveData<String> = MutableLiveData()
