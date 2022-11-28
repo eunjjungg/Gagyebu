@@ -40,21 +40,26 @@
         >
 
         <Button
-            android:id="@+id/btn_cancel"
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cancel"
-            android:textAllCaps="false"
-            android:layout_marginEnd="10dp"
+            android:background="#00FFFFFF"
+            android:textColor="#000000"
+            android:text="cancel" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             />
 
         <Button
-            android:id="@+id/btn_confirm"
+            android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="confirm"
-            android:textAllCaps="false"
-            />
+            android:background="#00FFFFFF"
+            android:textColor="#000000"
+            android:text="confirm" />
 
     </LinearLayout>
 </LinearLayout>

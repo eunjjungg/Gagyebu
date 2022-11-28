@@ -13,209 +13,116 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp"
-        tools:context=".main.MainActivity">
-
-        <TextView
-            android:id="@+id/calender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/show_date"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/total"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/total"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-
-            app:layout_constraintBottom_toTopOf="@+id/card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calender" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_margin="20dp"
-
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="#f7f2f3"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/vertical_line"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/total">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/income_view"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/horizontal_line"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/income" />
-
-                    <TextView
-                        android:id="@+id/income"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/show_won" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/horizontal_line"
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="#FFAAAAAA"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/spend_view"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/horizontal_line"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/spend" />
-
-                    <TextView
-                        android:id="@+id/spend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/show_won" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <View
-            android:id="@+id/vertical_line"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginBottom="20dp"
-            android:background="#FFAAAAAA"
-            app:layout_constraintBottom_toTopOf="@+id/detail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card" />
+        android:layout_height="match_parent">
 
 
         <LinearLayout
-            android:id="@+id/detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vertical_line">
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/calender"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/details" />
+                android:text="@string/show_date"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/total"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:id="@+id/vertical_line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="#FFAAAAAA" />
 
-            <ImageView
-                android:id="@+id/filter"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/filter_list_48px" />
-
-            <Button
-                android:id="@+id/save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="저장" />
+                android:gravity="center"
+                android:orientation="horizontal">
 
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/details" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/filter_list_48px" />
+
+            </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail"
-            app:layout_constraintVertical_weight="1" />
-
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp" />
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/fabAdd"
             android:src="@drawable/ic_add"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            android:backgroundTint="@color/fabAdd"
             app:layout_constraintBottom_toBottomOf="@+id/fabDefault"
-            app:layout_constraintEnd_toEndOf="@+id/fabDefault"/>
+            app:layout_constraintEnd_toEndOf="@+id/fabDefault" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/fabCalendar"
             android:src="@drawable/ic_calendar"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            android:backgroundTint="@color/fabCalendar"
             app:layout_constraintBottom_toBottomOf="@+id/fabDefault"
-            app:layout_constraintEnd_toEndOf="@+id/fabDefault"/>
+            app:layout_constraintEnd_toEndOf="@+id/fabDefault" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDefault"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:backgroundTint="@color/fabDefault"
             android:src="@drawable/ic_menu"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            android:layout_margin="8dp"
-            android:backgroundTint="@color/fabDefault"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

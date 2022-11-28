@@ -2,6 +2,7 @@ package com.intern.gagyebu.main
 
 import androidx.lifecycle.*
 import com.intern.gagyebu.ItemGetOption
+import com.intern.gagyebu.dialog.Options
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import kotlinx.coroutines.flow.*
@@ -15,8 +16,8 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
     private val itemGetOption = ItemGetOption(
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH) + 1,
-        "all",
-        "date"
+        Options.DEFAULT.toString(),
+        Options.day.toString()
     )
 
     private var _date: MutableLiveData<String> = MutableLiveData()

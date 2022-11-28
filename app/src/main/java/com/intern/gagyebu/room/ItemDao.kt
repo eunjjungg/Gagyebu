@@ -14,7 +14,7 @@ interface ItemDao{
     @Insert
     fun saveItem(itemEntity: ItemEntity)
 
-    //해당 년, 월 일별 정렬 (기본 쿼리값)
+    //필터링 없음 + 금액, 일자 사용자 입력에 따라 정렬
     @Query("SELECT * FROM ItemEntity WHERE year= :year AND month = :month ORDER BY "+
             "CASE :order WHEN 'day' THEN day END DESC," +
             "CASE :order WHEN 'amount' THEN amount END DESC")

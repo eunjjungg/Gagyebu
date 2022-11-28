@@ -23,9 +23,9 @@ class AddActivityViewModel : ViewModel() {
 
     var activityTitle: String = "항목 저장"
 
-    var ID: Int = 0
+    var itemId: Int = 0
 
-    private var isrunning: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var isSaving: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun updateTitle(title: String) {
         _title.value = title
@@ -51,20 +51,20 @@ class AddActivityViewModel : ViewModel() {
         title.asFlow(),
         amount.asFlow(),
         date.asFlow(),
-        isrunning.asFlow()
-    ) { title, amount, date, isrunning -> title.isNotBlank() && amount.isNotBlank() && date.isNotBlank() && isrunning == false }.onStart {
+        isSaving.asFlow()
+    ) { title, amount, date, isSaving -> title.isNotBlank() && amount.isNotBlank() && date.isNotBlank() && isSaving == false }.onStart {
         emit(
             false
         )
     }.asLiveData()
 
-    fun setData() {
+    fun saveData() {
         try {
             val dateArr =
-                date.value?.let { date -> date.split("-").map { it.toInt() }.toIntArray() }
+                date.value?.split("-")?.map { it.toInt() }?.toIntArray()
                     ?: throw java.lang.IllegalArgumentException("날짜을 확인해주세요")
 
-            val title = title.value?.let { it.trim() }
+            val title = title.value?.trim()
                 ?: throw java.lang.IllegalArgumentException("제목을 확인해주세요")
 
             val amount = amount.value?.let {
@@ -88,11 +88,11 @@ class AddActivityViewModel : ViewModel() {
                     day = dateArr[2],
                     category = category
                 )
-                setData(itemEntity)
+                saveData(itemEntity)
 
             } else {
                 val itemEntity = ItemEntity(
-                    id = ID,
+                    id = itemId,
                     amount = amount,
                     title = title,
                     year = dateArr[0],
@@ -101,7 +101,7 @@ class AddActivityViewModel : ViewModel() {
                     category = category
                 )
 
-                update(itemEntity)
+                updateData(itemEntity)
             }
 
 
@@ -110,26 +110,27 @@ class AddActivityViewModel : ViewModel() {
         }
     }
 
-    private fun setData(itemEntity: ItemEntity) {
-        isrunning.value = true
+    private fun saveData(itemEntity: ItemEntity) {
+        isSaving.value = true
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 withTimeout(5000) {
                     launch {
+                        //delay(4000)
                         ItemRepo.saveItem(itemEntity)
                         event(Event.Done("저장 완료"))
                     }
                 }
 
             } catch (e: TimeoutCancellationException) {
-                isrunning.value = false
+                isSaving.value = false
                 event(Event.Error("저장 실패"))
             }
         }
     }
 
-    private fun update(itemEntity: ItemEntity) {
-        isrunning.value = true
+    private fun updateData(itemEntity: ItemEntity) {
+        isSaving.value = true
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 withTimeout(2000) {
@@ -140,7 +141,7 @@ class AddActivityViewModel : ViewModel() {
                 }
 
             } catch (e: TimeoutCancellationException) {
-                isrunning.value = false
+                isSaving.value = false
                 event(Event.Error("수정 실패"))
             }
         }
@@ -159,7 +160,7 @@ class AddActivityViewModel : ViewModel() {
         _amount.value = intent.getIntExtra("AMOUNT", 0).toString()
         _category.value = intent.getStringExtra("CATEGORY")
         activityTitle = "항목 수정"
-        ID = intent.getIntExtra("ID", 0)
+        itemId = intent.getIntExtra("ID", 0)
     }
 
     sealed class Event {
