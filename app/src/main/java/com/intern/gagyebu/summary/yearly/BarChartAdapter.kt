@@ -35,7 +35,7 @@ class BarChartAdapter: RecyclerView.Adapter<BarChartAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: RecyclerBarChartBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: BarChartInfo) {
-            if(position != RecyclerView.NO_POSITION) {
+            if(position != RecyclerView.NO_POSITION && item.percentage > 0f) {
                 itemView.setOnClickListener {
                     listener?.onItemClicked(item.month)
                 }
