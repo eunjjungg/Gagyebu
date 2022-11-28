@@ -1,11 +1,15 @@
 package com.intern.gagyebu.main
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.animation.OvershootInterpolator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.intern.gagyebu.*
 import com.intern.gagyebu.add.AddItemActivity
 import com.intern.gagyebu.databinding.ActivityMainBinding
@@ -14,6 +18,7 @@ import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -87,6 +92,9 @@ class MainActivity : AppCompatActivity() {
         val adapter = Adapter()
         binding.recyclerview.adapter = adapter
         subscribeUi(adapter, viewModel)
+
+        //fab listener
+        setFabClickListener()
     }
 
     //adapter diff observe 등록
@@ -94,6 +102,40 @@ class MainActivity : AppCompatActivity() {
         viewModel.itemFlow.observe(this) { value ->
             adapter.submitList(value)
         }
+    }
+
+    private var isFabOpen = false
+
+    private fun setFabClickListener() {
+        binding.fabDefault.setOnClickListener {
+            openFab()
+        }
+        binding.fabAdd.setOnClickListener {
+
+        }
+        binding.fabCalendar.setOnClickListener {
+            Intent(this@MainActivity, YearlySummaryActivity::class.java).also { startActivity(it) }
+        }
+    }
+
+    private fun openFab() {
+        val targetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, this.resources.displayMetrics)
+        val setAnimator = {button: FloatingActionButton, startF: Float, endF: Float, duration: Long ->
+            ObjectAnimator.ofFloat(button, "translationY", startF, endF).apply {
+                interpolator = OvershootInterpolator()
+                this.duration = duration
+                start()
+            }
+        }
+        if(isFabOpen) {
+            setAnimator(binding.fabAdd, -targetPx, 0f, 400L)
+            setAnimator(binding.fabCalendar, -targetPx * 2, 0f, 500L)
+        }
+        else {
+            setAnimator(binding.fabAdd, 0f, -targetPx, 400L)
+            setAnimator(binding.fabCalendar, 0f, -targetPx * 2, 500L)
+        }
+        isFabOpen = !isFabOpen
     }
 }
 

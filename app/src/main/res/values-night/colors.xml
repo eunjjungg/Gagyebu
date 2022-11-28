@@ -21,4 +21,10 @@
     <color name="pieChart2">#ABABAB</color>
     <color name="pieChart3">#C9C9C9</color>
     <color name="pieChart4">#FCFCFC</color>
+
+    <!--fab button-->
+    <color name="fabIcon">#252525</color>
+    <color name="fabDefault">#FCFCFC</color>
+    <color name="fabAdd">#C9C9C9</color>
+    <color name="fabCalendar">#C9C9C9</color>
 </resources>

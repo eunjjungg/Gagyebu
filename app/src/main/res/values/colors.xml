@@ -29,4 +29,10 @@
     <color name="pieChart3">#A8ACA4</color>
     <color name="pieChart4">#C6CAC1</color>
 
+    <!--fab button-->
+    <color name="fabIcon">#252525</color>
+    <color name="fabDefault">#C6CAC1</color>
+    <color name="fabAdd">#A8ACA4</color>
+    <color name="fabCalendar">#A8ACA4</color>
+
 </resources>

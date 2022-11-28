@@ -183,5 +183,39 @@
             app:layout_constraintTop_toBottomOf="@+id/detail"
             app:layout_constraintVertical_weight="1" />
 
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            android:backgroundTint="@color/fabAdd"
+            app:layout_constraintBottom_toBottomOf="@+id/fabDefault"
+            app:layout_constraintEnd_toEndOf="@+id/fabDefault"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_calendar"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            android:backgroundTint="@color/fabCalendar"
+            app:layout_constraintBottom_toBottomOf="@+id/fabDefault"
+            app:layout_constraintEnd_toEndOf="@+id/fabDefault"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            android:layout_margin="8dp"
+            android:backgroundTint="@color/fabDefault"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
