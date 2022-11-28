@@ -23,6 +23,27 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".summary.monthly.MonthlySummaryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".summary.util.SampleActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".summary.yearly.YearlySummaryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>

@@ -2,8 +2,12 @@ package com.intern.gagyebu.room
 
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
+import com.intern.gagyebu.summary.util.CategoryInfoOfMonth
+import com.intern.gagyebu.summary.util.MonthlyCategory
+import com.intern.gagyebu.summary.util.SumOfCategory
 import kotlinx.coroutines.flow.Flow
+
+import androidx.room.Update
 
 @androidx.room.Dao
 interface ItemDao{
@@ -32,6 +36,22 @@ interface ItemDao{
     @Query("SELECT SUM(amount) FROM ItemEntity WHERE category = '수입' AND year= :year AND month = :month")
     fun incomeTotal(year: Int, month: Int) : Flow<Int>
 
+    @Query("SELECT * FROM ItemEntity WHERE month = :month AND year = :year")
+    fun getItemWhenYearAndMonthSet(year: Int, month: Int) : List<ItemEntity>
+
+    @Query("SELECT amount FROM ItemEntity WHERE month = :month AND year = :year")
+    fun getAmountWhenYearAndMonthSet(year: Int, month: Int) : List<Int>
+
+    // 해당 연도의 카테고리 별 총액
+    @Query("SELECT category, sum(amount) FROM ItemEntity WHERE year = :year GROUP BY category")
+    fun getAmountSumOfEachCategory(year: Int) : List<SumOfCategory>
+
+    // 해당 연도의 월별 총액
+    @Query("SELECT month, sum(amount) FROM ItemEntity WHERE year = :year AND category = :category GROUP BY month ORDER BY sum(amount) desc")
+    fun getCategorySumOfEachMonth(year: Int, category: String) : List<MonthlyCategory>
+
+    @Query("SELECT category, sum(amount) FROM ItemEntity WHERE year = :year AND month = :month GROUP BY category ORDER BY sum(amount) desc")
+    fun getCategoryAndSumWhenYearAndMonthSet(year: Int, month: Int) : List<CategoryInfoOfMonth>
     //해당월 지출 전체
     @Query("SELECT SUM(amount) FROM ItemEntity WHERE NOT category = '수입' AND year= :year AND month = :month")
     fun spendTotal(year: Int, month: Int) : Flow<Int>
