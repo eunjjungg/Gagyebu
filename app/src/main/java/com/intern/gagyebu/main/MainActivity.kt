@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             openFab()
         }
         binding.fabAdd.setOnClickListener {
-
+            Intent(this@MainActivity, AddItemActivity::class.java).also { startActivity(it) }
         }
         binding.fabCalendar.setOnClickListener {
             Intent(this@MainActivity, YearlySummaryActivity::class.java).also { startActivity(it) }
