@@ -1,7 +1,10 @@
 package com.intern.gagyebu.summary.monthly
 
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +27,7 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
     }
     var year: Int = 0
     var month: Int = 0
+    val descList: MutableList<TextView> = mutableListOf()
 
     override fun initViewModel(viewModel: ViewModel) {
         binding.lifecycleOwner = this@MonthlySummaryActivity
@@ -32,7 +36,7 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
 
     override fun onCreateAction() {
         getParcel()
-        binding.setTitle()
+        binding.setView()
         setObserver()
         viewModel.getMonthlyReportData(year, month)
     }
@@ -47,13 +51,29 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
     private fun setObserver() {
         this.viewModel.pieChartData.observe(this@MonthlySummaryActivity, Observer {
             binding.pieChart.setPercentage(viewModel.pieChartData.value!!)
+            var tmp = 0
+            for(i in viewModel.pieChartData.value!!.indices) {
+                descList[i].text = viewModel.pieChartData.value!![i].name
+                descList[i].visibility = View.VISIBLE
+                tmp = i
+            }
+            for(i in tmp + 1..descList.size - 1) {
+                descList[i].visibility = View.GONE
+            }
         })
     }
 
-    private fun ActivityMonthlySummaryBinding.setTitle() {
+    private fun ActivityMonthlySummaryBinding.setView() {
         title.text = String.format(
             resources.getString(R.string.pieTitle_month),
             months[month]
         )
+        descList.apply {
+            add(pieDesc0)
+            add(pieDesc1)
+            add(pieDesc2)
+            add(pieDesc3)
+            add(pieDesc4)
+        }
     }
 }
