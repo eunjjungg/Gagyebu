@@ -53,6 +53,14 @@
             app:layout_constraintStart_toStartOf="@id/pieChartBg"
             app:layout_constraintEnd_toEndOf="@id/pieChartBg"/>
 
+        <com.intern.gagyebu.summary.monthly.PieChartView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/pieChartBg"
+            app:layout_constraintBottom_toBottomOf="@id/pieChartBg"
+            app:layout_constraintStart_toStartOf="@id/pieChartBg"
+            app:layout_constraintEnd_toEndOf="@id/pieChartBg"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

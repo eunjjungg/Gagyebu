@@ -14,4 +14,7 @@
         <attr name="inputTextCostTheme" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="PieChartView">
+    </declare-styleable>
+
 </resources>
