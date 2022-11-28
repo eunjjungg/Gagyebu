@@ -38,6 +38,11 @@ data class CategoryInfoOfMonth(
     val sum: Int
 )
 
+data class PieElement(
+    val name: String,
+    val percentage: Float
+)
+
 @Parcelize
 data class DateInfo(
     val year: Int,

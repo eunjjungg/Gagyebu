@@ -6,17 +6,13 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.core.animation.addListener
 import com.intern.gagyebu.R
+import com.intern.gagyebu.summary.util.PieElement
 import kotlin.math.roundToInt
-
-data class PieElement(
-    val name: String,
-    val percentage: Float
-)
-
 
 class PieChartView: View {
     constructor(context: Context?) : super(context) {
@@ -194,13 +190,19 @@ class PieChartView: View {
     }
 
 
-    fun setPercentage(per0: PieElement, per1: PieElement?, per2: PieElement?, per3: PieElement?, per4: PieElement?){
-        pieElements[0] = per0
-        pieElements[1] = per1 ?: PieElement("", 0f)
-        pieElements[2] = per2 ?: PieElement("", 0f)
-        pieElements[3] = per3 ?: PieElement("", 0f)
-        pieElements[4] = per4 ?: PieElement("", 0f)
+    fun setPercentage(elementList: List<PieElement>){
+        val _elementList = if(elementList.size > 5)
+            elementList.subList(0, 5)
+        else elementList
+
+        for(i in _elementList.indices) {
+            pieElements[i] = _elementList[i]
+        }
+        for(i in _elementList.size until pieElements.size) {
+            pieElements[i] = PieElement("", 0f)
+        }
         pieElements.sortByDescending { it!!.percentage }
+        Log.d("pieElements", pieElements.toString())
         for(i in 0..pieElements.size - 1) {
             eachPieRangeList[i] = (360f * pieElements[i]!!.percentage).roundToInt().toFloat()
             if(i > 0) {
