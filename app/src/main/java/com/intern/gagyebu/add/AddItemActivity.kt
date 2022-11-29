@@ -46,7 +46,9 @@ class AddItemActivity : ComponentActivity() {
 
         viewModel = ViewModelProvider(this)[AddActivityViewModel::class.java]
 
-        intent.getParcelableExtra("updateData", UpdateDate::class.java)?.let { viewModel.initUpdate(it)}
+        if(intent.hasExtra("updateData")){
+            intent.getParcelableExtra("updateData", UpdateDate::class.java)?.let { viewModel.initUpdate(it)}
+        }
 
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
