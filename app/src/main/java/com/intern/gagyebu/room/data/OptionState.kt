@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.intern.gagyebu.dialog.Options
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -18,10 +19,10 @@ class OptionState(private val context: Context) {
     private val order = stringPreferencesKey("order") // 정렬값 저장
 
     val filterFlow : Flow<String> = context.dataStore.data
-        .map { Preferences ->  Preferences[filter] ?: ""}
+        .map { Preferences ->  Preferences[filter] ?: Options.DEFAULT.toString()}
 
     val orderFlow : Flow<String> = context.dataStore.data
-        .map { Preferences ->  Preferences[order] ?: ""}
+        .map { Preferences ->  Preferences[order] ?: Options.day.toString()}
 
     suspend fun setFilter(value : String){
         context.dataStore.edit {

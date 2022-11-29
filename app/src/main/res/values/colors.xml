@@ -35,4 +35,8 @@
     <color name="fabAdd">#A8ACA4</color>
     <color name="fabCalendar">#A8ACA4</color>
 
+    <!--recycler itme-->
+    <color name="income">#7CBED6</color>
+    <color name="spend">#F08080</color>
+
 </resources>

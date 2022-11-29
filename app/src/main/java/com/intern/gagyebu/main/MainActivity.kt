@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             when(it){
                 "nomal" -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
 
-                else -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#0000FF"))
+                else -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#E74141"))
             }
         }
 
