@@ -30,6 +30,7 @@ class AddActivityViewModel : ViewModel() {
 
     fun updateTitle(title: String) {
         _title.value = title
+        //_title.postValue()
     }
 
     fun updateAmount(amount: String) {

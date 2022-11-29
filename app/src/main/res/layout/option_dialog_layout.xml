@@ -35,7 +35,6 @@
         <RadioButton
             android:id="@+id/filter_all"
             style="@style/Theme.Gagyebu.OptionSelect"
-            android:checked="true"
             android:text="전체" />
 
         <RadioButton
@@ -82,7 +81,6 @@
         <RadioButton
             android:id="@+id/order_date"
             style="@style/Theme.Gagyebu.OptionSelect"
-            android:checked="true"
             android:text="날짜" />
 
     </RadioGroup>

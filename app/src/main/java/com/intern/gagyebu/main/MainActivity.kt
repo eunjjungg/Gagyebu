@@ -2,11 +2,15 @@ package com.intern.gagyebu.main
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.ColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.material3.MaterialTheme
 import android.util.TypedValue
 import android.view.animation.OvershootInterpolator
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,12 +22,14 @@ import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val factory = MainViewModelFactory(ItemRepo)
+    private lateinit var dataStore : OptionState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,16 @@ class MainActivity : AppCompatActivity() {
         binding.composeView.setContent {
             MaterialTheme() {
                 MonthlyDescription(viewModel)
+            }
+        }
+
+        //필터링 상태인지
+        viewModel.filterState.observe(this){
+            Log.d("value", "$it")
+            when(it){
+                "nomal" -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
+
+                else -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#0000FF"))
             }
         }
 
@@ -116,6 +132,7 @@ class MainActivity : AppCompatActivity() {
         val YEAR = calendar.get(Calendar.YEAR)
         val MONTH = calendar.get(Calendar.MONTH) + 1
     }
+
 }
 
 class MainViewModelFactory(
