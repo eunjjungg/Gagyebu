@@ -63,6 +63,7 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
         })
     }
 
+
     private fun ActivityMonthlySummaryBinding.setView() {
         title.text = String.format(
             resources.getString(R.string.pieTitle_month),

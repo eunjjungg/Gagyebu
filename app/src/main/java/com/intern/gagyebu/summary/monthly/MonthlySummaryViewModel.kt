@@ -14,9 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MonthlySummaryViewModel(private val itemRepository: ItemRepository): ViewModel() {
-    val pieChartData = MutableLiveData<MutableList<PieElement>>(mutableListOf<PieElement>(
-        PieElement("", 0f)
-    ))
+    val pieChartData = MutableLiveData<MutableList<PieElement>>()
 
     private suspend fun getDataFromRepository(year: Int, month: Int): List<CategoryInfoOfMonth> {
         var rawData = listOf<CategoryInfoOfMonth>()
@@ -61,6 +59,9 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepository): ViewM
                 add(PieElement(tmp.name, tmp.percentage + (1f - checkOne)))
             }
         }
+        var check = 0f
+        for(i in 0..pieElementList.size - 1)
+            check += pieElementList[i].percentage
 
         //라이브 데이터 적용
         pieChartData.value = pieElementList

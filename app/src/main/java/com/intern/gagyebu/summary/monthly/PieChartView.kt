@@ -190,7 +190,12 @@ class PieChartView: View {
     }
 
 
+    /**
+     * 여기서 문제 발생!! 360을 넘는 상황이 발생
+     */
+
     fun setPercentage(elementList: List<PieElement>){
+
         val _elementList = if(elementList.size > 5)
             elementList.subList(0, 5)
         else elementList
@@ -201,14 +206,27 @@ class PieChartView: View {
         for(i in _elementList.size until pieElements.size) {
             pieElements[i] = PieElement("", 0f)
         }
+
         pieElements.sortByDescending { it!!.percentage }
-        Log.d("pieElements", pieElements.toString())
         for(i in 0..pieElements.size - 1) {
             eachPieRangeList[i] = (360f * pieElements[i]!!.percentage).roundToInt().toFloat()
             if(i > 0) {
                 eachPieStartAngle[i] = eachPieStartAngle[i - 1] + eachPieRangeList[i - 1]
             }
         }
+        //보정을 해주는 부분
+        var check360 = 0f
+        for(i in eachPieRangeList.indices) {
+            check360 += eachPieRangeList[i]
+        }
+        if(check360 != 360f) {
+            eachPieRangeList[_elementList.lastIndex] += 360f - check360
+        }
+
+
+
+
+
         startAnimator()
     }
 }
