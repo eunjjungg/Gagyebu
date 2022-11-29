@@ -28,8 +28,6 @@ class AddActivityViewModel : ViewModel() {
 
     private var isSaving: MutableLiveData<Boolean> = MutableLiveData(false)
 
-
-
     fun updateTitle(title: String) {
         _title.value = title
     }
@@ -45,10 +43,6 @@ class AddActivityViewModel : ViewModel() {
     fun updateDate(date: String) {
         _date.value = date
     }
-
-
-
-
 
     private val _eventFlow = MutableSharedFlow<Event>()
 
@@ -154,7 +148,6 @@ class AddActivityViewModel : ViewModel() {
         }
     }
 
-
     private fun event(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)
@@ -162,7 +155,6 @@ class AddActivityViewModel : ViewModel() {
     }
 
     fun initUpdate(intent: UpdateDate) {
-
         _date.value = intent.date
         _title.value = intent.title
         _amount.value = intent.amount.toString()

@@ -46,7 +46,7 @@ class AddItemActivity : ComponentActivity() {
 
         viewModel = ViewModelProvider(this)[AddActivityViewModel::class.java]
 
-        intent.getParcelableExtra("item", UpdateDate::class.java)?.let { viewModel.initUpdate(it)}
+        intent.getParcelableExtra("updateData", UpdateDate::class.java)?.let { viewModel.initUpdate(it)}
 
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
@@ -121,7 +121,6 @@ class AddItemActivity : ComponentActivity() {
                                         )
                                     )
                                 )
-
                             }
 
                             Button(
