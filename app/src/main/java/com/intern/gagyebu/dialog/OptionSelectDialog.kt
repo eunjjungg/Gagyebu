@@ -6,12 +6,18 @@ import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.DialogFragment
-import com.intern.gagyebu.databinding.OptionSelectBinding
+import androidx.lifecycle.lifecycleScope
+import com.intern.gagyebu.App
+import com.intern.gagyebu.databinding.OptionDialogLayoutBinding
+import com.intern.gagyebu.room.data.OptionState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class OptionSelectDialog : DialogFragment() {
 
     private lateinit var optionListener: OptionDialogListener
-
 
     fun setListener(listener: OptionDialogListener) {
         this.optionListener = listener
@@ -19,40 +25,56 @@ class OptionSelectDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
-        val binding = OptionSelectBinding.inflate(requireActivity().layoutInflater)
-
-        var filter: String = Options.DEFAULT.toString()
-        var order = Options.day.toString()
+        val binding = OptionDialogLayoutBinding.inflate(requireActivity().layoutInflater)
+        val dataStore = OptionState(App.context())
 
         builder.setTitle("필터링")
 
-        binding.filterGroup.setOnCheckedChangeListener { group, checkedId ->
-            filter = when (checkedId) {
-                binding.filterIncome.id -> Options.SPEND.toString()
+        lifecycleScope.launch {
+            val filterOption = dataStore.filterFlow.first()
+            val orderOption = dataStore.orderFlow.first()
 
-                binding.filterSpend.id ->  Options.INCOME.toString()
+            when (filterOption) {
+                Options.SPEND.toString() -> binding.filterSpend.isChecked = true
 
-                else -> Options.DEFAULT.toString()
+                Options.INCOME.toString() -> binding.filterIncome.isChecked = true
+
+                else -> binding.filterAll.isChecked = true
             }
-            Log.d("filter",checkedId.toString())
+
+            when (orderOption) {
+                Options.amount.toString() -> binding.orderAmount.isChecked = true
+
+                else -> binding.orderDate.isChecked = true
+            }
+
         }
 
-        binding.orderGroup.setOnCheckedChangeListener { group, checkedId ->
-            order = when (checkedId) {
-                binding.orderAmount.id -> Options.amount.toString()
-
-                else -> Options.day.toString()
-
+        binding.confirm.setOnClickListener {
+            val filter = if (binding.filterSpend.isChecked) {
+                Options.SPEND.toString()
+            } else if (binding.filterIncome.isChecked) {
+                Options.INCOME.toString()
+            } else {
+                Options.DEFAULT.toString()
             }
-            Log.d("order",checkedId.toString())
-        }
 
-        binding.confirm.setOnClickListener{
+            val order = if (binding.orderAmount.isChecked) {
+                Options.amount.toString()
+            } else {
+                Options.day.toString()
+            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                dataStore.setFilter(filter)
+                dataStore.setOrder(order)
+            }
+
             optionListener.option(filter, order)
             this.dialog?.cancel()
         }
 
-        binding.cancel.setOnClickListener{
+        binding.cancel.setOnClickListener {
             this.dialog?.cancel()
         }
 

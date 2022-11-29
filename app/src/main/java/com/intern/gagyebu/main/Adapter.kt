@@ -6,9 +6,11 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.intern.gagyebu.App
 import com.intern.gagyebu.R
 import com.intern.gagyebu.add.AddItemActivity
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
@@ -41,9 +43,9 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                 Log.d("itme", itemList.category)
 
                 when (itemList.category) {
-                    "수입" -> color.setBackgroundColor(Color.BLUE)
+                    "수입" -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.income))
 
-                    else -> color.setBackgroundColor(Color.RED)
+                    else -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.spend))
                 }
 
                 date.text = this.root.context.getString(

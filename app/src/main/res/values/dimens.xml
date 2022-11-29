@@ -25,4 +25,8 @@
     <dimen name="pieTitleMarginVertical">24dp</dimen>
     <dimen name="pieTitleTextSize">20dp</dimen>
 
+    <!--main-->
+    <dimen name="radius">5dp</dimen>
+    <dimen name="itemHeight">90dp</dimen>
+
 </resources>
