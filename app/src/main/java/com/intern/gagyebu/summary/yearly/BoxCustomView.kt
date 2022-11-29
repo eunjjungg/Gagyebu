@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.yearly
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
@@ -15,12 +16,17 @@ import kotlin.math.roundToInt
 /**
  * width는 무조건 match_parent로 사용해야 함.
  */
-class BoxCustomView: LinearLayout {
+class BoxCustomView : LinearLayout {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         initAttribute(attrs, 0)
     }
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         initAttribute(attrs, defStyleAttr)
     }
 
@@ -32,7 +38,7 @@ class BoxCustomView: LinearLayout {
 
 
     var textList = mutableListOf<String>(
-        "주 거 비", "평균보다 -18% 소비", "AUG : 1,123,432원", "SEP : 234,332원", "JAN : 4,332원"
+        "", "", "", "", ""
     )
     private val TEXT_LIST_THEME = 0
     private val TEXT_LIST_AVERAGE = 1
@@ -40,11 +46,14 @@ class BoxCustomView: LinearLayout {
     private val TEXT_LIST_COST2 = 3
     private val TEXT_LIST_COST3 = 4
 
+    //최소 box들의 개수는 3개
     val minimumBoxCount = 3
+
+    //box의 개수에 따라서 TEXT_LIST_COST2, 3의 가시 여부를 설정
     var boxCount = 1
         set(value) {
             field = value
-            when(field) {
+            when (field) {
                 3 -> {
                     costList2TextView.visibility = View.GONE
                     costList3TextView.visibility = View.GONE
@@ -66,6 +75,7 @@ class BoxCustomView: LinearLayout {
     private var paddingVertical: Int = 0
     private var defaultBoxWidth: Int = 0
 
+    //xml에서 값을 설정해주는 경우 사용되는 함수 (현재 코드에서는 사용할 필요 X)
     private fun initAttribute(attrs: AttributeSet?, defStyleAttr: Int) {
         orientation = VERTICAL
 
@@ -79,7 +89,11 @@ class BoxCustomView: LinearLayout {
         //getDimension : dp -> px float return
         marginBtwBoxes = typedArray.getDimension(
             R.styleable.BoxCustomView_spacingBtwBoxes,
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, context.resources.displayMetrics)
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                20f,
+                context.resources.displayMetrics
+            )
         )
 
         textSize = typedArray.getDimensionPixelSize(
@@ -97,6 +111,7 @@ class BoxCustomView: LinearLayout {
 
         defaultBoxWidth = resources.displayMetrics.widthPixels / 10 * 4
 
+        //텍스트뷰를 만드는 클래스 객체(공통된 부분이 많아 클래스로 뺌)
         val reportYearBoxView = BoxTextCustomView(
             context,
             defaultBoxWidth,
@@ -113,17 +128,22 @@ class BoxCustomView: LinearLayout {
             R.drawable.box_report_view_emphasis
         )
 
+        //위의 텍스트뷰를 만드는 클래스 객체로 실제 텍스트뷰를 만들어서 이 뷰에 붙여주는 함수
         setTextView(reportYearBoxView, emphasisBoxDrawable, basicBoxDrawable)
 
-        boxCount= typedArray.getInt(
+        //현재 따로 xml에서 설정해준 것이 없기 때문에 사용되지 않음.
+        boxCount = typedArray.getInt(
             R.styleable.BoxCustomView_boxCount,
             minimumBoxCount
         )
 
         this.gravity = Gravity.CENTER
+
         typedArray.recycle()
     }
 
+    //TextView를 직접 생성하고 뷰에 붙여주는 함수
+    //지그재그 형식으로 만들어주기 위해서 margin 값을 각각 다르게 부여함
     private fun setTextView(
         reportYearBoxView: BoxTextCustomView,
         emphasisBoxDrawable: Drawable,
@@ -146,34 +166,28 @@ class BoxCustomView: LinearLayout {
             }.also { addView(it) }
 
         costList3TextView = reportYearBoxView
-            .makeBaseTextView(basicBoxDrawable, 0 , 130).apply {
+            .makeBaseTextView(basicBoxDrawable, 0, 130).apply {
             }.also { addView(it) }
     }
 
+    //외부에서 커스텀뷰의 설정을 해주고 싶을 때 사용하는 함수
+    //average, theme, cost1은 필수지만 cost2, cost3는 필수가 아니기에 널체크를 해줌
     fun setTextAttribute(reportViewInfo: ReportViewInfo) {
-        textList[TEXT_LIST_AVERAGE] = reportViewInfo.average
-        textList[TEXT_LIST_COST2] = reportViewInfo.cost2 ?: ""
-        textList[TEXT_LIST_THEME] = reportViewInfo.theme
-        textList[TEXT_LIST_COST1] = reportViewInfo.cost1
-        textList[TEXT_LIST_COST3] = reportViewInfo.cost3 ?: ""
         boxCount =
-            if(reportViewInfo.cost2 == null) {
+            if (reportViewInfo.cost2 == null) {
                 3
-            }
-            else if(reportViewInfo.cost3 == null) {
+            } else if (reportViewInfo.cost3 == null) {
                 4
-            }
-            else {
+            } else {
                 5
             }
-        averageTextView.text = textList[TEXT_LIST_AVERAGE]
-        costList2TextView.text = textList[TEXT_LIST_COST2]
-        themeTextView.text = textList[TEXT_LIST_THEME]
-        costList1TextView.text = textList[TEXT_LIST_COST1]
-        costList3TextView.text = textList[TEXT_LIST_COST3]
+
+        averageTextView.text = reportViewInfo.average
+        themeTextView.text = reportViewInfo.theme
+        costList1TextView.text = reportViewInfo.cost1
+        costList2TextView.text = reportViewInfo.cost2 ?: ""
+        costList3TextView.text = reportViewInfo.cost3 ?: ""
     }
-
-
 
 
 }
