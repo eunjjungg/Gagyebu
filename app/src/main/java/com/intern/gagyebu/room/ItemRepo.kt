@@ -1,7 +1,7 @@
 package com.intern.gagyebu.room
 
 import com.intern.gagyebu.App
-import com.intern.gagyebu.ItemGetOption
+import com.intern.gagyebu.room.data.ItemGetOption
 import com.intern.gagyebu.dialog.Options
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

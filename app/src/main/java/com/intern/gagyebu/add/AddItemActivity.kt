@@ -1,11 +1,13 @@
 package com.intern.gagyebu.add
 
 import android.app.DatePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,20 +33,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.R
 import com.intern.gagyebu.add.ui.theme.GagyebuTheme
+import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.launch
 import java.util.*
 
 class AddItemActivity : ComponentActivity() {
     private lateinit var viewModel: AddActivityViewModel
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this)[AddActivityViewModel::class.java]
 
-        if (intent.hasExtra("ID")) {
-            viewModel.initUpdate(intent)
-        }
+        intent.getParcelableExtra("item", UpdateDate::class.java)?.let { viewModel.initUpdate(it)}
 
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
@@ -186,6 +188,7 @@ class AddItemActivity : ComponentActivity() {
         )
         datePickerDialog.show()
     }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

@@ -14,6 +14,7 @@ import com.intern.gagyebu.add.AddItemActivity
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.room.data.UpdateDate
 
 class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
@@ -60,12 +61,18 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                     builder.setItems(array) { dialog, which ->
                         when (which) {
                             0 -> {
+                                val data = UpdateDate(itemList.id,
+                                    date.text as String, itemList.title, itemList.amount, itemList.category)
                                 val intent = Intent(this.root.context, AddItemActivity::class.java)
+                                intent.putExtra("item", data)
+                                /*
                                 intent.putExtra("ID", itemList.id)
                                 intent.putExtra("DATE", date.text)
                                 intent.putExtra("TITLE", itemList.title)
                                 intent.putExtra("AMOUNT", itemList.amount)
                                 intent.putExtra("CATEGORY", itemList.category)
+
+                                 */
 
                                 this.root.context.startActivity(intent)
                             }
