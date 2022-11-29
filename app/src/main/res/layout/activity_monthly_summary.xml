@@ -79,7 +79,7 @@
                 android:id="@+id/pieDesc0"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="1st"
+                android:text="@{String.valueOf(viewModel.pieChartData[0].name)}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart0"/>
@@ -88,7 +88,7 @@
                 android:id="@+id/pieDesc1"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="1st"
+                android:text="@{String.valueOf(viewModel.pieChartData[1].name)}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart1"/>
@@ -97,7 +97,7 @@
                 android:id="@+id/pieDesc2"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="1st"
+                android:text="@{String.valueOf(viewModel.pieChartData[2].name)}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart2"/>
@@ -106,7 +106,7 @@
                 android:id="@+id/pieDesc3"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="1st"
+                android:text="@{String.valueOf(viewModel.pieChartData[3].name)}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart3"/>
@@ -115,7 +115,7 @@
                 android:id="@+id/pieDesc4"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="1st"
+                android:text="@{String.valueOf(viewModel.pieChartData[4].name)}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart4"/>

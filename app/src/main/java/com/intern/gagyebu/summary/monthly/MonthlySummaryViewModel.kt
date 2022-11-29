@@ -15,6 +15,8 @@ import kotlinx.coroutines.withContext
 class MonthlySummaryViewModel(private val itemRepository: ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
+    /*//view의 각 pie의 설명 text의 라이브 데이터 부분
+    val pieDescData = mutableListOf<String>("")*/
 
     //view에서 불려지는 함수
     fun getMonthlyReportData(year: Int, month: Int) {
