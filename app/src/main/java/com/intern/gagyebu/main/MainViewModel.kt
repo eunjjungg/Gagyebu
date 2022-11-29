@@ -1,10 +1,12 @@
 package com.intern.gagyebu.main
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.*
-import com.intern.gagyebu.ItemGetOption
+import com.intern.gagyebu.room.data.ItemGetOption
 import com.intern.gagyebu.dialog.Options
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import java.util.*
 
@@ -20,14 +22,9 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo):
         Options.day.toString()
     )
 
-    private var _date: MutableLiveData<String> = MutableLiveData()
-    val date: LiveData<String> get() = _date
+    var calendarView = ObservableField<String>()
 
-    fun updateDate(date: String) {
-        _date.value = date
-    }
-
-    private var _queryData = MutableStateFlow<ItemGetOption>(itemGetOption)
+    private var _queryData = MutableStateFlow(itemGetOption)
 
     val incomeValue: LiveData<Int> = _queryData.flatMapLatest {
         itemRepository.totalIncome(it)

@@ -1,9 +1,10 @@
 package com.intern.gagyebu.add
 
-import android.content.Intent
+import android.os.Bundle
 import androidx.lifecycle.*
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -147,20 +148,19 @@ class AddActivityViewModel : ViewModel() {
         }
     }
 
-
     private fun event(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)
         }
     }
 
-    fun initUpdate(intent: Intent) {
-        _date.value = intent.getStringExtra("DATE")
-        _title.value = intent.getStringExtra("TITLE")
-        _amount.value = intent.getIntExtra("AMOUNT", 0).toString()
-        _category.value = intent.getStringExtra("CATEGORY")
+    fun initUpdate(intent: UpdateDate) {
+        _date.value = intent.date
+        _title.value = intent.title
+        _amount.value = intent.amount.toString()
+        _category.value = intent.category
         activityTitle = "항목 수정"
-        itemId = intent.getIntExtra("ID", 0)
+        itemId = intent.id
     }
 
     sealed class Event {

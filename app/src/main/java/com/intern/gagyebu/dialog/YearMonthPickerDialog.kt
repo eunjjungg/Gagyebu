@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.widget.NumberPicker
 import androidx.fragment.app.DialogFragment
 import com.intern.gagyebu.databinding.YearMonthPickerBinding
+import com.intern.gagyebu.main.MainActivity.Companion.MONTH
+import com.intern.gagyebu.main.MainActivity.Companion.YEAR
 import java.util.*
 
 class YearMonthPickerDialog : DialogFragment() {
 
     var customListener: OnDateSetListener? = null
-    var calendar: Calendar = Calendar.getInstance()
 
     fun setListener(listener: OnDateSetListener?) {
         this.customListener = listener
@@ -33,8 +34,9 @@ class YearMonthPickerDialog : DialogFragment() {
         }
         monthPicker.minValue = 1
         monthPicker.maxValue = 12
-        monthPicker.value = calendar.get(Calendar.MONTH) + 1
-        val year: Int = calendar.get(Calendar.YEAR)
+        monthPicker.value = MONTH
+
+        val year = YEAR
         yearPicker.minValue = MIN_YEAR
         yearPicker.maxValue = MAX_YEAR
         yearPicker.value = year

@@ -25,25 +25,17 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val factory = MainViewModelFactory(ItemRepo)
 
-    companion object {
-        private val calendar: Calendar = Calendar.getInstance()
-        val YEAR = calendar.get(Calendar.YEAR)
-        val MONTH = calendar.get(Calendar.MONTH) + 1
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
 
-        binding.calender.text = getString(R.string.show_date, YEAR, MONTH)
+        viewModel.calendarView.set(getString(R.string.show_date, YEAR, MONTH))
 
         //recyclerView init
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerview.layoutManager = layoutManager
-
         val adapter = Adapter()
+        binding.recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.adapter = adapter
         subscribeUi(adapter, viewModel)
 
@@ -53,18 +45,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         //달력 다이얼로그
         binding.calender.setOnClickListener {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
                 viewModel.changeData(year, month)
-                viewModel.updateDate(getString(R.string.show_date, year, month))
+                viewModel.calendarView.set(getString(R.string.show_date, year, month))
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }
-
-
 
         //옵션 다이얼로그
         binding.filter.setOnClickListener {
@@ -84,7 +73,6 @@ class MainActivity : AppCompatActivity() {
     private fun subscribeUi(adapter: Adapter, viewModel: MainViewModel) {
         viewModel.itemFlow.observe(this) { value ->
             adapter.submitList(value){
-                //binding.recyclerview.scrollToPosition(0)
             }
         }
     }
@@ -122,6 +110,12 @@ class MainActivity : AppCompatActivity() {
         }
         isFabOpen = !isFabOpen
     }
+
+    companion object {
+        private val calendar: Calendar = Calendar.getInstance()
+        val YEAR = calendar.get(Calendar.YEAR)
+        val MONTH = calendar.get(Calendar.MONTH) + 1
+    }
 }
 
 class MainViewModelFactory(
@@ -131,4 +125,6 @@ class MainViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>) = MainViewModel(repository) as T
 }
+
+
 

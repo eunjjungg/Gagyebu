@@ -15,16 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.intern.gagyebu.R
 
-
 @Composable
 fun MonthlyDescription(MainViewModel: MainViewModel) {
-    // Observes values coming from the VM's LiveData<Plant> field
     val incomeValue by MainViewModel.incomeValue.observeAsState()
     val spendValue by MainViewModel.spendValue.observeAsState()
     val totalValue by MainViewModel.totalValue.observeAsState()
-    //val date by MainViewModel.date.observeAsState()
-
-    // If plant is not null, display the content
 
     Column(){
         totalValue?.let {

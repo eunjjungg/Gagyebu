@@ -1,4 +1,4 @@
-package com.intern.gagyebu
+package com.intern.gagyebu.room.data
 
 data class ItemGetOption(
     var year: Int,
