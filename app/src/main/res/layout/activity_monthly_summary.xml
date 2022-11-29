@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.intern.gagyebu.summary.monthly.MonthlySummaryViewModel" />
@@ -90,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(viewModel.pieChartData[1].name)}"
                 android:textSize="@dimen/pieTitleTextSize"
+                android:visibility="@{viewModel.pieChartData.size() > 1 ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart1"/>
 
@@ -98,6 +100,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(viewModel.pieChartData[2].name)}"
+                android:visibility="@{viewModel.pieChartData.size() > 2 ? View.VISIBLE : View.GONE}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart2"/>
@@ -107,6 +110,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(viewModel.pieChartData[3].name)}"
+                android:visibility="@{viewModel.pieChartData.size() > 3 ? View.VISIBLE : View.GONE}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart3"/>
@@ -116,6 +120,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(viewModel.pieChartData[4].name)}"
+                android:visibility="@{viewModel.pieChartData.size() > 4 ? View.VISIBLE : View.GONE}"
                 android:textSize="@dimen/pieTitleTextSize"
                 android:textColor="@color/pieChartText"
                 android:background="@color/pieChart4"/>

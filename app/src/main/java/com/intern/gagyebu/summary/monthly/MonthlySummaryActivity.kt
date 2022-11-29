@@ -54,15 +54,6 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
     private fun setObserver() {
         this.viewModel.pieChartData.observe(this@MonthlySummaryActivity, Observer {
             binding.pieChart.setPercentage(viewModel.pieChartData.value!!)
-            var tmp = 0
-            for (i in viewModel.pieChartData.value!!.indices) {
-                descList[i].text = viewModel.pieChartData.value!![i].name
-                descList[i].visibility = View.VISIBLE
-                tmp = i
-            }
-            for (i in tmp + 1..descList.size - 1) {
-                descList[i].visibility = View.GONE
-            }
         })
     }
 
