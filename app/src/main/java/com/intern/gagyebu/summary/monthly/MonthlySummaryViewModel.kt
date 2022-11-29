@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.monthly
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +16,13 @@ import kotlinx.coroutines.withContext
 class MonthlySummaryViewModel(private val itemRepository: ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
-    /*//view의 각 pie의 설명 text의 라이브 데이터 부분
-    val pieDescData = mutableListOf<String>("")*/
+
+    fun checkVisibility(string: String): Int {
+        if(string.isEmpty() || string.isNullOrBlank() || string.equals(""))
+            return View.GONE
+        else
+            return View.VISIBLE
+    }
 
     //view에서 불려지는 함수
     fun getMonthlyReportData(year: Int, month: Int) {
