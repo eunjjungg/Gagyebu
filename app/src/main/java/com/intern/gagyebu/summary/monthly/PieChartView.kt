@@ -13,10 +13,11 @@ import com.intern.gagyebu.R
 import com.intern.gagyebu.summary.util.PieElement
 import kotlin.math.roundToInt
 
-class PieChartView: View {
+class PieChartView : View {
     constructor(context: Context?) : super(context) {
         initPaint()
     }
+
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         initPaint()
     }
@@ -169,22 +170,22 @@ class PieChartView: View {
 
     //뷰에서 이 커스텀 뷰를 설정하는 함수
     //뷰에서는 setPercentage를 통해 각 파이 원소들의 이름과 float을 정의해둔 elementList를 함께 전달
-    fun setPercentage(elementList: List<PieElement>){
-        val _elementList = if(elementList.size > 5)
+    fun setPercentage(elementList: List<PieElement>) {
+        val _elementList = if (elementList.size > 5)
             elementList.subList(0, 5)
         else elementList
 
-        for(i in _elementList.indices) {
+        for (i in _elementList.indices) {
             pieElements[i] = _elementList[i]
         }
-        for(i in _elementList.size until pieElements.size) {
+        for (i in _elementList.size until pieElements.size) {
             pieElements[i] = PieElement("", 0f)
         }
 
         pieElements.sortByDescending { it!!.percentage }
-        for(i in 0..pieElements.size - 1) {
+        for (i in 0..pieElements.size - 1) {
             eachPieRangeList[i] = (360f * pieElements[i]!!.percentage).roundToInt().toFloat()
-            if(i > 0) {
+            if (i > 0) {
                 eachPieStartAngle[i] = eachPieStartAngle[i - 1] + eachPieRangeList[i - 1]
             }
         }
@@ -193,10 +194,10 @@ class PieChartView: View {
         //각 pie의 rangeList의 총합이 359, 361일 경우 마지막 pie의 값을 조절해서
         //총 pie의 rangeList의 총합이 360이 되도록 추가적으로 보정을 해주는 부분
         var check360 = 0f
-        for(i in eachPieRangeList.indices) {
+        for (i in eachPieRangeList.indices) {
             check360 += eachPieRangeList[i]
         }
-        if(check360 != 360f) {
+        if (check360 != 360f) {
             eachPieRangeList[_elementList.lastIndex] += 360f - check360
         }
 
