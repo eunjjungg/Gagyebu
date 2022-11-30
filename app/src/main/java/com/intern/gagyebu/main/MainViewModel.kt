@@ -11,6 +11,8 @@ import com.intern.gagyebu.room.data.OptionState
 import kotlinx.coroutines.flow.*
 import java.util.*
 
+/** mainActivity ViewModel**/
+
 class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     ViewModel() {
 

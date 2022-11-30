@@ -11,6 +11,8 @@ import com.intern.gagyebu.main.MainActivity.Companion.MONTH
 import com.intern.gagyebu.main.MainActivity.Companion.YEAR
 import java.util.*
 
+/** 날짜 변경을 위한 YearMonthPickerDialog **/
+
 class YearMonthPickerDialog : DialogFragment() {
 
     var customListener: OnDateSetListener? = null

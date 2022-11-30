@@ -2,8 +2,6 @@ package com.intern.gagyebu.main
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
-import com.intern.gagyebu.add.AddItemActivity
+import com.intern.gagyebu.add.ProduceActivity
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
@@ -40,14 +38,15 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
         fun bind(itemList: ItemEntity) {
             binding.apply {
                 item = itemList
-                Log.d("itme", itemList.category)
 
+                //수입, 지출에 따른 색상 변경
                 when (itemList.category) {
                     "수입" -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.income))
 
                     else -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.spend))
                 }
 
+                //년-월-일 항목을 하나로 합쳐 표현
                 date.text = this.root.context.getString(
                     R.string.show_date_full,
                     itemList.year,
@@ -55,6 +54,7 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                     itemList.day
                 )
 
+                //수정, 삭제 Dialog 표시
                 this.root.setOnLongClickListener {
 
                     val array = arrayOf("수정", "삭제")
@@ -62,15 +62,23 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                     val builder = AlertDialog.Builder(this.root.context)
                     builder.setItems(array) { dialog, which ->
                         when (which) {
+                            /**
+                             * 수정 요청시 항목을 UpdateDate.class parcel -> ProduceActivity 전달
+                            */
                             0 -> {
                                 val updateData = UpdateDate(id = itemList.id,
                                     date = date.text as String, title = itemList.title, amount = itemList.amount, category = itemList.category)
-                                val intent = Intent(this.root.context, AddItemActivity::class.java).apply {
+
+                                val intent = Intent(this.root.context, ProduceActivity::class.java).apply {
                                     putExtra("updateData", updateData)
                                 }
 
                                 this.root.context.startActivity(intent)
                             }
+
+                            /**
+                             * 삭제 요청시 해당 항목 id 를 통해 삭제 요청
+                             */
 
                             1 -> AlertDialog.Builder(this.root.context).apply {
                                 this.setTitle("삭제")
