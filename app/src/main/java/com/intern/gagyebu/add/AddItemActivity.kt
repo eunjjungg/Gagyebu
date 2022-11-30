@@ -47,7 +47,8 @@ class AddItemActivity : ComponentActivity() {
         viewModel = ViewModelProvider(this)[AddActivityViewModel::class.java]
 
         if(intent.hasExtra("updateData")){
-            intent.getParcelableExtra("updateData", UpdateDate::class.java)?.let { viewModel.initUpdate(it)}
+
+            viewModel.initUpdate(intent.extras!!)
         }
 
         lifecycleScope.launch {

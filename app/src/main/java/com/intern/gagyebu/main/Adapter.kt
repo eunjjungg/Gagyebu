@@ -63,11 +63,11 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                     builder.setItems(array) { dialog, which ->
                         when (which) {
                             0 -> {
-                                val updateItemData = UpdateDate(itemList.id,
-                                    date.text as String, itemList.title, itemList.amount, itemList.category)
-                                val intent = Intent(this.root.context, AddItemActivity::class.java)
-                                intent.putExtra("updateData", updateItemData)
-
+                                val updateData = UpdateDate(id = itemList.id,
+                                    date = date.text as String, title = itemList.title, amount = itemList.amount, category = itemList.category)
+                                val intent = Intent(this.root.context, AddItemActivity::class.java).apply {
+                                    putExtra("updateData", updateData)
+                                }
 
                                 this.root.context.startActivity(intent)
                             }
