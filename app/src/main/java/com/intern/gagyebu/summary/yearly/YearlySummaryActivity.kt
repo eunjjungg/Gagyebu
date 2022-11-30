@@ -1,6 +1,7 @@
 package com.intern.gagyebu.summary.yearly
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -75,6 +76,7 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
             barChartInfoList = viewModel.barChartData.value!!.subList(
                 1, viewModel.barChartData.value!!.size
             )
+
             resetRecyclerViewAdapter()
         })
 
@@ -110,10 +112,15 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
         barChartAdapter.apply {
             barChartInfo = barChartInfoList
             setOnItemClickListener(object : BarChartClickListener {
-                override fun onItemClicked(month: Int) {
-                    Intent(this@YearlySummaryActivity, MonthlySummaryActivity::class.java).apply {
-                        putExtra("dateInfo", DateInfo(viewModel.titleYear.value!!, month))
-                    }.also { startActivity(it) }
+                override fun onItemClicked(item: BarChartInfo) {
+                    if(item.percentage > 0f){
+                        Intent(
+                            this@YearlySummaryActivity,
+                            MonthlySummaryActivity::class.java
+                        ).apply {
+                            putExtra("dateInfo", DateInfo(viewModel.titleYear.value!!, item.month))
+                        }.also { startActivity(it) }
+                    }
                 }
             })
         }

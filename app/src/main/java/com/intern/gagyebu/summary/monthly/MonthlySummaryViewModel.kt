@@ -17,13 +17,6 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepository) : View
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
 
-    fun checkVisibility(string: String): Int {
-        if(string.isEmpty() || string.isNullOrBlank() || string.equals(""))
-            return View.GONE
-        else
-            return View.VISIBLE
-    }
-
     //view에서 불려지는 함수
     fun getMonthlyReportData(year: Int, month: Int) {
         viewModelScope.launch {

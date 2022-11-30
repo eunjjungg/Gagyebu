@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.yearly
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -85,7 +86,6 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
                 }
             }
         }
-
         job.await()
 
         //만약 소비 기록이 없다면 세팅해주기 전에 함수 종료
