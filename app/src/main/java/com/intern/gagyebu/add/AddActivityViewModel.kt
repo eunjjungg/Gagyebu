@@ -1,11 +1,8 @@
 package com.intern.gagyebu.add
 
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
@@ -13,20 +10,27 @@ import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
+/** addActivity-ViewModel **/
+
 class AddActivityViewModel : ViewModel() {
 
+    //날짜 입력 livedata
     private var _date: MutableLiveData<String> = MutableLiveData()
     val date: LiveData<String> get() = _date
 
+    //항목 제목 livedata
     private var _title: MutableLiveData<String> = MutableLiveData()
     val title: LiveData<String> get() = _title
 
+    //항목 금액 livedata
     private var _amount: MutableLiveData<String> = MutableLiveData()
     val amount: LiveData<String> get() = _amount
 
+    //항목 카테고리 livedata
     private var _category: MutableLiveData<String> = MutableLiveData("수입")
     val category: LiveData<String> get() = _category
 
+    //
     var activityTitle: String = "항목 저장"
 
     var itemId: Int = 0
@@ -169,7 +173,6 @@ class AddActivityViewModel : ViewModel() {
             activityTitle = "항목 수정"
             itemId = it.id
         }
-
     }
 
     sealed class Event {
