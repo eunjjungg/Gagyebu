@@ -33,18 +33,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.R
 import com.intern.gagyebu.add.ui.theme.GagyebuTheme
-import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.launch
 import java.util.*
 
-class AddItemActivity : ComponentActivity() {
-    private lateinit var viewModel: AddActivityViewModel
+class ProduceActivity : ComponentActivity() {
+    private lateinit var viewModel: ProduceActivityViewModel
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[AddActivityViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ProduceActivityViewModel::class.java]
 
         if(intent.hasExtra("updateData")){
 
@@ -127,7 +126,7 @@ class AddItemActivity : ComponentActivity() {
                             }
 
                             Button(
-                                onClick = {viewModel.saveData()},
+                                onClick = {viewModel.setData()},
                                 enabled = areInputsValid
                             ) {
                                 Text(
@@ -302,12 +301,12 @@ class AddItemActivity : ComponentActivity() {
         }
     }
 
-    private fun handleEvent(event: AddActivityViewModel.Event) = when (event) {
-        is AddActivityViewModel.Event.Done -> {
+    private fun handleEvent(event: ProduceActivityViewModel.Event) = when (event) {
+        is ProduceActivityViewModel.Event.Done -> {
             Log.d("saveLog", event.value)
             finish()
         }
-        is AddActivityViewModel.Event.Error -> {
+        is ProduceActivityViewModel.Event.Error -> {
             Toast.makeText(this, event.value, Toast.LENGTH_SHORT).show()
         }
     }

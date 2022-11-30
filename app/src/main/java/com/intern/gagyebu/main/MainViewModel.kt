@@ -11,13 +11,15 @@ import com.intern.gagyebu.room.data.OptionState
 import kotlinx.coroutines.flow.*
 import java.util.*
 
+/** mainActivity ViewModel**/
+
 class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     ViewModel() {
 
     private val calendar: Calendar = Calendar.getInstance()
     private val dataStore = OptionState(App.context())
 
-    private val itemGetOption = ItemGetOption(
+    private var itemGetOption = ItemGetOption(
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH) + 1,
         Options.DEFAULT.toString(),
@@ -62,11 +64,13 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     }.asLiveData()
 
     fun changeData(year: Int, month: Int) {
-        _queryData.value = itemGetOption.copy(year = year, month = month)
+        itemGetOption = itemGetOption.copy(year = year, month = month)
+        _queryData.value = itemGetOption
     }
 
     fun changeOption(filter: String, order: String) {
-        _queryData.value = itemGetOption.copy(filter = filter, order = order)
+        itemGetOption = itemGetOption.copy(filter = filter, order = order)
+        _queryData.value = itemGetOption
     }
 
 }

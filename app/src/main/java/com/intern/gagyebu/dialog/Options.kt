@@ -6,5 +6,4 @@ enum class Options {
     SPEND,
     amount,
     day
-
 }

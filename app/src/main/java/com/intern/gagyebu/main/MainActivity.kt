@@ -3,57 +3,57 @@ package com.intern.gagyebu.main
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.ColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.material3.MaterialTheme
 import android.util.TypedValue
 import android.view.animation.OvershootInterpolator
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.intern.gagyebu.*
-import com.intern.gagyebu.add.AddItemActivity
+import com.intern.gagyebu.add.ProduceActivity
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
 import com.intern.gagyebu.room.ItemRepo
-import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
 import java.util.*
+
+/** mainActivity **/
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val factory = MainViewModelFactory(ItemRepo)
-    private lateinit var dataStore : OptionState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        //viewModel, 데이터 초기화
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
 
+        //달력 text 오늘로 초기화
         viewModel.calendarView.set(getString(R.string.show_date, YEAR, MONTH))
 
-        //recyclerView init
+        //recyclerView 초기화
         val adapter = Adapter()
         binding.recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.adapter = adapter
         subscribeUi(adapter, viewModel)
 
+        //compose migration
         binding.composeView.setContent {
             MaterialTheme() {
                 MonthlyDescription(viewModel)
             }
         }
 
-        //필터링 상태인지
+        //필터링 상태에 따라 icon 색상 변경
         viewModel.filterState.observe(this){
-            Log.d("value", "$it")
             when(it){
                 "nomal" -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
 
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             datePicker.show(supportFragmentManager, "DatePicker")
         }
 
-        //옵션 다이얼로그
+        //필터링, 정렬 다이얼로그
         binding.filter.setOnClickListener {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener {
@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //adapter diff observe 등록
+    //ViewModel 에서 받은 ItemList 변경점 diffUtil observe
     private fun subscribeUi(adapter: Adapter, viewModel: MainViewModel) {
         viewModel.itemFlow.observe(this) { value ->
             adapter.submitList(value){
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             openFab()
         }
         binding.fabAdd.setOnClickListener {
-            Intent(this@MainActivity, AddItemActivity::class.java).also { startActivity(it) }
+            Intent(this@MainActivity, ProduceActivity::class.java).also { startActivity(it) }
         }
         binding.fabCalendar.setOnClickListener {
             Intent(this@MainActivity, YearlySummaryActivity::class.java).also { startActivity(it) }

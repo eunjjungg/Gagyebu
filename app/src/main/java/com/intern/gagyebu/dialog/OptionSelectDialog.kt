@@ -4,16 +4,15 @@ import android.app.AlertDialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App
 import com.intern.gagyebu.databinding.OptionDialogLayoutBinding
 import com.intern.gagyebu.room.data.OptionState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+
+/** 항목 정렬, 필터기능 제공을 위한 OptionSelectDialog **/
 
 class OptionSelectDialog : DialogFragment() {
 
@@ -30,6 +29,7 @@ class OptionSelectDialog : DialogFragment() {
 
         builder.setTitle("필터링")
 
+        //사용자가 기 저장한 필터, 정렬 옵션을 가져와 적용하도록 하는 lifecycleScope Block
         lifecycleScope.launch {
             val filterOption = dataStore.filterFlow.first()
             val orderOption = dataStore.orderFlow.first()
@@ -50,6 +50,11 @@ class OptionSelectDialog : DialogFragment() {
 
         }
 
+        /**사용자가 확인 버튼을 클릭하는 경우
+         * 1. datastore 에 해당 값 적용.
+         * 2. optionListener 을 통한 값 전달.
+         * 3. dialog 창 닫음
+         */
         binding.confirm.setOnClickListener {
             val filter = if (binding.filterSpend.isChecked) {
                 Options.SPEND.toString()
@@ -65,7 +70,8 @@ class OptionSelectDialog : DialogFragment() {
                 Options.day.toString()
             }
 
-            CoroutineScope(Dispatchers.Main).launch {
+            //사용자가 입력한 값 datastore 에 저장.
+            runBlocking {
                 dataStore.setFilter(filter)
                 dataStore.setOrder(order)
             }
@@ -74,6 +80,7 @@ class OptionSelectDialog : DialogFragment() {
             this.dialog?.cancel()
         }
 
+        //사용자가 취소 버튼을 누르는 경우
         binding.cancel.setOnClickListener {
             this.dialog?.cancel()
         }

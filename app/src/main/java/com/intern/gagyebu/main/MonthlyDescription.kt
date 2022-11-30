@@ -1,19 +1,23 @@
 package com.intern.gagyebu.main
 
-
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.intern.gagyebu.R
+
+/** MainActivity ComposeMigration */
 
 @Composable
 fun MonthlyDescription(MainViewModel: MainViewModel) {
@@ -21,7 +25,7 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
     val spendValue by MainViewModel.spendValue.observeAsState()
     val totalValue by MainViewModel.totalValue.observeAsState()
 
-    Column(){
+    Column() {
         totalValue?.let {
             TotalView(it)
         }
@@ -46,23 +50,37 @@ fun TotalView(it: Int) {
 
 @Composable
 fun CompInfo(incomeValue: Int?, spendValue: Int?) {
-    Box(modifier = Modifier.fillMaxWidth().height(100.dp),
-    contentAlignment = Alignment.Center,
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        contentAlignment = Alignment.Center,
         propagateMinConstraints = false
     ) {
-        ElevatedCard(modifier = Modifier.width(300.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically,
+        ElevatedCard(
+            modifier = Modifier.width(300.dp),
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .height(80.dp)
-                    .width(300.dp)) {
+                    .width(300.dp)
+            ) {
 
                 incomeValue?.let {
                     IncomeView(it)
                 }
 
                 Divider(
-                    color = Color.Black,
+                    color = Color.Gray,
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(1.dp)
@@ -79,8 +97,10 @@ fun CompInfo(incomeValue: Int?, spendValue: Int?) {
 
 @Composable
 fun IncomeView(it: Int) {
-    Column(modifier = Modifier,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = "수입",
             modifier = Modifier,
@@ -102,8 +122,10 @@ fun IncomeView(it: Int) {
 
 @Composable
 fun SpendView(it: Int) {
-    Column(modifier = Modifier,
-    horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = "지출",
             modifier = Modifier,
