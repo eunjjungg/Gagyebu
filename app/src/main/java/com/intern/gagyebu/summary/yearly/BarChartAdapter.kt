@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.yearly
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -37,9 +38,9 @@ class BarChartAdapter : RecyclerView.Adapter<BarChartAdapter.ViewHolder>() {
             //해당 연도에 데이터가 있는 월이 하나라도 있어서 쭉 나열은 되지만
             //데이터가 없는 월에는 클릭 리스너를 달아주고 싶지 않아서
             //item.percentage > 0f일 때만 클릭이 되도록 설정
-            if (position != RecyclerView.NO_POSITION && item.percentage > 0f) {
+            if (position != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
-                    listener?.onItemClicked(item.month)
+                    listener?.onItemClicked(item)
                 }
             }
 
