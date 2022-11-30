@@ -1,6 +1,11 @@
 package com.intern.gagyebu.add
 
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
@@ -155,17 +160,25 @@ class AddActivityViewModel : ViewModel() {
         }
     }
 
-    fun initUpdate(intent: UpdateDate) {
-        _date.value = intent.date
-        _title.value = intent.title
-        _amount.value = intent.amount.toString()
-        _category.value = intent.category
-        activityTitle = "항목 수정"
-        itemId = intent.id
+    fun initUpdate(bundle: Bundle) {
+        bundle.parcelable<UpdateDate>("updateData")?.let {
+            _date.value = it.date
+            _title.value = it.title
+            _amount.value = it.amount.toString()
+            _category.value = it.category
+            activityTitle = "항목 수정"
+            itemId = it.id
+        }
+
     }
 
     sealed class Event {
         data class Error(val value: String) : Event()
         data class Done(val value: String) : Event()
+    }
+
+    inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
+        SDK_INT >= 33 -> getParcelable(key, T::class.java)
+        else -> @Suppress("DEPRECATION") getParcelable(key) as? T
     }
 }
