@@ -77,7 +77,9 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                             }
 
                             /**
-                             * 삭제 요청시 해당 항목 id 를 통해 삭제 요청
+                             * 삭제 요청시 해당 항목 id 를 repo로 전달.
+                             * repo 함수를 통해 삭제 요청
+                             *
                              */
 
                             1 -> AlertDialog.Builder(this.root.context).apply {

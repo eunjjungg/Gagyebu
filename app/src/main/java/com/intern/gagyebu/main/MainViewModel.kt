@@ -74,15 +74,11 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     }.asLiveData()
 
     //필터링 상태인지
-    val filterState: LiveData<String> = combine(
+    val filterState: LiveData<Boolean> = combine(
         dataStore.filterFlow,
         dataStore.orderFlow
     ) { filter, order ->
-        if (filter != SelectableOptionsEnum.DEFAULT.toString() || order != SelectableOptionsEnum.day.toString()) {
-            "not_nomal"
-        } else {
-            "nomal"
-        }
+        filter != SelectableOptionsEnum.DEFAULT.toString() || order != SelectableOptionsEnum.day.toString()
     }.asLiveData()
 
     //test 날짜
