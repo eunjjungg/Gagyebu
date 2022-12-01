@@ -56,6 +56,11 @@ interface ItemDao{
     @Query("SELECT month, sum(amount) FROM ItemEntity WHERE year = :year AND category = :category GROUP BY month ORDER BY sum(amount) desc")
     fun getCategorySumOfEachMonth(year: Int, category: String) : List<MonthlyCategory>
 
+    //input: 연도, 월, 카테고리
+    //output: 특정 월의 특정 카테고리 소비 내역을 내림차순으로 정렬하여 가장 첫 번째 Item 리턴
+    @Query("SELECT * FROM (SELECT * FROM ItemEntity WHERE year = :year AND category = :category AND month = :month ORDER BY amount desc) LIMIT 1")
+    fun getTopCostItem(year: Int, month: Int, category: String) : ItemEntity
+
     //input: 연도, 월
     //output: 특정 월의 소비 내역을 카테고리로 묶어서 각 카테고리와 해당 카테고리 소비 금액을 내림차순으로 정렬한 결과
     @Query("SELECT category, sum(amount) FROM ItemEntity WHERE year = :year AND month = :month GROUP BY category ORDER BY sum(amount) desc")
