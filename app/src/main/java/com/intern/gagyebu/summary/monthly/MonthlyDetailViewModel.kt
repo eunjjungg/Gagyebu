@@ -1,6 +1,7 @@
 package com.intern.gagyebu.summary.monthly
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,7 @@ import kotlinx.coroutines.withContext
 
 class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     var dateInfo = DateInfo(0, 0)
-    val topCostDetailList = mutableListOf<MonthlyDetailInfo>()
+    val topCostDetailList = MutableLiveData(mutableListOf<MonthlyDetailInfo>())
     var pieElementList = mutableListOf<PieElement>()
 
     fun setDate(date: DateInfo) {
@@ -33,10 +34,12 @@ class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository
     private suspend fun getTopCostItemList() {
         viewModelScope.async {
             withContext(Dispatchers.IO) {
+                val tmp = mutableListOf<MonthlyDetailInfo>()
                 for (pieElement in pieElementList) {
                     val item = itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name)
-                    topCostDetailList.add(MonthlyDetailInfo(item, pieElement.percentage.toPercentageInt()))
+                    tmp.add(MonthlyDetailInfo(item, pieElement.percentage.toPercentageInt()))
                 }
+                withContext(Dispatchers.Main){ topCostDetailList.value = tmp }
             }
         }.await()
     }

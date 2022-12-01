@@ -29,14 +29,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.R
+import com.intern.gagyebu.summary.util.MonthlyDetailInfo
 import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.ui.theme.GagyebuTheme
 
 @Composable
 fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
-    //val pieChartData by monthlySummaryViewModel.pieChartData.observeAsState()
+    val topCostDetailList = monthlyDetailViewModel.topCostDetailList.observeAsState()
 
-    //ComposeCards(pieChartData, modifier = Modifier.fillMaxSize())
+    topCostDetailList.value?.let {
+        ComposeCards(topCostDetailList.value, modifier = Modifier.fillMaxSize())
+    }
+
 }
 
 @Composable
@@ -111,11 +115,11 @@ fun PreviewCardContent() {
 
 @Composable
 fun ComposeCards(
-    pieChartData : MutableList<PieElement>?,
+    topCostDetailList : MutableList<MonthlyDetailInfo>?,
     modifier: Modifier = Modifier
 ) {
 
-    if(pieChartData.isNullOrEmpty()) {
+    if(topCostDetailList.isNullOrEmpty()) {
         return
     } else {
         LazyColumn(
@@ -127,7 +131,7 @@ fun ComposeCards(
                     percentage = 80
                 )
             }
-            items(items = pieChartData) { item ->
+            items(items = topCostDetailList) { item ->
                 Log.d("ccheck",item.toString())
                 ComposeCard(
                     item = ItemEntity(1, 35000, "마카롱", 2022, 12, 1, "식료품"),
