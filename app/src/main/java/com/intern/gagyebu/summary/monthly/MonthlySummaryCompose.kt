@@ -1,42 +1,31 @@
 package com.intern.gagyebu.summary.monthly
 
-import android.preference.PreferenceActivity.Header
 import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.AlignmentLine
-import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.MutableLiveData
-import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.R
 import com.intern.gagyebu.summary.util.MonthlyDetailInfo
-import com.intern.gagyebu.summary.util.PieElement
-import com.intern.gagyebu.ui.theme.GagyebuTheme
 import com.intern.gagyebu.ui.theme.cardBackgroundColor
 import com.intern.gagyebu.ui.theme.cardTextColor
 
@@ -45,13 +34,16 @@ fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
     val topCostDetailList = monthlyDetailViewModel.topCostDetailList.observeAsState()
 
     topCostDetailList.value?.let {
-        ComposeCards(topCostDetailList.value, modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp))
+        ComposeCards(
+            topCostDetailList.value, modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+        )
     }
 
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CardContent(
     detail: MonthlyDetailInfo,
@@ -76,9 +68,11 @@ fun CardContent(
                 .padding(8.dp)
         ) {
             TextTitle(text = detail.item.category)
-            if(expanded) {
+            if (expanded) {
                 TextSubTitle(text = stringResource(id = R.string.compose_openedDesc))
-                TextContent(text = detail.toString())
+                TextContent(text = stringResource(id = R.string.compose_percentage, 80))
+                TextContent(text = stringResource(id = R.string.compose_itemTitle, detail.item.title))
+                TextContent(text = stringResource(id = R.string.compose_itemDate, detail.item.year, detail.item.month, detail.item.day))
             } else {
                 TextSubTitle(text = stringResource(id = R.string.compose_closedDesc))
             }
@@ -107,9 +101,12 @@ fun TextTitle(
     text: String,
 ) {
     Text(
-        text = text, 
-        modifier= Modifier.padding(vertical = 8.dp), 
-        style = MaterialTheme.typography.headlineMedium.copy(color = colorResource(id = R.color.pieChartText), fontSize = dpToSp(20.dp))
+        text = text,
+        modifier = Modifier.padding(vertical = 8.dp),
+        style = MaterialTheme.typography.headlineMedium.copy(
+            color = colorResource(id = R.color.pieChartText),
+            fontSize = dpToSp(20.dp)
+        )
     )
 }
 
@@ -119,8 +116,11 @@ fun TextSubTitle(
 ) {
     Text(
         text = text,
-        modifier= Modifier.padding(vertical = 4.dp),
-        style = MaterialTheme.typography.bodyLarge.copy(color = colorResource(id = R.color.pieChartText), fontSize = dpToSp(10.dp))
+        modifier = Modifier.padding(vertical = 4.dp),
+        style = MaterialTheme.typography.bodyLarge.copy(
+            color = colorResource(id = R.color.pieChartText),
+            fontSize = dpToSp(10.dp)
+        )
     )
 }
 
@@ -130,8 +130,11 @@ fun TextContent(
 ) {
     Text(
         text = text,
-        modifier= Modifier,
-        style = MaterialTheme.typography.bodyMedium.copy(color = colorResource(id = R.color.pieChartText), fontSize = dpToSp(12.dp))
+        modifier = Modifier.padding(vertical = 4.dp),
+        style = MaterialTheme.typography.bodyMedium.copy(
+            color = colorResource(id = R.color.pieChartText),
+            fontSize = dpToSp(12.dp)
+        )
     )
 }
 
@@ -155,11 +158,11 @@ fun ComposeCard(
 
 @Composable
 fun ComposeCards(
-    topCostDetailList : MutableList<MonthlyDetailInfo>?,
+    topCostDetailList: MutableList<MonthlyDetailInfo>?,
     modifier: Modifier = Modifier
 ) {
 
-    if(topCostDetailList.isNullOrEmpty()) {
+    if (topCostDetailList.isNullOrEmpty()) {
         return
     } else {
         LazyColumn(
@@ -169,7 +172,7 @@ fun ComposeCards(
 
             }
             items(items = topCostDetailList) { item ->
-                Log.d("ccheck",item.toString())
+                Log.d("ccheck", item.toString())
                 ComposeCard(
                     item
                 )
