@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
-import com.intern.gagyebu.add.ProduceActivity
+import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
