@@ -39,10 +39,11 @@ data class CategoryInfoOfMonth(
     val sum: Int
 )
 
+@Parcelize
 data class PieElement(
     val name: String,
     val percentage: Float
-)
+): Parcelable
 
 @Parcelize
 data class DateInfo(
@@ -50,3 +51,7 @@ data class DateInfo(
     val month: Int
 ): Parcelable
 
+data class MonthlyDetailInfo(
+    val item: ItemEntity,
+    val percentage: Int
+)

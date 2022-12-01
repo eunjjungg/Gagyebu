@@ -82,10 +82,6 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
         pieChartData.value = pieElementList
     }
 
-    fun goDetailActivity() {
-
-    }
-
     class MonthlySummaryViewModelFactory(private val repository: ItemRepo.ItemRepository) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

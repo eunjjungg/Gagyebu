@@ -33,10 +33,10 @@ import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.ui.theme.GagyebuTheme
 
 @Composable
-fun MonthlySummaryCompose(monthlySummaryViewModel: MonthlySummaryViewModel) {
-    val pieChartData by monthlySummaryViewModel.pieChartData.observeAsState()
+fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
+    //val pieChartData by monthlySummaryViewModel.pieChartData.observeAsState()
 
-    ComposeCards(pieChartData, modifier = Modifier.fillMaxSize())
+    //ComposeCards(pieChartData, modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -121,6 +121,12 @@ fun ComposeCards(
         LazyColumn(
             modifier = modifier
         ) {
+            item {
+                ComposeCard(
+                    item = ItemEntity(1, 35000, "마카롱", 2022, 12, 1, "식료품"),
+                    percentage = 80
+                )
+            }
             items(items = pieChartData) { item ->
                 Log.d("ccheck",item.toString())
                 ComposeCard(

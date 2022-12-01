@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="com.intern.gagyebu.summary.monthly.MonthlySummaryViewModel" />
+        <variable
+            name="view"
+            type="com.intern.gagyebu.summary.monthly.MonthlySummaryActivity" />
     </data>
 
     <!--<ScrollView
@@ -261,7 +264,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/pieTitleMarginVertical"
-                android:onClick="@{() -> viewModel.goDetailActivity()}"
+                android:backgroundTint="@color/pieChart4"
+                android:textColor="@color/pieChartText"
                 android:text="SEE DETAIL"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

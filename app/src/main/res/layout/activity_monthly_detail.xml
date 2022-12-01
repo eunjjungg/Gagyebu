@@ -6,10 +6,10 @@
     <data>
         <variable
             name="viewModel"
-            type="com.intern.gagyebu.summary.monthly.MonthlySummaryViewModel" />
+            type="com.intern.gagyebu.summary.monthly.MonthlyDetailViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,5 +20,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>
