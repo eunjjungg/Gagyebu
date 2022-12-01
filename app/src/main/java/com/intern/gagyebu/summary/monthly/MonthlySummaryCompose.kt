@@ -37,7 +37,7 @@ fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
         ComposeCards(
             topCostDetailList.value, modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp, vertical = 20.dp)
         )
     }
 
@@ -147,7 +147,7 @@ fun ComposeCard(
 ) {
     Card(
         modifier = Modifier
-            .padding(vertical = 30.dp, horizontal = 8.dp),
+            .padding(vertical = 12.dp, horizontal = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = cardBackgroundColor)
         )
