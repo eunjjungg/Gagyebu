@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.MonthlyDetailInfo
@@ -15,15 +16,15 @@ import kotlinx.coroutines.withContext
 
 class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     var dateInfo = DateInfo(0, 0)
-    val topCostItemList = mutableListOf<MonthlyDetailInfo>()
-    var topCostCategoryList = mutableListOf<PieElement>()
+    val topCostDetailList = mutableListOf<MonthlyDetailInfo>()
+    var pieElementList = mutableListOf<PieElement>()
 
     fun setDate(date: DateInfo) {
         dateInfo = date
     }
 
     fun setTopCostCategory(categoryList: MutableList<PieElement>) {
-        topCostCategoryList = categoryList
+        pieElementList = categoryList
         viewModelScope.launch {
             getTopCostItemList()
         }
@@ -32,10 +33,16 @@ class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository
     private suspend fun getTopCostItemList() {
         viewModelScope.async {
             withContext(Dispatchers.IO) {
-
+                for (pieElement in pieElementList) {
+                    val item = itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name)
+                    topCostDetailList.add(MonthlyDetailInfo(item, pieElement.percentage.toPercentageInt()))
+                }
             }
         }.await()
     }
+
+    private fun Float.toPercentageInt(): Int = Math.round(this * 100)
+
 
     class MonthlyDetailViewModelFactory(private val repository: ItemRepo.ItemRepository) :
         ViewModelProvider.Factory {
