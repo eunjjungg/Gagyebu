@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.monthly
 
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -79,6 +80,10 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
 
         //라이브 데이터 적용
         pieChartData.value = pieElementList
+    }
+
+    fun goDetailActivity() {
+
     }
 
     class MonthlySummaryViewModelFactory(private val repository: ItemRepo.ItemRepository) :

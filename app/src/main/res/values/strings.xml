@@ -18,4 +18,15 @@
     <string name="spend">지출</string>
     <string name="title_activity_test">test</string>
 
+    <!--Compose View-->
+    <string name="compose_closedDesc">DETAIL 확인하기</string>
+    <string name="compose_percentage">%s percentage: %d%</string>
+    <string name="compose_desc">최고 구매 기록의 상세 Detail</string>
+    <string name="compose_itemDate">- 구매 일자 : %d년 %d월 %d일</string>
+    <string name="compose_itemCategory">- 구매 카테고리 : %s</string>
+    <string name="compose_itemTitle">- 구매 제목 : %s</string>
+    <string name="compose_close">CLOSE</string>
+    <string name="compose_more">MORE</string>
+
+
 </resources>

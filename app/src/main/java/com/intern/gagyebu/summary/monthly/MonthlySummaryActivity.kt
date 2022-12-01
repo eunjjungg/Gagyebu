@@ -1,5 +1,6 @@
 package com.intern.gagyebu.summary.monthly
 
+import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -61,4 +62,6 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
             months[month]
         )
     }
+
+
 }
