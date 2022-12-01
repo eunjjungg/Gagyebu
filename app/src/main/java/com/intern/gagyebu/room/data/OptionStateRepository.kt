@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.intern.gagyebu.dialog.Options
+import com.intern.gagyebu.dialog.SelectableOptionsEnum
 import com.intern.gagyebu.main.MainActivity.Companion.MONTH
 import com.intern.gagyebu.main.MainActivity.Companion.YEAR
 import kotlinx.coroutines.flow.Flow
@@ -27,10 +27,10 @@ class OptionState(private val context: Context) {
         .map { Preferences ->  Preferences[month] ?: MONTH}
 
     val filterFlow : Flow<String> = context.dataStore.data
-        .map { Preferences ->  Preferences[filter] ?: Options.DEFAULT.toString()}
+        .map { Preferences ->  Preferences[filter] ?: SelectableOptionsEnum.DEFAULT.toString()}
 
     val orderFlow : Flow<String> = context.dataStore.data
-        .map { Preferences ->  Preferences[order] ?: Options.day.toString()}
+        .map { Preferences ->  Preferences[order] ?: SelectableOptionsEnum.day.toString()}
 
     suspend fun setYear(value : Int){
         context.dataStore.edit {
