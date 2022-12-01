@@ -1,4 +1,4 @@
-package com.intern.gagyebu.add
+package com.intern.gagyebu.produce
 
 import android.app.DatePickerDialog
 import android.os.Build
@@ -32,9 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.R
-import com.intern.gagyebu.add.ui.theme.GagyebuTheme
+import com.intern.gagyebu.ui.theme.GagyebuTheme
 import kotlinx.coroutines.launch
 import java.util.*
+
+/** mainActivity ViewModel**/
 
 class ProduceActivity : ComponentActivity() {
     private lateinit var viewModel: ProduceActivityViewModel
@@ -62,6 +64,24 @@ class ProduceActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    /**
+                     * text = mutableStateOf.. 변경 안됨.
+                     * 값 변경되면 setContent 재실행 -> 초기화됨
+                     * 따라서 remember 이용하여 값 복구할 수 있도록
+                     */
+
+                    /**
+                     * text = mutableStateOf.. 변경 안됨.
+                     * 값 변경되면 setContent 재실행 -> 초기화됨
+                     * 따라서 remember 이용하여 값 복구할 수 있도록
+                     */
+
+                    /**
+                     * text = mutableStateOf.. 변경 안됨.
+                     * 값 변경되면 setContent 재실행 -> 초기화됨
+                     * 따라서 remember 이용하여 값 복구할 수 있도록
+                     */
+
                     /**
                      * text = mutableStateOf.. 변경 안됨.
                      * 값 변경되면 setContent 재실행 -> 초기화됨

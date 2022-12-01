@@ -4,6 +4,7 @@ import android.app.AlertDialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App

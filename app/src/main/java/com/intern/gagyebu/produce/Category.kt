@@ -1,4 +1,4 @@
-package com.intern.gagyebu.add
+package com.intern.gagyebu.produce
 
 enum class Category(val script: String) {
     income("수입"),

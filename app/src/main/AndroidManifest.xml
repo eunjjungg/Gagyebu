@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Gagyebu"
         tools:targetApi="31">
         <activity
-            android:name=".add.ProduceActivity"
+            android:name=".produce.ProduceActivity"
             android:exported="false"
             android:label="@string/title_activity_test"
             android:theme="@style/Theme.Gagyebu">

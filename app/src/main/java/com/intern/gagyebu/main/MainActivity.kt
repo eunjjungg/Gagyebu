@@ -13,13 +13,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.intern.gagyebu.*
-import com.intern.gagyebu.add.ProduceActivity
+import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 /** mainActivity **/
@@ -27,6 +31,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val factory = MainViewModelFactory(ItemRepo)
+    private val dataStore = OptionState(App.context())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +40,6 @@ class MainActivity : AppCompatActivity() {
         //viewModel, 데이터 초기화
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
-
-        //달력 text 오늘로 초기화
-        viewModel.calendarView.set(getString(R.string.show_date, YEAR, MONTH))
 
         //recyclerView 초기화
         val adapter = Adapter()
@@ -61,12 +63,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        //달력 다이얼로그
+        viewModel.date.observe(this){
+            viewModel.calendarView.set(getString(R.string.show_date, it[0], it[1]))
+        }
+
+        /**달력 다이얼로그
+         * 사용자가 입력한 DATE 가 Listener 를 통해 전달되면 값 DataStore 에 저장
+         */
         binding.calender.setOnClickListener {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
-                viewModel.changeData(year, month)
-                viewModel.calendarView.set(getString(R.string.show_date, year, month))
+                CoroutineScope(Dispatchers.Main).launch {
+                    dataStore.setYear(year)
+                    dataStore.setMonth(month)
+                }
             }
             datePicker.show(supportFragmentManager, "DatePicker")
         }
@@ -76,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener {
                 override fun option(filter: String, order: String) {
-                    viewModel.changeOption(filter, order)
+                    //필터 변경시 아이템 스크롤 최상단으로 이동.
                     binding.recyclerview.smoothScrollToPosition(0)
                 }
             })

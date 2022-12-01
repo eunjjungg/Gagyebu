@@ -1,4 +1,4 @@
-package com.intern.gagyebu.add.ui.theme
+package com.intern.gagyebu.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

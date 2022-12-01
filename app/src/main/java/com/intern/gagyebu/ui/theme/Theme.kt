@@ -1,4 +1,4 @@
-package com.intern.gagyebu.add.ui.theme
+package com.intern.gagyebu.ui.theme
 
 import android.app.Activity
 import android.os.Build

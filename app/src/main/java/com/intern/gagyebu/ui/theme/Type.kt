@@ -1,4 +1,4 @@
-package com.intern.gagyebu.add.ui.theme
+package com.intern.gagyebu.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
