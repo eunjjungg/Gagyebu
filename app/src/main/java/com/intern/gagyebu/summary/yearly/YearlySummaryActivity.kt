@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.ActivityYearlySummaryBinding
-import com.intern.gagyebu.room.ItemRepository
+import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.monthly.MonthlySummaryActivity
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.BaseActivity
@@ -23,7 +23,7 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
     val barChartAdapter by lazy { BarChartAdapter() }
     override val viewModel by lazy {
         ViewModelProvider(
-            this, YearlySummaryViewModel.YearlySummaryViewModelFactory(ItemRepository(itemDao))
+            this, YearlySummaryViewModel.YearlySummaryViewModelFactory(ItemRepo.ItemRepository(itemDao))
         ).get(YearlySummaryViewModel::class.java)
     }
 
