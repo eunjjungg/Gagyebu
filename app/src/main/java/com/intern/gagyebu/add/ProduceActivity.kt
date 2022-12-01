@@ -36,6 +36,8 @@ import com.intern.gagyebu.add.ui.theme.GagyebuTheme
 import kotlinx.coroutines.launch
 import java.util.*
 
+/** mainActivity ViewModel**/
+
 class ProduceActivity : ComponentActivity() {
     private lateinit var viewModel: ProduceActivityViewModel
 

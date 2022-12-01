@@ -17,7 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.intern.gagyebu.R
 
-/** MainActivity ComposeMigration */
+/** MainActivity ComposeMigration
+ * 수입, 지출, 총합 View 컴포즈 이용하여 수정
+ *
+ */
 
 @Composable
 fun MonthlyDescription(MainViewModel: MainViewModel) {

@@ -68,7 +68,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.calendarView.set(getString(R.string.show_date, it[0], it[1]))
         }
 
-        //달력 다이얼로그
+        /**달력 다이얼로그
+         * 사용자가 입력한 DATE 가 Listener 를 통해 전달되면 값 DataStore 에 저장
+         */
         binding.calender.setOnClickListener {
             val datePicker = YearMonthPickerDialog()
             datePicker.setListener { _, year, month, _ ->
@@ -85,6 +87,7 @@ class MainActivity : AppCompatActivity() {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener {
                 override fun option(filter: String, order: String) {
+                    //필터 변경시 아이템 스크롤 최상단으로 이동.
                     binding.recyclerview.smoothScrollToPosition(0)
                 }
             })
