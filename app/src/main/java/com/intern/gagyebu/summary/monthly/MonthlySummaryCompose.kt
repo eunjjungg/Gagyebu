@@ -23,9 +23,13 @@ import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import com.intern.gagyebu.room.ItemEntity
@@ -34,6 +38,7 @@ import com.intern.gagyebu.summary.util.MonthlyDetailInfo
 import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.ui.theme.GagyebuTheme
 import com.intern.gagyebu.ui.theme.cardBackgroundColor
+import com.intern.gagyebu.ui.theme.cardTextColor
 
 @Composable
 fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
@@ -49,7 +54,7 @@ fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
 
 @Composable
 fun CardContent(
-    detail: MonthlyDetailInfo
+    detail: MonthlyDetailInfo,
 ) {
     var expanded by remember {
         mutableStateOf(false)
@@ -71,17 +76,21 @@ fun CardContent(
                 .padding(8.dp)
         ) {
             TextTitle(text = detail.item.category)
-            /*Text(text = detail.item.category, modifier= Modifier.padding(vertical = 8.dp), style = MaterialTheme.typography.headlineMedium)*/
             if(expanded) {
-                Text(text = stringResource(id = R.string.compose_openedDesc), modifier = Modifier.padding(bottom = 4.dp), style = MaterialTheme.typography.bodyLarge)
-                Text(text = detail.toString(), modifier= Modifier)
+                TextSubTitle(text = stringResource(id = R.string.compose_openedDesc))
+                TextContent(text = detail.toString())
             } else {
-                Text(text = stringResource(id = R.string.compose_closedDesc), modifier = Modifier.padding(bottom = 4.dp), style = MaterialTheme.typography.bodyLarge)
+                TextSubTitle(text = stringResource(id = R.string.compose_closedDesc))
             }
         }
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
-                imageVector = if (expanded) Icons.Filled.Close else Icons.Filled.Add,
+                imageVector = if (expanded) {
+                    Icons.Filled.Close
+                } else {
+                    Icons.Filled.Add
+                },
+                tint = colorResource(cardTextColor),
                 contentDescription = if (expanded) {
                     stringResource(R.string.compose_close)
                 } else {
@@ -100,8 +109,7 @@ fun TextTitle(
     Text(
         text = text, 
         modifier= Modifier.padding(vertical = 8.dp), 
-        style = MaterialTheme.typography.headlineMedium.copy(color = colorResource(id = R.color.pieChartText)
-        )
+        style = MaterialTheme.typography.headlineMedium.copy(color = colorResource(id = R.color.pieChartText), fontSize = dpToSp(20.dp))
     )
 }
 
@@ -112,8 +120,7 @@ fun TextSubTitle(
     Text(
         text = text,
         modifier= Modifier.padding(vertical = 4.dp),
-        style = MaterialTheme.typography.bodyLarge.copy(color = colorResource(id = R.color.pieChartText)
-        )
+        style = MaterialTheme.typography.bodyLarge.copy(color = colorResource(id = R.color.pieChartText), fontSize = dpToSp(10.dp))
     )
 }
 
@@ -124,10 +131,12 @@ fun TextContent(
     Text(
         text = text,
         modifier= Modifier,
-        style = MaterialTheme.typography.bodySmall.copy(color = colorResource(id = R.color.pieChartText)
-        )
+        style = MaterialTheme.typography.bodyMedium.copy(color = colorResource(id = R.color.pieChartText), fontSize = dpToSp(12.dp))
     )
 }
+
+@Composable
+fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
 
 @Composable
 fun ComposeCard(
