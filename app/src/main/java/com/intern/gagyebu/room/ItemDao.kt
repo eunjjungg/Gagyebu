@@ -36,22 +36,31 @@ interface ItemDao{
     @Query("SELECT SUM(amount) FROM ItemEntity WHERE category = '수입' AND year= :year AND month = :month")
     fun incomeTotal(year: Int, month: Int) : Flow<Int>
 
+    //input: 연도, 월
+    //output: 특정 월의 소비 내역을 리턴
     @Query("SELECT * FROM ItemEntity WHERE month = :month AND year = :year")
     fun getItemWhenYearAndMonthSet(year: Int, month: Int) : List<ItemEntity>
 
+    //input: 연도, 월
+    //output: 특정 월의 소비 금액만 리턴
     @Query("SELECT amount FROM ItemEntity WHERE month = :month AND year = :year")
     fun getAmountWhenYearAndMonthSet(year: Int, month: Int) : List<Int>
 
-    // 해당 연도의 카테고리 별 총액
+    //input: 연도
+    //output: 특정 연도의 소비 금액을 카테고리 별로 묶어서 카테고리별 소비 금액 리턴
     @Query("SELECT category, sum(amount) FROM ItemEntity WHERE year = :year GROUP BY category")
     fun getAmountSumOfEachCategory(year: Int) : List<SumOfCategory>
 
-    // 해당 연도의 월별 총액
+    //input: 연도, 카테고리
+    //output: 특정 연도의 특정 카테고리 소비 내역을 월별로 묶어서 해당 카테고리의 월별 소비 금액을 내림차순으로 정렬한 결과
     @Query("SELECT month, sum(amount) FROM ItemEntity WHERE year = :year AND category = :category GROUP BY month ORDER BY sum(amount) desc")
     fun getCategorySumOfEachMonth(year: Int, category: String) : List<MonthlyCategory>
 
+    //input: 연도, 월
+    //output: 특정 월의 소비 내역을 카테고리로 묶어서 각 카테고리와 해당 카테고리 소비 금액을 내림차순으로 정렬한 결과
     @Query("SELECT category, sum(amount) FROM ItemEntity WHERE year = :year AND month = :month GROUP BY category ORDER BY sum(amount) desc")
     fun getCategoryAndSumWhenYearAndMonthSet(year: Int, month: Int) : List<CategoryInfoOfMonth>
+
     //해당월 지출 전체
     @Query("SELECT SUM(amount) FROM ItemEntity WHERE NOT category = '수입' AND year= :year AND month = :month")
     fun spendTotal(year: Int, month: Int) : Flow<Int>
