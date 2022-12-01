@@ -1,5 +1,7 @@
 package com.intern.gagyebu.summary.monthly
 
+import android.content.Intent
+import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +10,7 @@ import com.intern.gagyebu.databinding.ActivityMonthlySummaryBinding
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.DateInfo
+import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.summary.yearly.YearlySummaryViewModel.Companion.months
 
 class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
@@ -32,6 +35,7 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
         binding.setView()
         setObserver()
         viewModel.getMonthlyReportData(year, month)
+        setListener()
     }
 
     //이전 액티비티(연간 요약)로부터 Parcel로 사용자가 누른 연, 월의 정보를 받음
@@ -61,4 +65,20 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
             months[month]
         )
     }
+
+    private fun setListener() {
+        binding.btnDetail.setOnClickListener {
+            Intent(this@MonthlySummaryActivity, MonthlyDetailActivity::class.java)
+                .apply {
+                    for(i in viewModel.pieChartData.value!!.indices) {
+                        putExtra("elementInfo$i", viewModel.pieChartData.value!![i])
+                    }
+                    putExtra("elementInfoSize", viewModel.pieChartData.value!!.size)
+                    putExtra("dateInfo", DateInfo(year, month))
+                }
+                .also { startActivity(it) }
+        }
+    }
+
+
 }

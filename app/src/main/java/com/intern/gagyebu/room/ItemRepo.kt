@@ -71,6 +71,10 @@ object ItemRepo {
         fun getCategoryAndSumWhenYearAndMonthSet(year: Int, month: Int) : List<CategoryInfoOfMonth> {
             return itemDao.getCategoryAndSumWhenYearAndMonthSet(year, month)
         }
+
+        fun getTopCostItem(year: Int, month: Int, category: String) : ItemEntity {
+            return itemDao.getTopCostItem(year, month, category)
+        }
     }
 }
 

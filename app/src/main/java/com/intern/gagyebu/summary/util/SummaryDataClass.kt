@@ -2,6 +2,7 @@ package com.intern.gagyebu.summary.util
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
+import com.intern.gagyebu.room.ItemEntity
 import kotlinx.parcelize.Parcelize
 
 data class SumOfCategory(
@@ -38,13 +39,19 @@ data class CategoryInfoOfMonth(
     val sum: Int
 )
 
+@Parcelize
 data class PieElement(
     val name: String,
     val percentage: Float
-)
+): Parcelable
 
 @Parcelize
 data class DateInfo(
     val year: Int,
     val month: Int
 ): Parcelable
+
+data class MonthlyDetailInfo(
+    val item: ItemEntity,
+    val percentage: Int
+)
