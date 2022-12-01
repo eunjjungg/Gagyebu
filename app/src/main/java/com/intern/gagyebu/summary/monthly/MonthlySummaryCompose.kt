@@ -77,7 +77,11 @@ fun CardContent(
                 TextSubTitle(text = stringResource(id = R.string.compose_closedDesc))
             }
         }
-        IconButton(onClick = { expanded = !expanded }) {
+        IconButton(
+            onClick = {
+                expanded = !expanded
+            }
+        ) {
             Icon(
                 imageVector = if (expanded) {
                     Icons.Filled.Close
@@ -161,18 +165,13 @@ fun ComposeCards(
     topCostDetailList: MutableList<MonthlyDetailInfo>?,
     modifier: Modifier = Modifier
 ) {
-
     if (topCostDetailList.isNullOrEmpty()) {
         return
     } else {
         LazyColumn(
             modifier = modifier
         ) {
-            item {
-
-            }
             items(items = topCostDetailList) { item ->
-                Log.d("ccheck", item.toString())
                 ComposeCard(
                     item
                 )
