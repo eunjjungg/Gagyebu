@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,21 +33,23 @@ import com.intern.gagyebu.R
 import com.intern.gagyebu.summary.util.MonthlyDetailInfo
 import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.ui.theme.GagyebuTheme
+import com.intern.gagyebu.ui.theme.cardBackgroundColor
 
 @Composable
 fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
     val topCostDetailList = monthlyDetailViewModel.topCostDetailList.observeAsState()
 
     topCostDetailList.value?.let {
-        ComposeCards(topCostDetailList.value, modifier = Modifier.fillMaxSize())
+        ComposeCards(topCostDetailList.value, modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp))
     }
 
 }
 
 @Composable
 fun CardContent(
-    item: ItemEntity,
-    percentage: Int
+    detail: MonthlyDetailInfo
 ) {
     var expanded by remember {
         mutableStateOf(false)
@@ -65,14 +68,15 @@ fun CardContent(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(12.dp)
+                .padding(8.dp)
         ) {
-            Text(text = item.category, modifier= Modifier, style = MaterialTheme.typography.bodyMedium)
-            Text(text = stringResource(id = R.string.compose_closedDesc), modifier= Modifier)
+            TextTitle(text = detail.item.category)
+            /*Text(text = detail.item.category, modifier= Modifier.padding(vertical = 8.dp), style = MaterialTheme.typography.headlineMedium)*/
             if(expanded) {
-                Text(text = "expanded Text\nexpanded Text\nexpanded Text\nexpanded Text\nexpanded Text\nexpanded Text\n")
-                Text(text = "expanded Text\nexpanded Text\nexpanded Text\nexpanded Text\nexpanded Text\nexpanded Text\n")
-                Text(text = "expanded Text\nexpanded Text\nexpanded Text\nexpanded Text\nexpanded Text\nexpanded Text\n")
+                Text(text = stringResource(id = R.string.compose_openedDesc), modifier = Modifier.padding(bottom = 4.dp), style = MaterialTheme.typography.bodyLarge)
+                Text(text = detail.toString(), modifier= Modifier)
+            } else {
+                Text(text = stringResource(id = R.string.compose_closedDesc), modifier = Modifier.padding(bottom = 4.dp), style = MaterialTheme.typography.bodyLarge)
             }
         }
         IconButton(onClick = { expanded = !expanded }) {
@@ -90,26 +94,53 @@ fun CardContent(
 }
 
 @Composable
-fun ComposeCard(
-    item: ItemEntity,
-    percentage: Int
+fun TextTitle(
+    text: String,
 ) {
-    Card(
-        modifier = Modifier
-            .padding(vertical = 30.dp, horizontal = 8.dp)
-    ) {
-        CardContent(item, percentage)
-    }
+    Text(
+        text = text, 
+        modifier= Modifier.padding(vertical = 8.dp), 
+        style = MaterialTheme.typography.headlineMedium.copy(color = colorResource(id = R.color.pieChartText)
+        )
+    )
 }
 
 @Composable
-@Preview(showBackground = true)
-fun PreviewCardContent() {
-    GagyebuTheme{
-        ComposeCard(
-            ItemEntity(1, 35000, "마카롱", 2022, 12, 1, "식료품"),
-            80
+fun TextSubTitle(
+    text: String,
+) {
+    Text(
+        text = text,
+        modifier= Modifier.padding(vertical = 4.dp),
+        style = MaterialTheme.typography.bodyLarge.copy(color = colorResource(id = R.color.pieChartText)
         )
+    )
+}
+
+@Composable
+fun TextContent(
+    text: String,
+) {
+    Text(
+        text = text,
+        modifier= Modifier,
+        style = MaterialTheme.typography.bodySmall.copy(color = colorResource(id = R.color.pieChartText)
+        )
+    )
+}
+
+@Composable
+fun ComposeCard(
+    detail: MonthlyDetailInfo
+) {
+    Card(
+        modifier = Modifier
+            .padding(vertical = 30.dp, horizontal = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = cardBackgroundColor)
+        )
+    ) {
+        CardContent(detail)
     }
 }
 
@@ -126,16 +157,12 @@ fun ComposeCards(
             modifier = modifier
         ) {
             item {
-                ComposeCard(
-                    item = ItemEntity(1, 35000, "마카롱", 2022, 12, 1, "식료품"),
-                    percentage = 80
-                )
+
             }
             items(items = topCostDetailList) { item ->
                 Log.d("ccheck",item.toString())
                 ComposeCard(
-                    item = ItemEntity(1, 35000, "마카롱", 2022, 12, 1, "식료품"),
-                    percentage = 80
+                    item
                 )
             }
         }
