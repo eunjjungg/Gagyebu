@@ -8,7 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.intern.gagyebu.room.AppDatabase
-import com.intern.gagyebu.room.ItemRepository
+import com.intern.gagyebu.room.ItemRepo.ItemRepository
 
 abstract class BaseActivity<VD: ViewDataBinding>(resource: Int) : AppCompatActivity() {
     val a = 0

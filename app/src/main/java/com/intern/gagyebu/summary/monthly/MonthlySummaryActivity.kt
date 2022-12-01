@@ -1,13 +1,11 @@
 package com.intern.gagyebu.summary.monthly
 
-import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.ActivityMonthlySummaryBinding
-import com.intern.gagyebu.room.ItemRepository
+import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.yearly.YearlySummaryViewModel.Companion.months
@@ -17,12 +15,11 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
 ) {
     override val viewModel by lazy {
         ViewModelProvider(
-            this, MonthlySummaryViewModel.MonthlySummaryViewModelFactory(ItemRepository(itemDao))
+            this, MonthlySummaryViewModel.MonthlySummaryViewModelFactory(ItemRepo.ItemRepository(itemDao))
         ).get(MonthlySummaryViewModel::class.java)
     }
     var year: Int = 0
     var month: Int = 0
-    val descList: MutableList<TextView> = mutableListOf()
 
     override fun initViewModel(viewModel: ViewModel) {
         binding.lifecycleOwner = this@MonthlySummaryActivity
@@ -46,7 +43,6 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
         month = dateInfo?.month ?: 0
     }
 
-    //todo: 뷰모델의 코루틴에서 결과값을 받아서 이걸 뷰로 던져서 이벤트 처리?
     //pie chart를 그릴 데이터인 pieChartData LiveData를 뷰에서 observe하고
     //값이 변경될 때마다 (이 액티비티가 새로 그려질 때마다) pieChart를 그리도록 함.
     //또한 각 파이차트의 원소들의 설명을 나타낸 descList: MutableList<TextView>도
@@ -64,12 +60,5 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
             resources.getString(R.string.pieTitle_month),
             months[month]
         )
-        descList.apply {
-            add(pieDesc0)
-            add(pieDesc1)
-            add(pieDesc2)
-            add(pieDesc3)
-            add(pieDesc4)
-        }
     }
 }
