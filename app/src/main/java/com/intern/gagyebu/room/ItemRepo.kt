@@ -2,10 +2,10 @@ package com.intern.gagyebu.room
 
 import com.intern.gagyebu.App
 import com.intern.gagyebu.room.data.ItemGetOption
-import com.intern.gagyebu.dialog.Options
 import com.intern.gagyebu.summary.util.CategoryInfoOfMonth
 import com.intern.gagyebu.summary.util.MonthlyCategory
 import com.intern.gagyebu.summary.util.SumOfCategory
+import com.intern.gagyebu.dialog.SelectableOptionsEnum
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -23,10 +23,10 @@ object ItemRepo {
 
     fun itemGet(data: ItemGetOption): Flow<List<ItemEntity>> {
         val item = when (data.filter) {
-            Options.DEFAULT.toString() -> {
+            SelectableOptionsEnum.DEFAULT.toString() -> {
                 ItemDao.sortDay(data.year, data.month, data.order)
             }
-            Options.SPEND.toString() -> {
+            SelectableOptionsEnum.SPEND.toString() -> {
                 ItemDao.sortInSpend(data.year, data.month, data.order)
             }
             else -> {

@@ -1,6 +1,6 @@
 package com.intern.gagyebu.dialog
 
-enum class Options {
+enum class SelectableOptionsEnum {
     DEFAULT,
     INCOME,
     SPEND,

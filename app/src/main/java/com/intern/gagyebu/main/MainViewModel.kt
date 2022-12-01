@@ -4,7 +4,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.intern.gagyebu.App
 import com.intern.gagyebu.room.data.ItemGetOption
-import com.intern.gagyebu.dialog.Options
+import com.intern.gagyebu.dialog.SelectableOptionsEnum
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
@@ -78,7 +78,7 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
         dataStore.filterFlow,
         dataStore.orderFlow
     ) { filter, order ->
-        if (filter != Options.DEFAULT.toString() || order != Options.day.toString()) {
+        if (filter != SelectableOptionsEnum.DEFAULT.toString() || order != SelectableOptionsEnum.day.toString()) {
             "not_nomal"
         } else {
             "nomal"

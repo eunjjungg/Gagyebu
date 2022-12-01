@@ -4,7 +4,6 @@ import android.app.AlertDialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App
@@ -36,15 +35,15 @@ class OptionSelectDialog : DialogFragment() {
             val orderOption = dataStore.orderFlow.first()
 
             when (filterOption) {
-                Options.SPEND.toString() -> binding.filterSpend.isChecked = true
+                SelectableOptionsEnum.SPEND.toString() -> binding.filterSpend.isChecked = true
 
-                Options.INCOME.toString() -> binding.filterIncome.isChecked = true
+                SelectableOptionsEnum.INCOME.toString() -> binding.filterIncome.isChecked = true
 
                 else -> binding.filterAll.isChecked = true
             }
 
             when (orderOption) {
-                Options.amount.toString() -> binding.orderAmount.isChecked = true
+                SelectableOptionsEnum.amount.toString() -> binding.orderAmount.isChecked = true
 
                 else -> binding.orderDate.isChecked = true
             }
@@ -58,17 +57,17 @@ class OptionSelectDialog : DialogFragment() {
          */
         binding.confirm.setOnClickListener {
             val filter = if (binding.filterSpend.isChecked) {
-                Options.SPEND.toString()
+                SelectableOptionsEnum.SPEND.toString()
             } else if (binding.filterIncome.isChecked) {
-                Options.INCOME.toString()
+                SelectableOptionsEnum.INCOME.toString()
             } else {
-                Options.DEFAULT.toString()
+                SelectableOptionsEnum.DEFAULT.toString()
             }
 
             val order = if (binding.orderAmount.isChecked) {
-                Options.amount.toString()
+                SelectableOptionsEnum.amount.toString()
             } else {
-                Options.day.toString()
+                SelectableOptionsEnum.day.toString()
             }
 
             //사용자가 입력한 값 datastore 에 저장.
