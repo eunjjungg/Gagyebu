@@ -71,8 +71,9 @@
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@color/pieChart0"
+                        android:textAlignment="center"
                         android:text="@{String.valueOf(viewModel.pieChartData[0].name)}"
-                        android:textColor="@color/pieChartText"
+                        android:textColor="@color/pieChartDescTopText"
                         android:textSize="@dimen/pieDescTextSize" />
 
                     <TextView
@@ -80,8 +81,9 @@
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@color/pieChart1"
+                        android:textAlignment="center"
                         android:text="@{String.valueOf(viewModel.pieChartData[1].name)}"
-                        android:textColor="@color/pieChartText"
+                        android:textColor="@color/pieChartDescTopText"
                         android:textSize="@dimen/pieDescTextSize"
                         android:visibility="@{viewModel.pieChartData.size() > 1 ? View.VISIBLE : View.GONE}" />
 
@@ -90,8 +92,9 @@
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@color/pieChart2"
+                        android:textAlignment="center"
                         android:text="@{String.valueOf(viewModel.pieChartData[2].name)}"
-                        android:textColor="@color/pieChartText"
+                        android:textColor="@color/pieChartDescBottomText"
                         android:textSize="@dimen/pieDescTextSize"
                         android:visibility="@{viewModel.pieChartData.size() > 2 ? View.VISIBLE : View.GONE}" />
 
@@ -100,8 +103,9 @@
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@color/pieChart3"
+                        android:textAlignment="center"
                         android:text="@{String.valueOf(viewModel.pieChartData[3].name)}"
-                        android:textColor="@color/pieChartText"
+                        android:textColor="@color/pieChartDescBottomText"
                         android:textSize="@dimen/pieDescTextSize"
                         android:visibility="@{viewModel.pieChartData.size() > 3 ? View.VISIBLE : View.GONE}" />
 
@@ -110,8 +114,9 @@
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@color/pieChart4"
+                        android:textAlignment="center"
                         android:text="@{String.valueOf(viewModel.pieChartData[4].name)}"
-                        android:textColor="@color/pieChartText"
+                        android:textColor="@color/pieChartDescBottomText"
                         android:textSize="@dimen/pieDescTextSize"
                         android:visibility="@{viewModel.pieChartData.size() > 4 ? View.VISIBLE : View.GONE}" />
 
