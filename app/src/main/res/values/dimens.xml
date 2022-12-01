@@ -23,7 +23,8 @@
     <dimen name="pieBackgroundMarginVertical">100dp</dimen>
     <dimen name="pieBackgroundMarginHorizontal">40dp</dimen>
     <dimen name="pieTitleMarginVertical">24dp</dimen>
-    <dimen name="pieTitleTextSize">20dp</dimen>
+    <dimen name="pieTitleTextSize">16dp</dimen>
+    <dimen name="pieDescTextSize">12dp</dimen>
 
     <!--main-->
     <dimen name="radius">5dp</dimen>
