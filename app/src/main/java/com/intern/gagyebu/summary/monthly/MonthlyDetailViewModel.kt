@@ -1,9 +1,11 @@
 package com.intern.gagyebu.summary.monthly
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.MonthlyDetailInfo
 import com.intern.gagyebu.summary.util.PieElement
 import kotlinx.coroutines.Dispatchers
@@ -12,10 +14,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
+    var dateInfo = DateInfo(0, 0)
     val topCostItemList = mutableListOf<MonthlyDetailInfo>()
     var topCostCategoryList = mutableListOf<PieElement>()
 
-    //fun getTopCostItemList
+    fun setDate(date: DateInfo) {
+        dateInfo = date
+    }
+
     fun setTopCostCategory(categoryList: MutableList<PieElement>) {
         topCostCategoryList = categoryList
         viewModelScope.launch {

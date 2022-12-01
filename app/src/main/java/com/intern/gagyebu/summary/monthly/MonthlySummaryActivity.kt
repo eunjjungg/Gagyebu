@@ -74,6 +74,7 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
                         putExtra("elementInfo$i", viewModel.pieChartData.value!![i])
                     }
                     putExtra("elementInfoSize", viewModel.pieChartData.value!!.size)
+                    putExtra("dateInfo", DateInfo(year, month))
                 }
                 .also { startActivity(it) }
         }

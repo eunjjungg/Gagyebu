@@ -40,6 +40,12 @@ class MonthlyDetailActivity : BaseActivity<ActivityMonthlyDetailBinding>(R.layou
 
     private fun getParcel() {
         val bundle = intent.extras
+
+        val dateInfo: DateInfo? = bundle?.getParcelable("dateInfo")
+        if(dateInfo != null) {
+            viewModel.setDate(dateInfo)
+        }
+
         val elementInfoList = mutableListOf<PieElement>()
         val elementInfoSize: Int = bundle?.getInt("elementInfoSize") ?: 0
         for(i in 0..elementInfoSize - 1) {
