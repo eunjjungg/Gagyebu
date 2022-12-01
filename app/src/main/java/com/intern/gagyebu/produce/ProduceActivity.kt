@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -20,10 +21,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,8 +50,7 @@ class ProduceActivity : ComponentActivity() {
 
         viewModel = ViewModelProvider(this)[ProduceActivityViewModel::class.java]
 
-        if(intent.hasExtra("updateData")){
-
+        if (intent.hasExtra("updateData")) {
             viewModel.initUpdate(intent.extras!!)
         }
 
@@ -128,7 +130,7 @@ class ProduceActivity : ComponentActivity() {
                             }
 
                             Button(
-                                onClick = {viewModel.setData()},
+                                onClick = { viewModel.setData() },
                                 enabled = areInputsValid
                             ) {
                                 Text(
@@ -208,10 +210,11 @@ class ProduceActivity : ComponentActivity() {
     }
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     @Composable
     fun TitleField() {
         val title by viewModel.title.observeAsState("")
+        val keyboardController = LocalSoftwareKeyboardController.current
         OutlinedTextField(
             value = title,
             //ViewModel StateFlow -> 신뢰할 수 있는 단일 소스. 따라서 {mutable = ..} 문법 사용 안해도 가능
@@ -219,15 +222,19 @@ class ProduceActivity : ComponentActivity() {
             label = { Text("제목") },
             leadingIcon = { Icon(Icons.Outlined.Add, null, modifier = Modifier) },
             singleLine = true,
-            maxLines = 1
+            maxLines = 1,
+            keyboardActions = KeyboardActions(onDone = {
+                keyboardController?.hide()
+            })
         )
 
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     @Composable
     fun AmountField() {
         val amount by viewModel.amount.observeAsState("")
+        val keyboardController = LocalSoftwareKeyboardController.current
         OutlinedTextField(
             value = amount,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -235,7 +242,10 @@ class ProduceActivity : ComponentActivity() {
             label = { Text("금액") },
             leadingIcon = { Text(text = "$") },
             singleLine = true,
-            maxLines = 1
+            maxLines = 1,
+            keyboardActions = KeyboardActions(onDone = {
+                keyboardController?.hide()
+            })
         )
     }
 
