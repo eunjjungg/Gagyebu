@@ -70,24 +70,6 @@ class ProduceActivity : ComponentActivity() {
                      * 따라서 remember 이용하여 값 복구할 수 있도록
                      */
 
-                    /**
-                     * text = mutableStateOf.. 변경 안됨.
-                     * 값 변경되면 setContent 재실행 -> 초기화됨
-                     * 따라서 remember 이용하여 값 복구할 수 있도록
-                     */
-
-                    /**
-                     * text = mutableStateOf.. 변경 안됨.
-                     * 값 변경되면 setContent 재실행 -> 초기화됨
-                     * 따라서 remember 이용하여 값 복구할 수 있도록
-                     */
-
-                    /**
-                     * text = mutableStateOf.. 변경 안됨.
-                     * 값 변경되면 setContent 재실행 -> 초기화됨
-                     * 따라서 remember 이용하여 값 복구할 수 있도록
-                     */
-
                     val source = remember {
                         MutableInteractionSource()
                     }

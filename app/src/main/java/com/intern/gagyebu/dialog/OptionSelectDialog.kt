@@ -51,9 +51,8 @@ class OptionSelectDialog : DialogFragment() {
         }
 
         /**사용자가 확인 버튼을 클릭하는 경우
-         * 1. datastore 에 해당 값 적용.
-         * 2. optionListener 을 통한 값 전달.
-         * 3. dialog 창 닫음
+         * 1. optionListener 을 통한 값 전달.
+         * 2. dialog 창 닫음
          */
         binding.confirm.setOnClickListener {
             val filter = if (binding.filterSpend.isChecked) {
@@ -68,12 +67,6 @@ class OptionSelectDialog : DialogFragment() {
                 SelectableOptionsEnum.amount.toString()
             } else {
                 SelectableOptionsEnum.day.toString()
-            }
-
-            //사용자가 입력한 값 datastore 에 저장.
-            runBlocking {
-                dataStore.setFilter(filter)
-                dataStore.setOrder(order)
             }
 
             optionListener.option(filter, order)

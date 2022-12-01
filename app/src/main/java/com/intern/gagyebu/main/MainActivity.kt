@@ -24,6 +24,7 @@ import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 /** mainActivity **/
@@ -57,9 +58,9 @@ class MainActivity : AppCompatActivity() {
         //필터링 상태에 따라 icon 색상 변경
         viewModel.filterState.observe(this){
             when(it){
-                "nomal" -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
+                true -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#E74141"))
 
-                else -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#E74141"))
+                false -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
             }
         }
 
@@ -81,11 +82,18 @@ class MainActivity : AppCompatActivity() {
             datePicker.show(supportFragmentManager, "DatePicker")
         }
 
-        //필터링, 정렬 다이얼로그
+        /**필터링, 정렬 다이얼로그
+         * 사용자가 입력한 Option 이 Listener 를 통해 전달되면 값 DataStore 에 저장
+         */
         binding.filter.setOnClickListener {
             val optionPicker = OptionSelectDialog()
             optionPicker.setListener(object : OptionDialogListener {
                 override fun option(filter: String, order: String) {
+                    //사용자가 입력한 값 datastore 에 저장.
+                    CoroutineScope(Dispatchers.Main).launch {
+                        dataStore.setFilter(filter)
+                        dataStore.setOrder(order)
+                    }
                     //필터 변경시 아이템 스크롤 최상단으로 이동.
                     binding.recyclerview.smoothScrollToPosition(0)
                 }

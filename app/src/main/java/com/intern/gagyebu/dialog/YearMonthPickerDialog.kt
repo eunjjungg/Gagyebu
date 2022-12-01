@@ -12,6 +12,8 @@ import com.intern.gagyebu.databinding.YearMonthPickerBinding
 import com.intern.gagyebu.main.MainActivity.Companion.MONTH
 import com.intern.gagyebu.main.MainActivity.Companion.YEAR
 import com.intern.gagyebu.room.data.OptionState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -21,10 +23,12 @@ import java.util.*
 
 class YearMonthPickerDialog : DialogFragment() {
 
-    var customListener: OnDateSetListener? = null
+    private lateinit var customListener: OnDateSetListener
 
     fun setListener(listener: OnDateSetListener?) {
-        this.customListener = listener
+        if (listener != null) {
+            this.customListener = listener
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -41,7 +45,10 @@ class YearMonthPickerDialog : DialogFragment() {
         yearPicker.minValue = MIN_YEAR
         yearPicker.maxValue = MAX_YEAR
 
-        runBlocking{
+        /**
+         * Dialog 시작 전, 년도, 월 값을 사용자가 마지막으로 입력한 값으로 초기화
+         */
+        CoroutineScope(Dispatchers.Main).launch{
             yearPicker.value  = dataStore.yearFlow.first()
             monthPicker.value = dataStore.monthFlow.first()
         }
@@ -49,8 +56,10 @@ class YearMonthPickerDialog : DialogFragment() {
         binding.cancel.setOnClickListener {
             this@YearMonthPickerDialog.dialog?.cancel()
         }
+
+        //confirm 버튼 클릭시 년도와 월 전달.
         binding.confirm.setOnClickListener {
-            customListener!!.onDateSet(null, yearPicker.value, monthPicker.value, 0)
+            customListener.onDateSet(null, yearPicker.value, monthPicker.value, 0)
             this@YearMonthPickerDialog.dialog?.cancel()
         }
 
