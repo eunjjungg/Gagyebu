@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.intern.gagyebu.room.ItemRepository
+import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.MonthlyCategory
 import com.intern.gagyebu.summary.util.ReportViewInfo
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 
-class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewModel() {
+class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository): ViewModel() {
 
     //월이 함께 들어가는 barChartData, percentageOfEachMonth는 index가 1, 2, 3일 때
     //1, 2, 3월로 사용하기 위해 index가 0일 때 더미 값을 넣어줌
@@ -172,7 +172,7 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepository): ViewMo
         this.value = this.value
     }
 
-    class YearlySummaryViewModelFactory(private val repository: ItemRepository) : ViewModelProvider.Factory {
+    class YearlySummaryViewModelFactory(private val repository: ItemRepo.ItemRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             return YearlySummaryViewModel(repository) as T

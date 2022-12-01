@@ -5,7 +5,7 @@ import com.intern.gagyebu.summary.util.CategoryInfoOfMonth
 import com.intern.gagyebu.summary.util.MonthlyCategory
 import com.intern.gagyebu.summary.util.SumOfCategory
 
-class ItemRepository(private val itemDao: ItemDao) {
+class ItemRepository2(private val itemDao: ItemDao) {
 
     fun getAmountWhenYearAndMonthSet(year: Int, month: Int) : List<Int> {
         return itemDao.getAmountWhenYearAndMonthSet(year, month)

@@ -1,11 +1,10 @@
 package com.intern.gagyebu.summary.monthly
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.intern.gagyebu.room.ItemRepository
+import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.CategoryInfoOfMonth
 import com.intern.gagyebu.summary.util.PieElement
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MonthlySummaryViewModel(private val itemRepository: ItemRepository) : ViewModel() {
+class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
 
@@ -82,7 +81,7 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepository) : View
         pieChartData.value = pieElementList
     }
 
-    class MonthlySummaryViewModelFactory(private val repository: ItemRepository) :
+    class MonthlySummaryViewModelFactory(private val repository: ItemRepo.ItemRepository) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
