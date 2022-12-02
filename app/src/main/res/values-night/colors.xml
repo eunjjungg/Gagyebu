@@ -15,8 +15,8 @@
     <!--Pie Chart View-->
     <color name="pieChartBackground">#252525</color>
     <color name="pieChartText">#FFFFFF</color>
-    <color name="pieChartDescTopText">#FFFFFF</color>
-    <color name="pieChartDescBottomText">#5A5A5A</color>
+    <color name="pieChartDescTopText">#FCFCFC</color>
+    <color name="pieChartDescBottomText">#4D4D4D</color>
     <color name="pieChartDividingLine">#999999</color>
     <color name="pieChart0">#4D4D4D</color>
     <color name="pieChart1">#818181</color>
@@ -29,4 +29,10 @@
     <color name="fabDefault">#FCFCFC</color>
     <color name="fabAdd">#C9C9C9</color>
     <color name="fabCalendar">#C9C9C9</color>
+
+    <!--theme color-->
+    <color name="colorPrimary">#252525</color>
+    <color name="colorPrimaryVariant">#C6CAC1</color>
+    <color name="colorOnPrimary">#4D4D4D</color>
+
 </resources>
