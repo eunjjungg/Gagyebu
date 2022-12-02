@@ -1,14 +1,10 @@
 package com.intern.gagyebu.summary.monthly
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
 import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.ActivityMonthlyDetailBinding
-import com.intern.gagyebu.main.MonthlyDescription
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.DateInfo
@@ -33,7 +29,7 @@ class MonthlyDetailActivity : BaseActivity<ActivityMonthlyDetailBinding>(R.layou
     private fun setComposeView() {
         binding.composeView.setContent {
             MaterialTheme() {
-                MonthlySummaryCompose(viewModel)
+                MonthlyDetailCompose(viewModel)
             }
         }
     }
