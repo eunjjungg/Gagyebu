@@ -1,3 +1,40 @@
 <resources>
     <string name="app_name">Gagyebu</string>
+
+    <!--Box Report View-->
+    <string name="boxTitle_year">%d REPORT</string>
+    <string name="boxSubTitle_year">%d년 가장 많이 소비한 금액</string>
+    <string name="boxAverage_percentageInt">평균보다 %d 만큼 소비</string>
+    <string name="boxList_month_amount">%1$s : %2$s원</string>
+
+    <!--Pie Chart View-->
+    <string name="pieTitle_month">%s Report</string>
+
+    <string name="show_date" formatted="true">%1$d년 %2$d월 가계부</string>
+    <string name="show_won" formatted="true">%1$s 원</string>
+    <string name="show_date_full" formatted="true">%1$d-%2$d-%3$d</string>
+    <string name="details">상세내역</string>
+    <string name="income">수입</string>
+    <string name="spend">지출</string>
+    <string name="title_activity_test">test</string>
+
+    <!--Compose View-->
+    <string name="compose_closedDesc">📘  접힌 상태\n상세 정보를 확인하시려면 오른쪽의 + 버튼을 눌러주세요!</string>
+    <string name="compose_openedDesc">📖  펼쳐진 상태\n상세 정보를 접으시려면 오른쪽의 x 버튼을 눌러주세요!</string>
+    <string name="compose_percentage">1️⃣ percentage: %d&#37;&#37;</string>
+    <string name="compose_desc">최고 구매 기록의 상세 Detail</string>
+    <string name="compose_itemDate">3️⃣ 구매 일자 : %d년 %d월 %d일</string>
+    <string name="compose_itemTitle">2️⃣ 구매 제목 : %s</string>
+    <string name="compose_close">CLOSE</string>
+    <string name="compose_more">MORE</string>
+
+    <plurals name="compose_percentage">
+        <item quantity="one">percentage: %d </item>
+        <item quantity="other">percentage: %d </item>
+    </plurals>
+    <plurals name="compose_itemDate">
+        <item quantity="other">- 구매 일자 : %d년 %d월 %d일</item>
+    </plurals>
+
+
 </resources>

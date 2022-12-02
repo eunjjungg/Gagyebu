@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--activity yearly-->
+    <dimen name="yearlyTitleMargin">12dp</dimen>
+    <dimen name="yearlyTitlePadding">20dp</dimen>
+    <dimen name="yearlyTitleTextSize">20dp</dimen>
+
+    <!--Bar Chart View-->
+    <dimen name="barChartMarginHorizontal">24dp</dimen>
+    <dimen name="barChartMarginVertical">12dp</dimen>
+    <dimen name="barChartTextSize">12dp</dimen>
+
+    <!--Box Report View-->
+    <dimen name="boxTitleMarginHorizontal">16dp</dimen>
+    <dimen name="boxTitleMarginVertical">52dp</dimen>
+    <dimen name="boxTitleTextSize">16dp</dimen>
+    <dimen name="boxSubTitleTextSize">12dp</dimen>
+    <dimen name="boxTextSize">4dp</dimen>
+    <dimen name="boxRounded">8dp</dimen>
+    <dimen name="boxViewMarginVertical">16dp</dimen>
+
+    <!--Pie Chart View-->
+    <dimen name="pieBackgroundMarginVertical">100dp</dimen>
+    <dimen name="pieBackgroundMarginHorizontal">40dp</dimen>
+    <dimen name="pieTitleMarginVertical">24dp</dimen>
+    <dimen name="pieTitleTextSize">16dp</dimen>
+    <dimen name="pieDescTextSize">12dp</dimen>
+
+    <!--main-->
+    <dimen name="radius">5dp</dimen>
+    <dimen name="itemHeight">90dp</dimen>
+
+</resources>
