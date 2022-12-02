@@ -19,8 +19,8 @@
     <string name="title_activity_test">test</string>
 
     <!--Compose View-->
-    <string name="compose_closedDesc">📘 접힌 상태\n상세 정보를 확인하시려면 오른쪽의 + 버튼을 눌러주세요!</string>
-    <string name="compose_openedDesc">📖 펼쳐진 상태\n상세 정보를 접으시려면 오른쪽의 x 버튼을 눌러주세요!</string>
+    <string name="compose_closedDesc">📘  접힌 상태\n상세 정보를 확인하시려면 오른쪽의 + 버튼을 눌러주세요!</string>
+    <string name="compose_openedDesc">📖  펼쳐진 상태\n상세 정보를 접으시려면 오른쪽의 x 버튼을 눌러주세요!</string>
     <string name="compose_percentage">1️⃣ percentage: %d&#37;&#37;</string>
     <string name="compose_desc">최고 구매 기록의 상세 Detail</string>
     <string name="compose_itemDate">3️⃣ 구매 일자 : %d년 %d월 %d일</string>
