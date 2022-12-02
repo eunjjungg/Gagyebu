@@ -68,7 +68,7 @@ fun CardContent(
             TextTitle(text = detail.item.category)
             if (expanded) {
                 TextSubTitle(text = stringResource(id = R.string.compose_openedDesc))
-                TextContent(text = stringResource(id = R.string.compose_percentage, 80))
+                TextContent(text = stringResource(id = R.string.compose_percentage, detail.percentage))
                 TextContent(text = stringResource(id = R.string.compose_itemTitle, detail.item.title))
                 TextContent(text = stringResource(id = R.string.compose_itemDate, detail.item.year, detail.item.month, detail.item.day))
             } else {
