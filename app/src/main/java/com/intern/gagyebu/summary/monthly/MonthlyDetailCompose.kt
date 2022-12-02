@@ -1,6 +1,5 @@
 package com.intern.gagyebu.summary.monthly
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -20,7 +19,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -30,7 +28,7 @@ import com.intern.gagyebu.ui.theme.cardBackgroundColor
 import com.intern.gagyebu.ui.theme.cardTextColor
 
 @Composable
-fun MonthlySummaryCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
+fun MonthlyDetailCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
     val topCostDetailList = monthlyDetailViewModel.topCostDetailList.observeAsState()
 
     topCostDetailList.value?.let {
