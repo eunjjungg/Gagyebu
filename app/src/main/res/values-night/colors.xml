@@ -31,7 +31,7 @@
     <color name="fabCalendar">#C9C9C9</color>
 
     <!--theme color-->
-    <color name="colorPrimary">#252525</color>
+    <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryVariant">#C6CAC1</color>
     <color name="colorOnPrimary">#4D4D4D</color>
 

@@ -13,9 +13,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="fontFamily">@font/pretendard200compressed</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="21">?android:attr/colorBackground</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
-        <item name="statusBarForeground">?attr/colorOnPrimary</item>
         <!-- Customize your theme here. -->
     </style>
 
