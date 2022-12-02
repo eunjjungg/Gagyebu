@@ -22,8 +22,8 @@
     <!--Pie Chart View-->
     <color name="pieChartBackground">#EFF4EB</color>
     <color name="pieChartText">#000000</color>
-    <color name="pieChartDescTopText">#E1E1E1</color>
-    <color name="pieChartDescBottomText">#000000</color>
+    <color name="pieChartDescTopText">#C6CAC1</color>
+    <color name="pieChartDescBottomText">#4A4E46</color>
     <color name="pieChartDividingLine">#E0E0E0</color>
     <color name="pieChart0">#4A4E46</color>
     <color name="pieChart1">#696D66</color>
@@ -40,5 +40,10 @@
     <!--recycler itme-->
     <color name="income">#7CBED6</color>
     <color name="spend">#F08080</color>
+
+    <!--theme color-->
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryVariant">#C6CAC1</color>
+    <color name="colorOnPrimary">#252525</color>
 
 </resources>
