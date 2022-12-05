@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -45,8 +46,10 @@ fun TotalView(it: String) {
         modifier = Modifier,
         style = LocalTextStyle.current.merge(
             TextStyle(
-                fontSize = 30.sp
-            )
+                fontSize = 30.sp,
+                color = colorResource(id = R.color.pieChartText)
+            ),
+
         )
     )
 }
@@ -64,7 +67,7 @@ fun CompInfo(incomeValue: String?, spendValue: String?) {
             modifier = Modifier.width(300.dp),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = colorResource(id = R.color.back),
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 10.dp
@@ -109,7 +112,8 @@ fun IncomeView(it: String) {
             modifier = Modifier,
             style = LocalTextStyle.current.merge(
                 TextStyle(
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.pieChartText)
                 )
             )
         )
@@ -118,6 +122,12 @@ fun IncomeView(it: String) {
         Text(
             text = resource.format(it),
             modifier = Modifier,
+            style = LocalTextStyle.current.merge(
+                TextStyle(
+                    fontSize = 15.sp,
+                    color = colorResource(id = R.color.pieChartText)
+                )
+            )
         )
     }
 
@@ -134,7 +144,8 @@ fun SpendView(it: String) {
             modifier = Modifier,
             style = LocalTextStyle.current.merge(
                 TextStyle(
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.pieChartText)
                 )
             )
         )
@@ -142,7 +153,13 @@ fun SpendView(it: String) {
         val resource = stringResource(id = R.string.show_won)
         Text(
             text = resource.format(it),
-            modifier = Modifier
+            modifier = Modifier,
+            style = LocalTextStyle.current.merge(
+                TextStyle(
+                    fontSize = 15.sp,
+                    color = colorResource(id = R.color.pieChartText)
+                )
+            )
         )
     }
 }

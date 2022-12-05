@@ -41,6 +41,9 @@
     <color name="income">#7CBED6</color>
     <color name="spend">#F08080</color>
 
+    <!--item background-->
+    <color name="back">#FFFFFF</color>
+
     <!--theme color-->
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryVariant">#C6CAC1</color>
