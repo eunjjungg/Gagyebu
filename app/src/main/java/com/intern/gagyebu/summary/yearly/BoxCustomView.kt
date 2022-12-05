@@ -1,6 +1,6 @@
 package com.intern.gagyebu.summary.yearly
 
-import android.annotation.SuppressLint
+import com.intern.gagyebu.Comma
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
@@ -187,6 +187,7 @@ class BoxCustomView : LinearLayout {
         costList1TextView.text = reportViewInfo.cost1
         costList2TextView.text = reportViewInfo.cost2 ?: ""
         costList3TextView.text = reportViewInfo.cost3 ?: ""
+
     }
 
 
