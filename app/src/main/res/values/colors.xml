@@ -46,4 +46,7 @@
     <color name="colorPrimaryVariant">#C6CAC1</color>
     <color name="colorOnPrimary">#252525</color>
 
+    <!--ripple highlight itme-->
+    <color name="highlight">#C6CAC1</color>
+
 </resources>
