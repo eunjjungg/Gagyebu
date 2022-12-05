@@ -1,5 +1,6 @@
 package com.intern.gagyebu.main
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.intern.gagyebu.App
@@ -9,6 +10,7 @@ import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import kotlinx.coroutines.flow.*
+import java.text.DecimalFormat
 
 /** mainActivity ViewModel**/
 
@@ -51,19 +53,21 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
      */
 
     //해당 달 수입 춍합
-    val incomeValue: LiveData<Int> = itemGetOption.flatMapLatest {
-        itemRepository.totalIncome(it)
+    val incomeValue: LiveData<String> = itemGetOption.flatMapLatest {
+        itemRepository.totalIncome(it).addComma()
     }.asLiveData()
 
     //해당 달 지출 춍합
-    val spendValue: LiveData<Int> = itemGetOption.flatMapLatest {
-        itemRepository.totalSpend(it)
+    val spendValue: LiveData<String> = itemGetOption.flatMapLatest {
+        itemRepository.totalSpend(it).addComma()
     }.asLiveData()
 
     //해당 달 수입 - 지출 값
-    val totalValue = combine(
-        incomeValue.asFlow(),
-        spendValue.asFlow()
+    val totalValue  = combine(
+        itemGetOption.flatMapLatest {
+        itemRepository.totalIncome(it) },
+        itemGetOption.flatMapLatest {
+            itemRepository.totalSpend(it) }
     ) { income, spend ->
         income - spend
     }.asLiveData()
@@ -88,4 +92,10 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     ) { year, month -> arrayListOf(year,month)
     }.asLiveData()
 
+    private fun Flow<Int>.addComma(): Flow<String> = transform { value ->
+        val dec = DecimalFormat("###,###")
+        val a = dec.format(value)
+        return@transform emit(a)
+    }
 }
+
