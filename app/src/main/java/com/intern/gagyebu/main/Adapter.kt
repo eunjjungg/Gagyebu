@@ -15,6 +15,7 @@ import com.intern.gagyebu.databinding.RecyclerviewItemBinding
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.UpdateDate
+import com.intern.gagyebu.Comma
 
 class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
@@ -33,12 +34,12 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
 
     class ViewHolder(
         private val binding: RecyclerviewItemBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root), Comma {
 
         fun bind(itemList: ItemEntity) {
             binding.apply {
                 item = itemList
-
+                amount.text = itemList.amount.addComma()
                 //수입, 지출에 따른 색상 변경
                 when (itemList.category) {
                     "수입" -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.income))

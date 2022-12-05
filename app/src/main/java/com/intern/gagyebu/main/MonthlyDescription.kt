@@ -38,7 +38,7 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
 }
 
 @Composable
-fun TotalView(it: Int) {
+fun TotalView(it: String) {
     val resource = stringResource(id = R.string.show_won)
     Text(
         text = resource.format(it),
@@ -52,7 +52,7 @@ fun TotalView(it: Int) {
 }
 
 @Composable
-fun CompInfo(incomeValue: Int?, spendValue: Int?) {
+fun CompInfo(incomeValue: String?, spendValue: String?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,7 +99,7 @@ fun CompInfo(incomeValue: Int?, spendValue: Int?) {
 
 
 @Composable
-fun IncomeView(it: Int) {
+fun IncomeView(it: String) {
     Column(
         modifier = Modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -124,7 +124,7 @@ fun IncomeView(it: Int) {
 }
 
 @Composable
-fun SpendView(it: Int) {
+fun SpendView(it: String) {
     Column(
         modifier = Modifier,
         horizontalAlignment = Alignment.CenterHorizontally

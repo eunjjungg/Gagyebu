@@ -8,12 +8,13 @@ import com.intern.gagyebu.dialog.SelectableOptionsEnum
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
+import com.intern.gagyebu.Comma
 import kotlinx.coroutines.flow.*
 
 /** mainActivity ViewModel**/
 
 class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
-    ViewModel() {
+    ViewModel(), Comma {
 
     // datastore 객체 초기화
     private val dataStore = OptionState(App.context())
@@ -51,22 +52,24 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
      */
 
     //해당 달 수입 춍합
-    val incomeValue: LiveData<Int> = itemGetOption.flatMapLatest {
-        itemRepository.totalIncome(it)
+    val incomeValue: LiveData<String> = itemGetOption.flatMapLatest {
+        itemRepository.totalIncome(it).addComma()
     }.asLiveData()
 
     //해당 달 지출 춍합
-    val spendValue: LiveData<Int> = itemGetOption.flatMapLatest {
-        itemRepository.totalSpend(it)
+    val spendValue: LiveData<String> = itemGetOption.flatMapLatest {
+        itemRepository.totalSpend(it).addComma()
     }.asLiveData()
 
     //해당 달 수입 - 지출 값
-    val totalValue = combine(
-        incomeValue.asFlow(),
-        spendValue.asFlow()
+    val totalValue  = combine(
+        itemGetOption.flatMapLatest {
+        itemRepository.totalIncome(it) },
+        itemGetOption.flatMapLatest {
+            itemRepository.totalSpend(it) }
     ) { income, spend ->
         income - spend
-    }.asLiveData()
+    }.addComma().asLiveData()
 
     //사용자 item
     val itemFlow: LiveData<List<ItemEntity>> = itemGetOption.flatMapLatest {
@@ -88,4 +91,6 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     ) { year, month -> arrayListOf(year,month)
     }.asLiveData()
 
+
 }
+
