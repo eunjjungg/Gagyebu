@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.intern.gagyebu.Comma
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.MonthlyCategory
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 
-class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository): ViewModel() {
+class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository): ViewModel(), Comma {
 
     //월이 함께 들어가는 barChartData, percentageOfEachMonth는 index가 1, 2, 3일 때
     //1, 2, 3월로 사용하기 위해 index가 0일 때 더미 값을 넣어줌
@@ -150,16 +151,16 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository
         maxCategory: SumOfCategory, monthList: List<MonthlyCategory>
     ): ReportViewInfo {
         val theme = "${maxCategory.category}"
-        val average = "총 ${maxCategory.sum}원 소비"
-        val cost1 = "${months[monthList[0].month]} : ${monthList[0].sum}원"
+        val average = "총 ${maxCategory.sum.addComma()}원 소비"
+        val cost1 = "${months[monthList[0].month]} : ${monthList[0].sum.addComma()}원"
         var cost2: String? = null
         var cost3: String? = null
 
         if(monthList.size >= 2) {
-            cost2 = "${months[monthList[1].month]} : ${monthList[1].sum}원"
+            cost2 = "${months[monthList[1].month]} : ${monthList[1].sum.addComma()}원"
         }
         if(monthList.size >= 3) {
-            cost3 = "${months[monthList[2].month]} : ${monthList[2].sum}원"
+            cost3 = "${months[monthList[2].month]} : ${monthList[2].sum.addComma()}원"
         }
 
         return ReportViewInfo(theme, average, cost1, cost2, cost3)
