@@ -38,7 +38,7 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
 }
 
 @Composable
-fun TotalView(it: Int) {
+fun TotalView(it: String) {
     val resource = stringResource(id = R.string.show_won)
     Text(
         text = resource.format(it),

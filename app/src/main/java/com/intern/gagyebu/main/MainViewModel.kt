@@ -1,6 +1,5 @@
 package com.intern.gagyebu.main
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.intern.gagyebu.App
@@ -9,13 +8,13 @@ import com.intern.gagyebu.dialog.SelectableOptionsEnum
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
+import com.intern.gagyebu.Comma
 import kotlinx.coroutines.flow.*
-import java.text.DecimalFormat
 
 /** mainActivity ViewModel**/
 
 class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
-    ViewModel() {
+    ViewModel(), Comma {
 
     // datastore 객체 초기화
     private val dataStore = OptionState(App.context())
@@ -70,7 +69,7 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
             itemRepository.totalSpend(it) }
     ) { income, spend ->
         income - spend
-    }.asLiveData()
+    }.addComma().asLiveData()
 
     //사용자 item
     val itemFlow: LiveData<List<ItemEntity>> = itemGetOption.flatMapLatest {
@@ -92,10 +91,6 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     ) { year, month -> arrayListOf(year,month)
     }.asLiveData()
 
-    private fun Flow<Int>.addComma(): Flow<String> = transform { value ->
-        val dec = DecimalFormat("###,###")
-        val a = dec.format(value)
-        return@transform emit(a)
-    }
+
 }
 
