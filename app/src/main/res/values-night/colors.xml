@@ -24,6 +24,9 @@
     <color name="pieChart3">#C9C9C9</color>
     <color name="pieChart4">#FCFCFC</color>
 
+    <!--item background-->
+    <color name="back">#4D4D4D</color>
+
     <!--fab button-->
     <color name="fabIcon">#252525</color>
     <color name="fabDefault">#FCFCFC</color>
