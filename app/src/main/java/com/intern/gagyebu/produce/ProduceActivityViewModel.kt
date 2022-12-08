@@ -39,6 +39,7 @@ class ProduceActivityViewModel : ViewModel() {
 
     fun updateTitle(title: String) {
         _title.value = title
+        Log.d("title", "${_title.value}")
         //_title.postValue()
     }
 

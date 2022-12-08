@@ -40,19 +40,15 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 /** mainActivity ViewModel**/
-
 class ProduceActivity : ComponentActivity() {
     private lateinit var viewModel: ProduceActivityViewModel
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this)[ProduceActivityViewModel::class.java]
-
-        if (intent.hasExtra("updateData")) {
-            viewModel.initUpdate(intent.extras!!)
-        }
 
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event -> handleEvent(event) }
