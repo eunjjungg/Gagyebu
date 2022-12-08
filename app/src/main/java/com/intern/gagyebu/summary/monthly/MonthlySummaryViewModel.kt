@@ -12,10 +12,11 @@ import kotlinx.coroutines.*
 class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
+    val pieElementList = mutableListOf<PieElement>()
 
     // TODO : coroutine 고치기 일단은 완료
     //직접 db에 접근해서 데이터를 가져오는 함수
-    fun getMonthlyReportData(year: Int, month: Int){
+    /*fun getMonthlyReportData(year: Int, month: Int){
         viewModelScope.launch(Dispatchers.IO) {
             val result = itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
             result.sortedByDescending { it.sum }
@@ -24,7 +25,18 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
                 pieChartData.value = applyDataToPieElement(result)
             }
         }
-    }
+    }*/
+
+    //직접 db에 접근해서 데이터를 가져오는 함수 - 2번째 구현 방법
+    fun getMonthlyReportData(year: Int, month: Int) =
+        viewModelScope.launch {
+            pieChartData.value = applyDataToPieElement(getDataFromRepository(year, month).sortedByDescending { it.sum })
+        }
+
+    private suspend fun getDataFromRepository(year: Int, month: Int): List<CategoryInfoOfMonth> =
+        withContext(Dispatchers.IO) {
+            itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
+        }
 
     //db에서 가져온 데이터를 pieElement에 맞도록 보정해주는 부분
     private fun applyDataToPieElement(data: List<CategoryInfoOfMonth>) : MutableList<PieElement> {
