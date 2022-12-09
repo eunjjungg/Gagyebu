@@ -2,6 +2,7 @@ package com.intern.gagyebu.produce
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,16 +10,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.materialIcon
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -35,7 +38,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
@@ -52,18 +58,50 @@ class ProduceActivity2 : ComponentActivity() {
                 viewModel.eventFlow.collect { event -> handleEvent(event) }
             }
 
+            val source = remember {
+                MutableInteractionSource()
+            }
+
+            if (source.collectIsPressedAsState().value) {
+                DatePicker()
+            }
+
             GagyebuTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Column() {
-                        Title()
-                        DateField()
-                        TitleField()
-                        AmountField()
-                        CategorySpinner()
+
+                    Title(modifier = Modifier)
+
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        BasicTextField(
+                            value = viewModel.date.observeAsState(""),
+                            onValueChange = viewModel::updateDate,
+                            interaction = source,
+                            icon = Icons.Outlined.DateRange,
+                            readOnlyValue = true
+                        )
+
+                        BasicTextField(
+                            value = viewModel.title.observeAsState(""),
+                            onValueChange = viewModel::updateTitle,
+                            icon = Icons.Outlined.Add
+                        )
+
+                        BasicTextField(
+                            value = viewModel.amount.observeAsState(""),
+                            onValueChange = viewModel::updateAmount,
+                            icon = Icons.Outlined.AttachMoney,
+                            keyboardType = KeyboardType.Number
+                        )
+
+                        CategorySpinner(list = Category.values())
 
                         Row {
                             CancelButtons()
@@ -86,8 +124,9 @@ class ProduceActivity2 : ComponentActivity() {
     }
 
 }
+
 @Composable
-fun InitUpdate(viewModel: ProduceActivityViewModel = viewModel(), intent: Intent){
+fun InitUpdate(viewModel: ProduceActivityViewModel = viewModel(), intent: Intent) {
     var firstInit by rememberSaveable { mutableStateOf(true) }
 
     if (firstInit) {
@@ -95,27 +134,6 @@ fun InitUpdate(viewModel: ProduceActivityViewModel = viewModel(), intent: Intent
             viewModel.initUpdate(intent.extras!!)
         }
         firstInit = false
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DateField(modifier: Modifier = Modifier,
-              viewModel: ProduceActivityViewModel = viewModel()) {
-    val date by viewModel.date.observeAsState("")
-    val interactionSource = remember { MutableInteractionSource() }
-
-        OutlinedTextField(
-            value = date,
-            onValueChange = { },
-            readOnly = true,
-            label = { Text("날짜") },
-            interactionSource = interactionSource,
-            leadingIcon = { Icon(Icons.Outlined.DateRange, null, modifier = Modifier) }
-        )
-
-    if (interactionSource.collectIsPressedAsState().value) {
-        DatePicker()
     }
 }
 
@@ -147,21 +165,28 @@ fun Title(modifier: Modifier = Modifier,
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun TitleField(modifier: Modifier = Modifier,
-               viewModel: ProduceActivityViewModel = viewModel()) {
-    val title by viewModel.title.observeAsState("")
+fun BasicTextField(
+    modifier: Modifier = Modifier,
+    value: State<String>,
+    onValueChange: (String) -> Unit,
+    icon: ImageVector,
+    interaction: MutableInteractionSource = remember { MutableInteractionSource() },
+    keyboardType: KeyboardType = KeyboardType.Text,
+    readOnlyValue: Boolean = false
+) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
     OutlinedTextField(
-        value = title,
-        //ViewModel StateFlow -> 신뢰할 수 있는 단일 소스. 따라서 {mutable = ..} 문법 사용 안해도 가능
-        onValueChange = viewModel::updateTitle,
-        label = { Text("제목") },
-        leadingIcon = { Icon(Icons.Outlined.Add, null, modifier = modifier) },
-        singleLine = true,
-        maxLines = 1,
+        modifier = modifier.padding(10.dp),
+        value = value.value,
+        readOnly = readOnlyValue,
+        onValueChange = onValueChange,
+        interactionSource = interaction,
+        leadingIcon = { Icon(icon, null, modifier = Modifier) },
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         keyboardActions = KeyboardActions(onDone = {
             keyboardController?.hide()
         })
@@ -169,27 +194,19 @@ fun TitleField(modifier: Modifier = Modifier,
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@Preview
 @Composable
-fun AmountField(modifier: Modifier = Modifier,
-                viewModel: ProduceActivityViewModel = viewModel()) {
-
-    val amount by viewModel.amount.observeAsState("")
-    val keyboardController = LocalSoftwareKeyboardController.current
+fun BasicTextFieldPreview() {
     OutlinedTextField(
-        value = amount,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        onValueChange = viewModel::updateAmount,
-        label = { Text("금액") },
-        leadingIcon = { Text(text = "$") },
-        singleLine = true,
-        maxLines = 1,
-        keyboardActions = KeyboardActions(onDone = {
-            keyboardController?.hide()
-        })
+        modifier = Modifier.padding(10.dp),
+        value = "2022-12-31",
+        onValueChange = {},
+        leadingIcon = { Icon(Icons.Outlined.Add, null, modifier = Modifier) },
+
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = Color.White,
+            focusedBorderColor = Color.White,
+            unfocusedBorderColor = Color.White
+        )
     )
 }
-
-
-
-
-
