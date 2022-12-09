@@ -1,10 +1,9 @@
 package com.intern.gagyebu.summary.yearly
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.intern.gagyebu.Comma
+import com.intern.gagyebu.R
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.BarChartInfo
 import com.intern.gagyebu.summary.util.MonthlyCategory
@@ -15,8 +14,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 
-class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository)
-    : ViewModel(), Comma {
+class YearlySummaryViewModel(
+    private val itemRepository: ItemRepo.ItemRepository,
+    application: Application
+) : AndroidViewModel(application), Comma {
 
     //월이 함께 들어가는 barChartData, percentageOfEachMonth는 index가 1, 2, 3일 때
     //1, 2, 3월로 사용하기 위해 index가 0일 때 더미 값을 넣어줌
@@ -80,14 +81,13 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository
         titleYear.value = titleYear.value!!.minus(1)
     }
 
-    // TODO : coroutine 고치기 일단은 완료 (데이터를 다 받아야만 다른 메소드를 수행할 수 있으므로
-    // 현재로서는 코루틴의 이득을 볼 수 없는 구조입니다.)
+    // TODO : coroutine 고치기 일단은 완료 (데이터를 다 받아야만 다른 메소드를 수행할 수 있으므로 현재로서는 코루틴의 이득을 볼 수 없는 구조입니다.)
     //뷰에서 데이터가 바뀐 것을 감지했을 때 불리는 함수
     fun getYearReportData() {
         viewModelScope.launch {
             setBarChartData(getYearMonthAmountData(titleYear.value!!))
 
-            if(isEmpty.value == false) {
+            if (isEmpty.value == false) {
                 reportViewData.value = getYearCategoryData(titleYear.value!!)
             }
         }
@@ -153,26 +153,39 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository
             convertRawToReportData(maxCategory, monthListGroupByMaxCategory)
         }
 
-
     //각 데이터들을 커스텀뷰의 속성에 바로 할당해줄수 있도록 데이터 바꿔주는 부분
     private fun convertRawToReportData(
         maxCategory: SumOfCategory, monthList: List<MonthlyCategory>
     ): ReportViewInfo {
-        val theme = maxCategory.category
-        val average = "총 ${maxCategory.sum.addComma()}원 소비"
-        val cost1 = "${months[monthList[0].month]} : ${monthList[0].sum.addComma()}원"
-        var cost2: String? = null
-        var cost3: String? = null
+        fun getCostString(index: Int): String =
+            String.format(
+                getStringResource(R.string.boxTitle_cost),
+                months[monthList[index].month],
+                monthList[index].sum.addComma()
+            )
 
-        if (monthList.size >= 2) {
-            cost2 = "${months[monthList[1].month]} : ${monthList[1].sum.addComma()}원"
-        }
-        if (monthList.size >= 3) {
-            cost3 = "${months[monthList[2].month]} : ${monthList[2].sum.addComma()}원"
+        val average = String.format(
+            getStringResource(R.string.boxTitle_sum),
+            maxCategory.sum.addComma()
+        )
+
+        val cost2 = if (monthList.size >= 2) {
+            getCostString(1)
+        } else {
+            null
         }
 
-        return ReportViewInfo(theme, average, cost1, cost2, cost3)
+        val cost3 = if (monthList.size >= 3) {
+            getCostString(2)
+        } else {
+            null
+        }
+
+        return ReportViewInfo(maxCategory.category, average, getCostString(0), cost2, cost3)
     }
+
+    private fun getStringResource(id: Int): String =
+        getApplication<Application>().resources.getString(id)
 
     //처음 Init부터 총 13개의 List를 만들어줬고 뷰모델의 코드에서는 List의 각 원소의 값만 변경함
     //따라서 그대로만 사용하면 뷰의 옵저버가 감지를 못하므로 값의 변경이 모두 일어난 후
@@ -181,11 +194,17 @@ class YearlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository
         this.value = this.value
     }
 
-    class YearlySummaryViewModelFactory(private val repository: ItemRepo.ItemRepository) :
+    class YearlySummaryViewModelFactory(
+        private val repository: ItemRepo.ItemRepository,
+        private val application: Application
+    ) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return YearlySummaryViewModel(repository) as T
+            return modelClass.getConstructor(
+                ItemRepo.ItemRepository::class.java,
+                Application::class.java
+            ).newInstance(repository, application)
         }
     }
 }

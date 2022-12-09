@@ -23,7 +23,7 @@ class YearlySummaryActivity() : BaseActivity<ActivityYearlySummaryBinding>(
     val barChartAdapter by lazy { BarChartAdapter() }
     override val viewModel by lazy {
         ViewModelProvider(
-            this, YearlySummaryViewModel.YearlySummaryViewModelFactory(ItemRepo.ItemRepository(itemDao))
+            this, YearlySummaryViewModel.YearlySummaryViewModelFactory(ItemRepo.ItemRepository(itemDao), application = application)
         ).get(YearlySummaryViewModel::class.java)
     }
 
