@@ -1,13 +1,14 @@
 package com.intern.gagyebu.produce
 
+import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -17,9 +18,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun CancelButtons(
     modifier: Modifier = Modifier,
     viewModel: ProduceActivityViewModel = viewModel(),
+    onExitClick: () -> Unit
 ) {
     Button(
-        onClick = {},
+        onClick = {onExitClick()},
         Modifier.padding()
     ) {
         Text(
@@ -37,7 +39,7 @@ fun CancelButtons(
 @Composable
 fun SaveButtons(
     modifier: Modifier = Modifier,
-    viewModel: ProduceActivityViewModel = viewModel(),
+    viewModel: ProduceActivityViewModel = viewModel()
 ) {
     val state = viewModel.areInputsValid.observeAsState(false)
 
