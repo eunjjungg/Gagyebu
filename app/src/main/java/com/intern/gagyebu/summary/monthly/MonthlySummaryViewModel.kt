@@ -12,7 +12,6 @@ import kotlinx.coroutines.*
 class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
-    val pieElementList = mutableListOf<PieElement>()
 
     // TODO : coroutine 고치기 일단은 완료
     //직접 db에 접근해서 데이터를 가져오는 함수
