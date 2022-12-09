@@ -27,8 +27,8 @@ abstract class BaseActivity<VD: ViewDataBinding>(resource: Int) : AppCompatActiv
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding
         super.onCreate(savedInstanceState)
+        binding
         initViewModel(viewModel)
         onCreateAction()
     }
