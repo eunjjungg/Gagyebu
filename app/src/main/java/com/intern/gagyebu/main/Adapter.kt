@@ -15,7 +15,7 @@ import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.UpdateDate
 import com.intern.gagyebu.Comma
-import com.intern.gagyebu.produce.ProduceActivity2
+import com.intern.gagyebu.produce.ProduceActivity
 
 class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
@@ -70,7 +70,7 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                                 val updateData = UpdateDate(id = itemList.id,
                                     date = date.text as String, title = itemList.title, amount = itemList.amount, category = itemList.category)
 
-                                val intent = Intent(this.root.context, ProduceActivity2::class.java).apply {
+                                val intent = Intent(this.root.context, ProduceActivity::class.java).apply {
                                     putExtra("updateData", updateData)
                                 }
 

@@ -52,7 +52,7 @@ fun BasicTextField(
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun BasicTextFieldPreview() {
     OutlinedTextField(
@@ -61,10 +61,13 @@ fun BasicTextFieldPreview() {
         onValueChange = {},
         leadingIcon = { Icon(Icons.Outlined.Add, null, modifier = Modifier) },
 
+        /*
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.White,
             focusedBorderColor = Color.White,
             unfocusedBorderColor = Color.White
         )
+
+         */
     )
 }

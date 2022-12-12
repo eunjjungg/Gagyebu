@@ -17,7 +17,7 @@ import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
-import com.intern.gagyebu.produce.ProduceActivity2
+import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             openFab()
         }
         binding.fabAdd.setOnClickListener {
-            Intent(this@MainActivity, ProduceActivity2::class.java).also { startActivity(it) }
+            Intent(this@MainActivity, ProduceActivity::class.java).also { startActivity(it) }
         }
         binding.fabCalendar.setOnClickListener {
             Intent(this@MainActivity, YearlySummaryActivity::class.java).also { startActivity(it) }
