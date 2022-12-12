@@ -1,30 +1,26 @@
 package com.intern.gagyebu.main
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.intern.gagyebu.App
 import com.intern.gagyebu.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.intern.gagyebu.dialog.SelectableOptionsEnum
+import com.intern.gagyebu.room.data.OptionState
+import kotlinx.coroutines.*
 
 /** MainActivity ComposeMigration
  * 수입, 지출, 총합 View 컴포즈 이용하여 수정
@@ -40,9 +36,9 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
     var showLoading by remember { mutableStateOf(true) }
 
     Column {
-        if(showLoading){
-            Landing(modifier = Modifier, onTimeout = {showLoading = false})
-        }else{
+        if (showLoading) {
+            Landing(modifier = Modifier, onTimeout = { showLoading = false })
+        } else {
             totalValue?.let {
                 TotalView(it)
             }
@@ -72,13 +68,13 @@ fun Landing(modifier: Modifier, onTimeout: () -> Unit) {
             .fillMaxWidth()
             .height(40.dp)
             .background(Color.LightGray.copy(alpha = alpha))
-    ){
+    ) {
         val timeout by rememberUpdatedState(onTimeout)
         /**
          * LaunchedEffect 내부 key가 변경되면 다시 시작 따라서 상수 값 등 사용하지 말고,
          * rememberUpdatedState 에 대해 공부하기
          */
-        LaunchedEffect(true){
+        LaunchedEffect(true) {
             delay(5000L)
             timeout()
         }
@@ -149,8 +145,13 @@ fun CompInfo(incomeValue: String?, spendValue: String?) {
 
 @Composable
 fun IncomeView(it: String) {
+    val scope = rememberCoroutineScope()
     Column(
-        modifier = Modifier,
+        modifier = Modifier.clickable {
+            scope.launch {
+                filterChange(SelectableOptionsEnum.INCOME.toString())
+            }
+        },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -180,8 +181,13 @@ fun IncomeView(it: String) {
 
 @Composable
 fun SpendView(it: String) {
+    val scope = rememberCoroutineScope()
     Column(
-        modifier = Modifier,
+        modifier = Modifier.clickable {
+            scope.launch {
+                filterChange(SelectableOptionsEnum.SPEND.toString())
+            }
+        },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -207,4 +213,9 @@ fun SpendView(it: String) {
             )
         )
     }
+}
+
+suspend fun filterChange(filter: String) {
+    val dataStore = OptionState(App.context())
+    dataStore.setFilter(filter)
 }

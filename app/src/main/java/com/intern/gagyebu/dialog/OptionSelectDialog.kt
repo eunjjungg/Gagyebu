@@ -4,6 +4,7 @@ import android.app.AlertDialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.intern.gagyebu.App
@@ -34,7 +35,10 @@ class OptionSelectDialog : DialogFragment() {
             val filterOption = dataStore.filterFlow.first()
             val orderOption = dataStore.orderFlow.first()
 
+            Log.d("filter", filterOption)
+
             when (filterOption) {
+
                 SelectableOptionsEnum.SPEND.toString() -> binding.filterSpend.isChecked = true
 
                 SelectableOptionsEnum.INCOME.toString() -> binding.filterIncome.isChecked = true
