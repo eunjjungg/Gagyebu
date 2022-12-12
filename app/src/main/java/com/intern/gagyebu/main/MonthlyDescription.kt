@@ -4,6 +4,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
 import com.intern.gagyebu.dialog.SelectableOptionsEnum
+import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.data.OptionState
 import kotlinx.coroutines.*
 
@@ -31,6 +33,7 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
     val incomeValue by MainViewModel.incomeValue.observeAsState()
     val spendValue by MainViewModel.spendValue.observeAsState()
     val totalValue by MainViewModel.totalValue.observeAsState()
+    val itemValue by MainViewModel.itemFlow.observeAsState()
 
     // sideEffect 상태 추적
     var showLoading by remember { mutableStateOf(true) }
@@ -44,6 +47,10 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
             }
         }
         CompInfo(incomeValue, spendValue)
+
+        itemValue?.let {
+            ItemList(it)
+        }
     }
 }
 
@@ -214,6 +221,27 @@ fun SpendView(it: String) {
         )
     }
 }
+
+@Composable
+fun ItemList(items: List<ItemEntity>) {
+    LazyColumn (modifier = Modifier){
+        items(items.size) { pos ->
+
+            val date = stringResource(R.string.show_date_full,
+                items[pos].year,
+                items[pos].month,
+                items[pos].day )
+
+            val color = when (items[pos].category) {
+                "수입" -> colorResource(id = R.color.income)
+
+                else -> colorResource(id = R.color.spend)
+            }
+            AccountRow(date = date, title = items[pos].title, amount = items[pos].amount, color = color)
+        }
+    }
+}
+
 
 suspend fun filterChange(filter: String) {
     val dataStore = OptionState(App.context())

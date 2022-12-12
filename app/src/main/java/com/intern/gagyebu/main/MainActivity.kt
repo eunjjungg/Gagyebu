@@ -41,11 +41,14 @@ class MainActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
 
+        /*
         //recyclerView 초기화
         val adapter = Adapter()
         binding.recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerview.adapter = adapter
         subscribeUi(adapter, viewModel)
+
+         */
 
         //compose migration
         binding.composeView.setContent {
@@ -94,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                         dataStore.setOrder(order)
                     }
                     //필터 변경시 아이템 스크롤 최상단으로 이동.
-                    binding.recyclerview.smoothScrollToPosition(0)
+                    //binding.recyclerview.smoothScrollToPosition(0)
                 }
             })
             optionPicker.show(supportFragmentManager, "OptionPicker")
@@ -102,6 +105,7 @@ class MainActivity : AppCompatActivity() {
         setFabClickListener()
     }
 
+    /*
     //adapter diff observe 등록
     //ViewModel 에서 받은 ItemList 변경점 diffUtil observe
     private fun subscribeUi(adapter: Adapter, viewModel: MainViewModel) {
@@ -110,6 +114,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+     */
 
     private var isFabOpen = false
 
