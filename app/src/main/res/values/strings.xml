@@ -37,6 +37,7 @@
     <plurals name="compose_itemDate">
         <item quantity="other">- 구매 일자 : %d년 %d월 %d일</item>
     </plurals>
+    <string name="title_activity_example">example</string>
 
 
 </resources>
