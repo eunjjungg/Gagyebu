@@ -9,6 +9,7 @@ import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.Comma
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 /** mainActivity ViewModel**/
@@ -62,12 +63,16 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     }.asLiveData()
 
     //해당 달 수입 - 지출 값
-    val totalValue  = combine(
+    val totalValue = combine(
         itemGetOption.flatMapLatest {
-        itemRepository.totalIncome(it) },
+            itemRepository.totalIncome(it)
+        },
         itemGetOption.flatMapLatest {
-            itemRepository.totalSpend(it) }
-    ) { income, spend ->
+            itemRepository.totalSpend(it)
+        },
+
+        )
+    { income, spend ->
         income - spend
     }.addComma().asLiveData()
 
@@ -88,7 +93,8 @@ class MainViewModel internal constructor(private val itemRepository: ItemRepo) :
     val date: LiveData<List<Int>> = combine(
         dataStore.yearFlow,
         dataStore.monthFlow
-    ) { year, month -> arrayListOf(year,month)
+    ) { year, month ->
+        arrayListOf(year, month)
     }.asLiveData()
 
 

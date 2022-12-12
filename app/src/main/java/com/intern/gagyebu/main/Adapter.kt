@@ -5,17 +5,20 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
-import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.databinding.RecyclerviewItemBinding
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.UpdateDate
 import com.intern.gagyebu.Comma
+import com.intern.gagyebu.produce.ProduceActivity
+import com.google.android.material.snackbar.Snackbar
+
 
 class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallback()) {
 
@@ -42,9 +45,19 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                 amount.text = itemList.amount.addComma()
                 //수입, 지출에 따른 색상 변경
                 when (itemList.category) {
-                    "수입" -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.income))
+                    "수입" -> color.setBackgroundColor(
+                        ContextCompat.getColor(
+                            App.context(),
+                            R.color.income
+                        )
+                    )
 
-                    else -> color.setBackgroundColor(ContextCompat.getColor(App.context(), R.color.spend))
+                    else -> color.setBackgroundColor(
+                        ContextCompat.getColor(
+                            App.context(),
+                            R.color.spend
+                        )
+                    )
                 }
 
                 //년-월-일 항목을 하나로 합쳐 표현
@@ -65,14 +78,20 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                         when (which) {
                             /**
                              * 수정 요청시 항목을 UpdateDate.class parcel -> ProduceActivity 전달
-                            */
+                             */
                             0 -> {
-                                val updateData = UpdateDate(id = itemList.id,
-                                    date = date.text as String, title = itemList.title, amount = itemList.amount, category = itemList.category)
+                                val updateData = UpdateDate(
+                                    id = itemList.id,
+                                    date = date.text as String,
+                                    title = itemList.title,
+                                    amount = itemList.amount,
+                                    category = itemList.category
+                                )
 
-                                val intent = Intent(this.root.context, ProduceActivity::class.java).apply {
-                                    putExtra("updateData", updateData)
-                                }
+                                val intent =
+                                    Intent(this.root.context, ProduceActivity::class.java).apply {
+                                        putExtra("updateData", updateData)
+                                    }
 
                                 this.root.context.startActivity(intent)
                             }
@@ -87,7 +106,16 @@ class Adapter : ListAdapter<ItemEntity, RecyclerView.ViewHolder>(ItemDiffCallbac
                                 this.setTitle("삭제")
                                 this.setMessage("정말 삭제할까요?")
                                 this.setPositiveButton("삭제") { _, _ ->
+                                    val restore = itemList.copy()
+
                                     ItemRepo.deleteItem(itemList.id)
+
+                                    Snackbar.make(binding.root, "삭제되었습니다.", Snackbar.LENGTH_LONG)
+                                        .apply {
+                                            setAction("복원하기") {
+                                                ItemRepo.saveItem(restore)
+                                            }
+                                        }.show()
                                 }
                                 this.setNegativeButton("취소") { _, _ ->
                                     dialog.cancel()

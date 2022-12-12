@@ -13,18 +13,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.intern.gagyebu.*
-import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.databinding.ActivityMainBinding
 import com.intern.gagyebu.dialog.OptionDialogListener
 import com.intern.gagyebu.dialog.OptionSelectDialog
 import com.intern.gagyebu.dialog.YearMonthPickerDialog
+import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 /** mainActivity **/
