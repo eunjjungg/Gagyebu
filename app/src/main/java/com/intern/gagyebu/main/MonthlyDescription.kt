@@ -1,26 +1,37 @@
 package com.intern.gagyebu.main
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
 import com.intern.gagyebu.dialog.SelectableOptionsEnum
 import com.intern.gagyebu.room.ItemEntity
+import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import kotlinx.coroutines.*
 
@@ -48,8 +59,8 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
         }
         CompInfo(incomeValue, spendValue)
 
-        itemValue?.let {
-            ItemList(it)
+        itemValue?.let { it ->
+            ItemList(it, dismissed = {ItemRepo.deleteItem(it.id)})
         }
     }
 }
@@ -222,26 +233,80 @@ fun SpendView(it: String) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ItemList(items: List<ItemEntity>) {
-    LazyColumn (modifier = Modifier){
-        items(items.size) { pos ->
+fun ItemList(itemList: List<ItemEntity>, dismissed: (listItem: ItemEntity) -> Unit) {
 
-            val date = stringResource(R.string.show_date_full,
-                items[pos].year,
-                items[pos].month,
-                items[pos].day )
+    LazyColumn(modifier = Modifier) {
+        items(count = itemList.size, key = { pos -> itemList[pos].id }) { pos ->
 
-            val color = when (items[pos].category) {
-                "수입" -> colorResource(id = R.color.income)
+            val dismissState = rememberDismissState()
 
-                else -> colorResource(id = R.color.spend)
+            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                dismissed(itemList[pos])
             }
-            AccountRow(date = date, title = items[pos].title, amount = items[pos].amount, color = color)
+            SwipeToDismiss(
+                state = dismissState,
+                modifier = Modifier
+                    .padding(vertical = Dp(1f)),
+                directions = setOf(
+                    DismissDirection.EndToStart
+                ),
+                dismissThresholds = { direction ->
+                    androidx.compose.material.FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.1f else 0.05f)
+                },
+                background = {
+                    val color by animateColorAsState(
+                        when (dismissState.targetValue) {
+                            DismissValue.Default -> Color.White
+                            else -> Color.Red
+                        }
+                    )
+                    val alignment = Alignment.CenterEnd
+                    val icon = Icons.Default.Delete
+
+                    val scale by animateFloatAsState(
+                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                    )
+
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(color)
+                            .padding(horizontal = Dp(20f)),
+                        contentAlignment = alignment
+                    ) {
+                        Icon(
+                            icon,
+                            contentDescription = "Delete Icon",
+                            modifier = Modifier.scale(scale)
+                        )
+                    }
+                },
+                dismissContent = {
+                    val date = stringResource(
+                        R.string.show_date_full,
+                        itemList[pos].year,
+                        itemList[pos].month,
+                        itemList[pos].day
+                    )
+
+                    val color = when (itemList[pos].category) {
+                        "수입" -> colorResource(id = R.color.income)
+
+                        else -> colorResource(id = R.color.spend)
+                    }
+                    AccountRow(
+                        date = date,
+                        title = itemList[pos].title,
+                        amount = itemList[pos].amount,
+                        color = color
+                    )
+                }
+            )
         }
     }
 }
-
 
 suspend fun filterChange(filter: String) {
     val dataStore = OptionState(App.context())
