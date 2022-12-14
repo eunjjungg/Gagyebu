@@ -1,18 +1,18 @@
 package com.intern.gagyebu.main
 
+import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -21,18 +21,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
 import com.intern.gagyebu.dialog.SelectableOptionsEnum
+import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
+import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.*
 
 /** MainActivity ComposeMigration
@@ -45,6 +49,7 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
     val spendValue by MainViewModel.spendValue.observeAsState()
     val totalValue by MainViewModel.totalValue.observeAsState()
     val itemValue by MainViewModel.itemFlow.observeAsState()
+    val context = LocalContext.current
 
     // sideEffect 상태 추적
     var showLoading by remember { mutableStateOf(true) }
@@ -60,7 +65,33 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
         CompInfo(incomeValue, spendValue)
 
         itemValue?.let { it ->
-            ItemList(it, dismissed = {ItemRepo.deleteItem(it.id)})
+            ItemList(it,
+                DismissDelete = { ItemRepo.deleteItem(it.id) },
+                DismissUpdate = {
+                    //TODO 날짜 생성방법 생각해보기
+                    /*
+                    val date = stringResource(id = R.string.show_date_full,
+                        it.year,
+                        it.month,
+                        it.day
+                    )
+
+                     */
+
+                    val updateData = UpdateDate(
+                        id = it.id,
+                        date = "2022-02-22",
+                        title = it.title,
+                        amount = it.amount,
+                        category = it.category
+                    )
+
+                    val intent =
+                        Intent(context, ProduceActivity::class.java).apply {
+                            putExtra("updateData", updateData)
+                        }
+                    context.startActivity(intent)
+                })
         }
     }
 }
@@ -233,52 +264,81 @@ fun SpendView(it: String) {
     }
 }
 
+/**
+ * 참조 : https://stackoverflow.com/questions/65381566/lazycolumn-with-swipetodismiss
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ItemList(itemList: List<ItemEntity>, dismissed: (listItem: ItemEntity) -> Unit) {
+fun ItemList(
+    itemList: List<ItemEntity>,
+    DismissDelete: (listItem: ItemEntity) -> Unit,
+    DismissUpdate: (listItem: ItemEntity) -> Unit
+) {
 
     LazyColumn(modifier = Modifier) {
         items(count = itemList.size, key = { pos -> itemList[pos].id }) { pos ->
 
-            val dismissState = rememberDismissState()
+            val dismissState = rememberDismissState(confirmStateChange = { dismissValue ->
+                when (dismissValue) {
+                    DismissValue.Default -> { // dismissThresholds 만족 안한 상태
+                        false
+                    }
+                    DismissValue.DismissedToEnd -> { // -> 방향 스와이프 (수정)
+                        DismissUpdate(itemList[pos])
+                        false
+                    }
+                    DismissValue.DismissedToStart -> { // <- 방향 스와이프 (삭제)
+                        DismissDelete(itemList[pos])
+                        true
+                    }
+                }
+            })
 
-            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                dismissed(itemList[pos])
-            }
             SwipeToDismiss(
                 state = dismissState,
                 modifier = Modifier
                     .padding(vertical = Dp(1f)),
                 directions = setOf(
-                    DismissDirection.EndToStart
+                    DismissDirection.EndToStart,
+                    DismissDirection.StartToEnd
                 ),
                 dismissThresholds = { direction ->
-                    androidx.compose.material.FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.1f else 0.05f)
+                    androidx.compose.material.FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.5f else 0.3f)
                 },
                 background = {
+                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
                     val color by animateColorAsState(
                         when (dismissState.targetValue) {
-                            DismissValue.Default -> Color.White
-                            else -> Color.Red
+                            DismissValue.Default -> backgroundColor.copy(alpha = 0.5f) // dismissThresholds 만족 안한 상태
+                            DismissValue.DismissedToEnd -> Color.Green.copy(alpha = 0.4f) // -> 방향 스와이프 (수정)
+                            DismissValue.DismissedToStart -> Color.Red.copy(alpha = 0.5f) // <- 방향 스와이프 (삭제)
                         }
                     )
-                    val alignment = Alignment.CenterEnd
-                    val icon = Icons.Default.Delete
-
+                    val icon = when (dismissState.targetValue) {
+                        DismissValue.Default -> Icons.Default.Adjust
+                        DismissValue.DismissedToEnd -> Icons.Default.Edit
+                        DismissValue.DismissedToStart -> Icons.Default.Delete
+                    }
                     val scale by animateFloatAsState(
-                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                        when (dismissState.targetValue == DismissValue.Default) {
+                            true -> 0.8f
+                            else -> 1.5f
+                        }
                     )
-
+                    val alignment = when (direction) {
+                        DismissDirection.EndToStart -> Alignment.CenterEnd
+                        DismissDirection.StartToEnd -> Alignment.CenterStart
+                    }
                     Box(
-                        Modifier
+                        modifier = Modifier
                             .fillMaxSize()
                             .background(color)
-                            .padding(horizontal = Dp(20f)),
+                            .padding(horizontal = 30.dp),
                         contentAlignment = alignment
                     ) {
-                        Icon(
-                            icon,
-                            contentDescription = "Delete Icon",
+                        androidx.compose.material.Icon(
+                            imageVector = icon,
+                            contentDescription = "",
                             modifier = Modifier.scale(scale)
                         )
                     }
