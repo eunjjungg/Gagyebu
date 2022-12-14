@@ -1,6 +1,8 @@
 package com.intern.gagyebu.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -28,7 +30,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import com.intern.gagyebu.App
 import com.intern.gagyebu.R
 import com.intern.gagyebu.dialog.SelectableOptionsEnum
@@ -66,21 +67,14 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
 
         itemValue?.let { it ->
             ItemList(it,
-                DismissDelete = { ItemRepo.deleteItem(it.id) },
+                DismissDelete = {
+                    ItemRepo.deleteItem(it.id)
+                },
                 DismissUpdate = {
                     //TODO 날짜 생성방법 생각해보기
-                    /*
-                    val date = stringResource(id = R.string.show_date_full,
-                        it.year,
-                        it.month,
-                        it.day
-                    )
-
-                     */
-
                     val updateData = UpdateDate(
                         id = it.id,
-                        date = "2022-02-22",
+                        date = "${it.year}-${it.month}-${it.day}",
                         title = it.title,
                         amount = it.amount,
                         category = it.category
@@ -91,7 +85,8 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
                             putExtra("updateData", updateData)
                         }
                     context.startActivity(intent)
-                })
+                }
+            )
         }
     }
 }
@@ -267,103 +262,111 @@ fun SpendView(it: String) {
 /**
  * 참조 : https://stackoverflow.com/questions/65381566/lazycolumn-with-swipetodismiss
  */
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ItemList(
     itemList: List<ItemEntity>,
     DismissDelete: (listItem: ItemEntity) -> Unit,
-    DismissUpdate: (listItem: ItemEntity) -> Unit
+    DismissUpdate: (listItem: ItemEntity) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
 
-    LazyColumn(modifier = Modifier) {
-        items(count = itemList.size, key = { pos -> itemList[pos].id }) { pos ->
-
-            val dismissState = rememberDismissState(confirmStateChange = { dismissValue ->
-                when (dismissValue) {
-                    DismissValue.Default -> { // dismissThresholds 만족 안한 상태
-                        false
-                    }
-                    DismissValue.DismissedToEnd -> { // -> 방향 스와이프 (수정)
-                        DismissUpdate(itemList[pos])
-                        false
-                    }
-                    DismissValue.DismissedToStart -> { // <- 방향 스와이프 (삭제)
-                        DismissDelete(itemList[pos])
-                        true
-                    }
-                }
-            })
-
-            SwipeToDismiss(
-                state = dismissState,
-                modifier = Modifier
-                    .padding(vertical = Dp(1f)),
-                directions = setOf(
-                    DismissDirection.EndToStart,
-                    DismissDirection.StartToEnd
-                ),
-                dismissThresholds = { direction ->
-                    androidx.compose.material.FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.5f else 0.3f)
-                },
-                background = {
-                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-                    val color by animateColorAsState(
-                        when (dismissState.targetValue) {
-                            DismissValue.Default -> backgroundColor.copy(alpha = 0.5f) // dismissThresholds 만족 안한 상태
-                            DismissValue.DismissedToEnd -> Color.Green.copy(alpha = 0.4f) // -> 방향 스와이프 (수정)
-                            DismissValue.DismissedToStart -> Color.Red.copy(alpha = 0.5f) // <- 방향 스와이프 (삭제)
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        scaffoldState = scaffoldState
+    ) {
+        LazyColumn(modifier = Modifier) {
+            items(count = itemList.size, key = { pos -> itemList[pos].id }) { pos ->
+                val dismissState = rememberDismissState(confirmStateChange = { dismissValue ->
+                    when (dismissValue) {
+                        DismissValue.Default -> { // dismissThresholds 만족 안한 상태
+                            false
                         }
-                    )
-                    val icon = when (dismissState.targetValue) {
-                        DismissValue.Default -> Icons.Default.Adjust
-                        DismissValue.DismissedToEnd -> Icons.Default.Edit
-                        DismissValue.DismissedToStart -> Icons.Default.Delete
-                    }
-                    val scale by animateFloatAsState(
-                        when (dismissState.targetValue == DismissValue.Default) {
-                            true -> 0.8f
-                            else -> 1.5f
+
+                        DismissValue.DismissedToEnd -> { // -> 방향 스와이프 (수정)
+                            DismissUpdate(itemList[pos])
+                            false
                         }
-                    )
-                    val alignment = when (direction) {
-                        DismissDirection.EndToStart -> Alignment.CenterEnd
-                        DismissDirection.StartToEnd -> Alignment.CenterStart
+
+                        DismissValue.DismissedToStart -> { // <- 방향 스와이프 (삭제)
+
+                            scope.launch {
+                                val temp = itemList[pos]
+                                val snackBarResult =
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        itemList[pos].title + " 항목을 삭제했습니다",
+                                        actionLabel = "복원"
+                                    )
+                                when (snackBarResult.toString()) {
+                                    "ActionPerformed" -> ItemRepo.saveItem(temp)
+
+                                    else -> Log.d("SnackbarResult", snackBarResult.toString())
+                                }
+                            }
+
+                            DismissDelete(itemList[pos])
+                            true
+                        }
                     }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(color)
-                            .padding(horizontal = 30.dp),
-                        contentAlignment = alignment
-                    ) {
-                        androidx.compose.material.Icon(
-                            imageVector = icon,
-                            contentDescription = "",
-                            modifier = Modifier.scale(scale)
+                })
+
+                SwipeToDismiss(
+                    state = dismissState,
+                    modifier = Modifier
+                        .padding(vertical = Dp(1f)),
+                    directions = setOf(
+                        DismissDirection.EndToStart,
+                        DismissDirection.StartToEnd
+                    ),
+                    dismissThresholds = { direction ->
+                        androidx.compose.material.FractionalThreshold(0.5f)
+                    },
+                    background = {
+                        val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                        val color by animateColorAsState(
+                            when (dismissState.targetValue) {
+                                DismissValue.Default -> backgroundColor.copy(alpha = 0.5f) // dismissThresholds 만족 안한 상태
+                                DismissValue.DismissedToEnd -> Color.Green.copy(alpha = 0.5f) // -> 방향 스와이프 (수정)
+                                DismissValue.DismissedToStart -> Color.Red.copy(alpha = 0.5f) // <- 방향 스와이프 (삭제)
+                            }
                         )
+                        val icon = when (dismissState.targetValue) {
+                            DismissValue.Default -> Icons.Default.Adjust
+                            DismissValue.DismissedToEnd -> Icons.Default.Edit
+                            DismissValue.DismissedToStart -> Icons.Default.Delete
+                        }
+                        val scale by animateFloatAsState(
+                            when (dismissState.targetValue == DismissValue.Default) {
+                                true -> 0.8f
+                                else -> 1.5f
+                            }
+                        )
+                        val alignment = when (direction) {
+                            DismissDirection.EndToStart -> Alignment.CenterEnd
+                            DismissDirection.StartToEnd -> Alignment.CenterStart
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color)
+                                .padding(horizontal = 30.dp),
+                            contentAlignment = alignment
+                        ) {
+                            androidx.compose.material.Icon(
+                                imageVector = icon,
+                                contentDescription = "",
+                                modifier = Modifier.scale(scale)
+                            )
+                        }
+                    },
+                    dismissContent = {
+                        AccountRow(itemList[pos])
                     }
-                },
-                dismissContent = {
-                    val date = stringResource(
-                        R.string.show_date_full,
-                        itemList[pos].year,
-                        itemList[pos].month,
-                        itemList[pos].day
-                    )
-
-                    val color = when (itemList[pos].category) {
-                        "수입" -> colorResource(id = R.color.income)
-
-                        else -> colorResource(id = R.color.spend)
-                    }
-                    AccountRow(
-                        date = date,
-                        title = itemList[pos].title,
-                        amount = itemList[pos].amount,
-                        color = color
-                    )
-                }
-            )
+                )
+            }
         }
     }
 }

@@ -2,8 +2,10 @@ package com.intern.gagyebu.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.DismissValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -11,25 +13,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.intern.gagyebu.R
+import com.intern.gagyebu.room.ItemEntity
 import java.text.DecimalFormat
 
 @Composable
-fun AccountRow(
-    color: Color,
-    date: String,
-    title: String,
-    amount: Int
-) {
-    val wonSign = if (true) "–₩ " else "₩ "
-    val formattedAmount = formatAmount(amount)
-    Column {
-        Row(
-            modifier = Modifier
-                .height(68.dp)
-                .background(color = colorResource(id = R.color.barChartBar)),
+fun AccountRow(item: ItemEntity) {
 
+    val date = stringResource(
+        R.string.show_date_full,
+        item.year,
+        item.month,
+        item.day
+    )
+
+    val color = when (item.category) {
+        "수입" -> colorResource(id = R.color.income)
+
+        else -> colorResource(id = R.color.spend)
+    }
+
+    val wonSign = if (item.category == "수입") "₩ " else "-₩ "
+    val formattedAmount = formatAmount(item.amount)
+    Column(modifier = Modifier
+        .height(76.dp)
+        .background(colorResource(id = R.color.colorPrimary))) {
+
+        Spacer(modifier = Modifier.heightIn(10.dp))
+
+        Row(
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
             val typography = MaterialTheme.typography
@@ -41,7 +56,7 @@ fun AccountRow(
             Column(Modifier) {
                 Text(text = date, style = typography.bodyLarge)
                 CompositionLocalProvider() {
-                    Text(text = title, style = typography.headlineMedium)
+                    Text(text = item.title, style = typography.headlineMedium)
                 }
             }
             Spacer(Modifier.weight(1f))
@@ -50,20 +65,33 @@ fun AccountRow(
             ) {
                 Text(
                     text = wonSign,
-                    style = typography.bodyMedium,
+                    style = typography.bodyLarge,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 Text(
                     text = formattedAmount,
-                    style = typography.bodyMedium,
+                    style = typography.bodyLarge,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
             Spacer(Modifier.width(16.dp))
 
+            val icon = when (item.category) {
+                "수입" -> Icons.Outlined.Diamond
+                "식료품" -> Icons.Outlined.Restaurant
+                "주거비" -> Icons.Outlined.Home
+                "교육비" -> Icons.Outlined.School
+                "의료비" -> Icons.Outlined.LocalHospital
+                "교통비" -> Icons.Outlined.DirectionsBus
+                "통신비" -> Icons.Outlined.Phone
+                "기타" -> Icons.Outlined.QuestionMark
+
+                else -> Icons.Outlined.QuestionMark
+            }
+
             CompositionLocalProvider() {
                 Icon(
-                    imageVector = Icons.Filled.ChevronRight,
+                    imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 12.dp)
@@ -71,7 +99,9 @@ fun AccountRow(
                 )
             }
         }
-        RallyDivider()
+        Spacer(Modifier.heightIn(5.dp))
+
+        ItemDivider()
     }
 }
 
@@ -85,10 +115,9 @@ private fun AccountIndicator(color: Color, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RallyDivider(modifier: Modifier = Modifier) {
-    Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp, modifier = modifier)
+fun ItemDivider(modifier: Modifier = Modifier) {
+    Divider(color = colorResource(id = R.color.gray), thickness = 1.dp, modifier = modifier)
 }
-
 
 fun formatAmount(amount: Int): String {
     return AmountDecimalFormat.format(amount)
