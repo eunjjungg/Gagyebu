@@ -37,9 +37,11 @@ fun AccountRow(item: ItemEntity) {
 
     val wonSign = if (item.category == "수입") "₩ " else "-₩ "
     val formattedAmount = formatAmount(item.amount)
-    Column(modifier = Modifier
-        .height(76.dp)
-        .background(colorResource(id = R.color.colorPrimary))) {
+    Column(
+        modifier = Modifier
+            .height(76.dp)
+            .background(MaterialTheme.colorScheme.background)
+    ) {
 
         Spacer(modifier = Modifier.heightIn(10.dp))
 
@@ -54,10 +56,20 @@ fun AccountRow(item: ItemEntity) {
             )
             Spacer(Modifier.width(12.dp))
             Column(Modifier) {
-                Text(text = date, style = typography.bodyLarge)
-                CompositionLocalProvider() {
-                    Text(text = item.title, style = typography.headlineMedium)
-                }
+                Text(
+                    text = date,
+                    style = typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(Modifier.heightIn(10.dp))
+
+                Text(
+                    text = item.title,
+                    style = typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
             }
             Spacer(Modifier.weight(1f))
             Row(
@@ -65,13 +77,15 @@ fun AccountRow(item: ItemEntity) {
             ) {
                 Text(
                     text = wonSign,
-                    style = typography.bodyLarge,
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    style = typography.titleMedium,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     text = formattedAmount,
-                    style = typography.bodyLarge,
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    style = typography.titleMedium,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Spacer(Modifier.width(16.dp))
@@ -95,7 +109,8 @@ fun AccountRow(item: ItemEntity) {
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 12.dp)
-                        .size(24.dp)
+                        .size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }

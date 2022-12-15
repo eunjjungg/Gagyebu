@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.compose.material3.MaterialTheme
 import android.util.TypedValue
 import android.view.animation.OvershootInterpolator
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.intern.gagyebu.*
 import com.intern.gagyebu.databinding.ActivityMainBinding
@@ -21,6 +23,7 @@ import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
+import com.intern.gagyebu.ui.theme.GagyebuTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,8 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         //compose migration
         binding.composeView.setContent {
-            MaterialTheme() {
-                MonthlyDescription(viewModel)
+            GagyebuTheme {
+                MainCompose(viewModel)
             }
         }
 
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                     ColorStateList.valueOf(android.graphics.Color.parseColor("#E74141"))
 
                 false -> binding.filter.imageTintList =
-                    ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
+                    ColorStateList.valueOf(android.graphics.Color.parseColor("#6D6D6D"))
             }
         }
 

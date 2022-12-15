@@ -9,6 +9,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -45,7 +48,7 @@ import kotlinx.coroutines.*
  *
  */
 @Composable
-fun MonthlyDescription(MainViewModel: MainViewModel) {
+fun MainCompose(MainViewModel: MainViewModel) {
     val incomeValue by MainViewModel.incomeValue.observeAsState()
     val spendValue by MainViewModel.spendValue.observeAsState()
     val totalValue by MainViewModel.totalValue.observeAsState()
@@ -54,6 +57,8 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
 
     // sideEffect 상태 추적
     var showLoading by remember { mutableStateOf(true) }
+
+    val listState = rememberLazyListState()
 
     Column {
         if (showLoading) {
@@ -64,29 +69,52 @@ fun MonthlyDescription(MainViewModel: MainViewModel) {
             }
         }
         CompInfo(incomeValue, spendValue)
+        Box(Modifier.weight(1f)) {
+            itemValue?.let { it ->
+                ItemList(it, listState = listState,
+                    DismissDelete = {
+                        ItemRepo.deleteItem(it.id)
+                    },
+                    DismissUpdate = {
+                        //TODO 날짜 생성방법 생각해보기
+                        val updateData = UpdateDate(
+                            id = it.id,
+                            date = "${it.year}-${it.month}-${it.day}",
+                            title = it.title,
+                            amount = it.amount,
+                            category = it.category
+                        )
 
-        itemValue?.let { it ->
-            ItemList(it,
-                DismissDelete = {
-                    ItemRepo.deleteItem(it.id)
-                },
-                DismissUpdate = {
-                    //TODO 날짜 생성방법 생각해보기
-                    val updateData = UpdateDate(
-                        id = it.id,
-                        date = "${it.year}-${it.month}-${it.day}",
-                        title = it.title,
-                        amount = it.amount,
-                        category = it.category
-                    )
+                        val intent =
+                            Intent(context, ProduceActivity::class.java).apply {
+                                putExtra("updateData", updateData)
+                            }
+                        context.startActivity(intent)
+                    }
+                )
+            }
 
-                    val intent =
-                        Intent(context, ProduceActivity::class.java).apply {
-                            putExtra("updateData", updateData)
+            val showB by remember {
+                derivedStateOf { listState.firstVisibleItemIndex > 0 }
+            }
+
+            if (showB) {
+                val coroutineScope = rememberCoroutineScope()
+                FloatingActionButton(
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .navigationBarsPadding()
+                        .padding(bottom = 8.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(0)
                         }
-                    context.startActivity(intent)
+                    }
+                ) {
+                    androidx.compose.material.Text("up")
                 }
-            )
+            }
         }
     }
 }
@@ -134,7 +162,7 @@ fun TotalView(it: String) {
         style = LocalTextStyle.current.merge(
             TextStyle(
                 fontSize = 30.sp,
-                color = colorResource(id = R.color.pieChartText)
+                color = MaterialTheme.colorScheme.primary
             ),
         )
     )
@@ -268,6 +296,7 @@ fun SpendView(it: String) {
 @Composable
 fun ItemList(
     itemList: List<ItemEntity>,
+    listState: LazyListState = rememberLazyListState(),
     DismissDelete: (listItem: ItemEntity) -> Unit,
     DismissUpdate: (listItem: ItemEntity) -> Unit,
 ) {
@@ -275,10 +304,11 @@ fun ItemList(
     val scaffoldState: ScaffoldState = rememberScaffoldState()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        scaffoldState = scaffoldState
+        modifier = Modifier,
+        scaffoldState = scaffoldState,
+        backgroundColor = MaterialTheme.colorScheme.background
     ) {
-        LazyColumn(modifier = Modifier) {
+        LazyColumn(modifier = Modifier, state = listState) {
             items(count = itemList.size, key = { pos -> itemList[pos].id }) { pos ->
                 val dismissState = rememberDismissState(confirmStateChange = { dismissValue ->
                     when (dismissValue) {
@@ -301,7 +331,9 @@ fun ItemList(
                                         actionLabel = "복원"
                                     )
                                 when (snackBarResult.toString()) {
-                                    "ActionPerformed" -> ItemRepo.saveItem(temp)
+                                    "ActionPerformed" -> {
+                                        ItemRepo.saveItem(temp)
+                                    }
 
                                     else -> Log.d("SnackbarResult", snackBarResult.toString())
                                 }
