@@ -94,11 +94,11 @@ fun MainCompose(MainViewModel: MainViewModel) {
                 )
             }
 
-            val showB by remember {
+            val upButton by remember {
                 derivedStateOf { listState.firstVisibleItemIndex > 0 }
             }
 
-            if (showB) {
+            if (upButton) {
                 val coroutineScope = rememberCoroutineScope()
                 FloatingActionButton(
                     backgroundColor = MaterialTheme.colorScheme.primary,
@@ -108,11 +108,11 @@ fun MainCompose(MainViewModel: MainViewModel) {
                         .padding(bottom = 8.dp),
                     onClick = {
                         coroutineScope.launch {
-                            listState.animateScrollToItem(0)
+                            listState.scrollToItem(0)
                         }
                     }
                 ) {
-                    androidx.compose.material.Text("up")
+                    androidx.compose.material.Text(text = "up", color = MaterialTheme.colorScheme.background)
                 }
             }
         }
