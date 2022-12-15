@@ -3,7 +3,7 @@ package com.intern.gagyebu.summary.util
 import androidx.compose.ui.graphics.Color
 
 class PieChartData(
-    val slices: List<Slice>
+    var slices: List<Slice>
 ) {
     internal val totalSize: Float
         get() {
@@ -15,6 +15,5 @@ class PieChartData(
     data class Slice(
         val percentage: Float,
         val title: String,
-        val color: Color
     )
 }

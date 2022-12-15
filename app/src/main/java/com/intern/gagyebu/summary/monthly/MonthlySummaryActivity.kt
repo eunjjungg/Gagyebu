@@ -80,6 +80,9 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
                 .also { startActivity(it) }*/
 
             Intent(this@MonthlySummaryActivity, ComposeActivity::class.java)
+                .apply {
+                    putExtra("dateInfo", DateInfo(year, month))
+                }
                 .also { startActivity(it) }
         }
     }

@@ -9,8 +9,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -20,6 +21,40 @@ import androidx.compose.ui.unit.dp
 import com.intern.gagyebu.R
 import com.intern.gagyebu.summary.util.PieChartData
 import com.intern.gagyebu.summary.util.PieChartUtils
+
+@Composable
+fun PieChartTopLevel(viewModel: PieChartViewModel) {
+    val pieChartViewModel = remember { viewModel }
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .padding(
+                horizontal = 0.dp,
+                vertical = 48.dp
+            )
+            .verticalScroll(scrollState),
+    ) {
+        PieChartRow(pieChartViewModel)
+    }
+}
+
+@Composable
+private fun PieChartRow(pieChartViewModel: PieChartViewModel) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(vertical = 8.dp)
+    ) {
+        PieChart(
+            pieChartData = pieChartViewModel.pieChartData,
+            pieDrawer = PieSliceDrawer(
+                sliceLineWidth = pieChartViewModel.sliceThickness
+            )
+        )
+    }
+}
 
 @Composable
 fun PieChart(
@@ -60,14 +95,26 @@ private fun DrawChart(
     pieDrawer: SliceDrawer
 ) {
     val slices = pieChartData.slices
+    val colors = listOf<Color>(
+        colorResource(id = R.color.pieChart0),
+        colorResource(id = R.color.pieChart1),
+        colorResource(id = R.color.pieChart2),
+        colorResource(id = R.color.pieChart3),
+        colorResource(id = R.color.pieChart4)
+    )
     // import androidx.compose.foundation.Canvas (ui.graphics의 canvas가 아님)
+    /**
+     * 파이 차트에 그려질 모든 원소에 대해 모두 시작점을 0으로 시작해서
+     * 그려져야 되는 시간 동안 자신의 퍼센테이지만큼 그리도록 함.
+     * 따라서 값을 보정해줘야 할 필요가 없음.
+     */
     Canvas(modifier = modifier) {
         drawIntoCanvas {
             var startArc = 0f
 
-            slices.forEach { slice ->
+            slices.indices.forEach { index ->
                 val drawArc = PieChartUtils.calculateAngle(
-                    sliceLength = slice.percentage,
+                    sliceLength = slices[index].percentage,
                     totalLength = pieChartData.totalSize,
                     progress = progress
                 )
@@ -78,7 +125,8 @@ private fun DrawChart(
                     area = drawContext.size,
                     startAngel = startArc,
                     drawAngle = drawArc,
-                    slice = slice
+                    slice = slices[index],
+                    _color = colors[index]
                 )
 
                 startArc += drawArc
@@ -92,8 +140,8 @@ private fun DrawChart(
 @Composable
 fun PieChartPreview() = PieChart(pieChartData = PieChartData(
     slices = listOf(
-        PieChartData.Slice(25f, "dd", colorResource(id = R.color.pieChart0)),
-        PieChartData.Slice(42f, "Ddd", Color.Blue),
-        PieChartData.Slice(23f, "eee", Color.Green)
+        PieChartData.Slice(25f, "dd"),
+        PieChartData.Slice(42f, "Ddd"),
+        PieChartData.Slice(23f, "eee")
     )
 ))

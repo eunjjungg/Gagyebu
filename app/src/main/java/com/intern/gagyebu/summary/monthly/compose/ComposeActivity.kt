@@ -1,9 +1,13 @@
 package com.intern.gagyebu.summary.monthly.compose
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,55 +19,54 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.material.snackbar.Snackbar
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.summary.monthly.PieChartView
+import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.ui.theme.GagyebuTheme
 
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel by viewModels<PieChartViewModel> {
+            PieChartViewModel.PieChartViewModelFactory(
+                ItemRepo.ItemRepository(
+                    itemDao = AppDatabase.getDatabase(this@ComposeActivity).itemDao()
+                )
+            )
+        }
+        intent.getParcel().also {
+            viewModel.apply {
+                getTopCostList(it)
+                getCardList(it)
+            }
+        }
+
         setContent {
             GagyebuTheme {
-                PieChart()
+                TopActivity(viewModel)
             }
         }
     }
 }
 
 @Composable
-private fun PieChart() {
-    val pieChartViewModel : PieChartViewModel = viewModel(factory = PieChartViewModel.PieChartViewModelFactory(
-        ItemRepo.ItemRepository(AppDatabase.getDatabase(LocalContext.current).itemDao())
-    ))
-    val pieChartDataModel = remember { PieChartDataModel() }
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .padding(
-                horizontal = 0.dp,
-                vertical = 24.dp
-            )
-            .verticalScroll(scrollState)
-
-    ) {
-        PieChartRow(pieChartDataModel)
+private fun TopActivity(viewModel: PieChartViewModel) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
+        PieChartTopLevel(viewModel)
+        Divider()
+        ComposeCards(viewModel)
     }
 }
 
-@Composable
-private fun PieChartRow(pieChartDataModel: PieChartDataModel) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .padding(vertical = 8.dp)
-    ) {
-        PieChart(
-            pieChartData = pieChartDataModel.pieChartData,
-            pieDrawer = PieSliceDrawer(
-                sliceLineWidth = pieChartDataModel.sliceThickness
-            )
-        )
+private fun Intent.getParcel(): DateInfo {
+    val bundle = this.extras
+
+    val dateInfo: DateInfo? = bundle?.getParcelable("dateInfo")
+
+    dateInfo?.let {
+        return it
     }
+    return DateInfo(0 , 0)
 }

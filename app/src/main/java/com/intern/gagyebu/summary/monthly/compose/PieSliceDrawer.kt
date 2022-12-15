@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -21,14 +22,15 @@ class PieSliceDrawer(private val sliceLineWidth: Float = 25f) : SliceDrawer {
         area: Size,
         startAngle: Float,
         drawAngle: Float,
-        slice: Slice
+        slice: Slice,
+        _color: Color
     ) {
         val sliceLineWidth = calculateSliceLineWidthOffset(area = area)
         val drawableArea = calculateDrawableSize(area = area)
         canvas.drawArc(
             rect = drawableArea,
             paint = piePainter.apply {
-                color = slice.color
+                color = _color
                 strokeWidth = sliceLineWidth
             },
             startAngle = startAngle,
@@ -47,20 +49,6 @@ class PieSliceDrawer(private val sliceLineWidth: Float = 25f) : SliceDrawer {
             calculateSliceLineWidthOffset(area = area) / 2f
         val horizontalOffset = (area.width - area.height) / 2f
 
-        /*Log.d(
-            "ccheck size", """
-      area width : ${area.width}
-      area height : ${area.height}
-      sliceThicknessOffset : $sliceLineWidthOffset
-      offsetHorizontally : $horizontalOffset
-      left = ${sliceLineWidthOffset + horizontalOffset},
-      top = $sliceLineWidthOffset,
-      right = ${area.width - sliceLineWidthOffset - horizontalOffset},
-      bottom = ${area.height - sliceLineWidthOffset}
-
-    """.trimIndent()
-        )
-*/
         return Rect(
             left = sliceLineWidthOffset + horizontalOffset,
             top = sliceLineWidthOffset ,
