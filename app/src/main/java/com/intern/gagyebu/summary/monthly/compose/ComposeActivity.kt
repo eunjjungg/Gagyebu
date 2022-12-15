@@ -55,7 +55,6 @@ class ComposeActivity : ComponentActivity() {
 private fun TopActivity(viewModel: PieChartViewModel) {
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
         PieChartTopLevel(viewModel)
-        Divider()
         ComposeCards(viewModel)
     }
 }

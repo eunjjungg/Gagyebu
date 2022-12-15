@@ -51,7 +51,9 @@ fun ComposeCards(_viewModel: PieChartViewModel) {
 
     Scaffold {
         Surface(
-            modifier = Modifier.padding(it).padding(bottom = 48.dp),
+            modifier = Modifier
+                .padding(it),
+            color = Color.Transparent
         ) {
             LazyColumn() {
                 items(items = viewModel.cardData) { item ->
@@ -82,19 +84,19 @@ fun MakeCard(
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
-            .padding(top = 48.dp, start = 24.dp, end = 24.dp)
+            .padding( start = 24.dp, end = 24.dp, bottom = 48.dp)
             .animateContentSize(
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            )
-        ),
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
         ),
         //TODO
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.pieChart0)
+            containerColor = colorResource(id = R.color.pieChartBackground)
         )
     ) {
         Column {
