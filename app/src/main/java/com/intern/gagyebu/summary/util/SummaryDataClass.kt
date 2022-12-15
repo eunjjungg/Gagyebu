@@ -1,6 +1,8 @@
 package com.intern.gagyebu.summary.util
 
 import android.os.Parcelable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.room.ColumnInfo
 import com.intern.gagyebu.room.ItemEntity
 import kotlinx.parcelize.Parcelize
@@ -54,4 +56,10 @@ data class DateInfo(
 data class MonthlyDetailInfo(
     val item: ItemEntity,
     val percentage: Int
+)
+
+data class MonthlyDetailInfoWithState(
+    val item: ItemEntity,
+    val order: Int,
+    var isOpen: MutableState<Boolean> = mutableStateOf(false)
 )

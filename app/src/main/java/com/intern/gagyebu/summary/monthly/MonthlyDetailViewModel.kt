@@ -1,29 +1,50 @@
 package com.intern.gagyebu.summary.monthly
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.MonthlyDetailInfo
 import com.intern.gagyebu.summary.util.PieElement
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     var dateInfo = DateInfo(0, 0)
     val topCostDetailList = MutableLiveData(mutableListOf<MonthlyDetailInfo>())
-    var pieElementList = mutableListOf<PieElement>()
 
     fun setDate(date: DateInfo) {
         dateInfo = date
     }
 
+
+    // TODO : coroutine 고치기
+    fun setTopCostCategory(categoryList: MutableList<PieElement>) {
+        viewModelScope.launch {
+            topCostDetailList.value = getTopCostItemList(categoryList)
+        }
+    }
+
+    // TODO : coroutine 고치기
+    private suspend fun getTopCostItemList(categoryList: MutableList<PieElement>): MutableList<MonthlyDetailInfo> =
+        withContext(Dispatchers.IO) {
+            val detailInfo = mutableListOf<MonthlyDetailInfo>()
+            for (pieElement in categoryList) {
+                detailInfo.add(
+                    MonthlyDetailInfo(
+                        itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name),
+                        pieElement.percentage.toPercentageInt()
+                    )
+                )
+            }
+            detailInfo
+        }
+
+
+    /*// coroutine 고치기 이전
     fun setTopCostCategory(categoryList: MutableList<PieElement>) {
         pieElementList = categoryList
         viewModelScope.launch {
@@ -31,6 +52,7 @@ class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository
         }
     }
 
+    // coroutine 고치기 이전
     private suspend fun getTopCostItemList() {
         viewModelScope.async {
             withContext(Dispatchers.IO) {
@@ -42,7 +64,7 @@ class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository
                 withContext(Dispatchers.Main){ topCostDetailList.value = tmp }
             }
         }.await()
-    }
+    }*/
 
     private fun Float.toPercentageInt(): Int = Math.round(this * 100)
 

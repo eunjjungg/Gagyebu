@@ -38,10 +38,8 @@ fun MonthlyDetailCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         )
     }
-
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CardContent(
     detail: MonthlyDetailInfo,

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.ActivityMonthlySummaryBinding
 import com.intern.gagyebu.room.ItemRepo
+import com.intern.gagyebu.summary.monthly.compose.ComposeActivity
 import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.PieElement
@@ -68,12 +69,18 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
 
     private fun setListener() {
         binding.btnDetail.setOnClickListener {
-            Intent(this@MonthlySummaryActivity, MonthlyDetailActivity::class.java)
+            /*Intent(this@MonthlySummaryActivity, MonthlyDetailActivity::class.java)
                 .apply {
                     for(i in viewModel.pieChartData.value!!.indices) {
                         putExtra("elementInfo$i", viewModel.pieChartData.value!![i])
                     }
                     putExtra("elementInfoSize", viewModel.pieChartData.value!!.size)
+                    putExtra("dateInfo", DateInfo(year, month))
+                }
+                .also { startActivity(it) }*/
+
+            Intent(this@MonthlySummaryActivity, ComposeActivity::class.java)
+                .apply {
                     putExtra("dateInfo", DateInfo(year, month))
                 }
                 .also { startActivity(it) }
