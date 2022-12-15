@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.compose.material3.MaterialTheme
 import android.util.TypedValue
 import android.view.animation.OvershootInterpolator
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.intern.gagyebu.*
 import com.intern.gagyebu.databinding.ActivityMainBinding
@@ -21,6 +23,7 @@ import com.intern.gagyebu.produce.ProduceActivity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.OptionState
 import com.intern.gagyebu.summary.yearly.YearlySummaryActivity
+import com.intern.gagyebu.ui.theme.GagyebuTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,29 +44,25 @@ class MainActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
 
-        //recyclerView 초기화
-        val adapter = Adapter()
-        binding.recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerview.adapter = adapter
-        subscribeUi(adapter, viewModel)
-
         //compose migration
         binding.composeView.setContent {
-            MaterialTheme() {
-                MonthlyDescription(viewModel)
+            GagyebuTheme {
+                MainCompose(viewModel)
             }
         }
 
         //필터링 상태에 따라 icon 색상 변경
-        viewModel.filterState.observe(this){
-            when(it){
-                true -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#E74141"))
+        viewModel.filterState.observe(this) {
+            when (it) {
+                true -> binding.filter.imageTintList =
+                    ColorStateList.valueOf(android.graphics.Color.parseColor("#E74141"))
 
-                false -> binding.filter.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor("#000000"))
+                false -> binding.filter.imageTintList =
+                    ColorStateList.valueOf(android.graphics.Color.parseColor("#6D6D6D"))
             }
         }
 
-        viewModel.date.observe(this){
+        viewModel.date.observe(this) {
             viewModel.calendarView.set(getString(R.string.show_date, it[0], it[1]))
         }
 
@@ -93,22 +92,11 @@ class MainActivity : AppCompatActivity() {
                         dataStore.setFilter(filter)
                         dataStore.setOrder(order)
                     }
-                    //필터 변경시 아이템 스크롤 최상단으로 이동.
-                    binding.recyclerview.smoothScrollToPosition(0)
                 }
             })
             optionPicker.show(supportFragmentManager, "OptionPicker")
         }
         setFabClickListener()
-    }
-
-    //adapter diff observe 등록
-    //ViewModel 에서 받은 ItemList 변경점 diffUtil observe
-    private fun subscribeUi(adapter: Adapter, viewModel: MainViewModel) {
-        viewModel.itemFlow.observe(this) { value ->
-            adapter.submitList(value){
-            }
-        }
     }
 
     private var isFabOpen = false
@@ -126,19 +114,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openFab() {
-        val targetPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, this.resources.displayMetrics)
-        val setAnimator = {button: FloatingActionButton, startF: Float, endF: Float, duration: Long ->
-            ObjectAnimator.ofFloat(button, "translationY", startF, endF).apply {
-                interpolator = OvershootInterpolator()
-                this.duration = duration
-                start()
+        val targetPx = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 50f, this.resources.displayMetrics
+        )
+        val setAnimator =
+            { button: FloatingActionButton, startF: Float, endF: Float, duration: Long ->
+                ObjectAnimator.ofFloat(button, "translationY", startF, endF).apply {
+                    interpolator = OvershootInterpolator()
+                    this.duration = duration
+                    start()
+                }
             }
-        }
-        if(isFabOpen) {
+        if (isFabOpen) {
             setAnimator(binding.fabAdd, -targetPx, 0f, 400L)
             setAnimator(binding.fabCalendar, -targetPx * 2, 0f, 500L)
-        }
-        else {
+        } else {
             setAnimator(binding.fabAdd, 0f, -targetPx, 400L)
             setAnimator(binding.fabCalendar, 0f, -targetPx * 2, 500L)
         }
