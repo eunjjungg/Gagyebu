@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="test">#FF7A7A</color>
+    <color name="gray">#FF555555</color>
 
     <!--Bar Chart View-->
     <color name="barChartBar">#EFF4EB</color>

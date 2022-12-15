@@ -17,62 +17,28 @@
 
 
         <LinearLayout
-            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:padding="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:padding="20dp">
-
-            <!--
-            android:text="@string/show_date"
-            -->
-
-            <TextView
-                android:id="@+id/calender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{mainViewModel.calendarView}"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/total"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.1"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/compose_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:id="@+id/vertical_line"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="#FFAAAAAA" />
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="horizontal">
 
-
                 <TextView
-                    android:textSize="20dp"
+                    android:id="@+id/calender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/details" />
+                    android:text="@{mainViewModel.calendarView}"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toTopOf="@+id/total" />
 
                 <View
                     android:layout_width="0dp"
@@ -88,11 +54,11 @@
             </LinearLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp" />
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
