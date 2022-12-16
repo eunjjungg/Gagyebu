@@ -98,10 +98,13 @@ class YearlySummaryViewModel(
     private suspend fun getYearMonthAmountData(year: Int): MutableList<Int> =
         withContext(Dispatchers.IO) {
             val sumOfMoney = MutableList<Int>(13) { _ -> 0 }
-            for (month in 1..12) {
-                sumOfMoney[month] = itemRepository.getAmountWhenYearAndMonthSet(year, month).sum()
+            sumOfMoney.apply {
+                forEachIndexed { index, _ ->
+                    if( index != 0 ) {
+                        this[index] = itemRepository.getAmountWhenYearAndMonthSet(year, index).sum()
+                    }
+                }
             }
-            sumOfMoney
         }
 
 
