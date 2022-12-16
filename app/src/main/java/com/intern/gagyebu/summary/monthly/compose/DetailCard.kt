@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.summary.monthly.dpToSp
 import com.intern.gagyebu.summary.util.MonthlyDetailInfoWithState
+import com.intern.gagyebu.summary.util.TextContent
+import com.intern.gagyebu.summary.util.TextTitle
 import com.intern.gagyebu.ui.theme.cardBackgroundColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -206,34 +208,6 @@ private fun CardDetailContent(monthlyDetailInfo: MonthlyDetailInfoWithState) {
         }
 
     }
-}
-
-@Composable
-fun TextTitle(
-    text: String,
-) {
-    Text(
-        text = text,
-        modifier = Modifier.padding(vertical = 8.dp),
-        style = MaterialTheme.typography.headlineMedium.copy(
-            color = colorResource(id = R.color.pieChartText),
-            fontSize = dpToSp(14.dp)
-        )
-    )
-}
-
-@Composable
-fun TextContent(
-    text: String,
-) {
-    Text(
-        text = text,
-        modifier = Modifier.padding(bottom = 12.dp),
-        style = MaterialTheme.typography.bodyMedium.copy(
-            color = colorResource(id = R.color.pieChartText),
-            fontSize = dpToSp(11.dp)
-        )
-    )
 }
 
 @Composable
