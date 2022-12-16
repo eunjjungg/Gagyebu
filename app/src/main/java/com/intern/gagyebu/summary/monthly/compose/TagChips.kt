@@ -88,7 +88,7 @@ private fun MonthlyDetailInfoWithState.getTagData(): MutableList<TagData> = muta
     TagData("소비 카테고리", item.category),
     TagData("소비 날짜", "${item.year}.${item.month}.${item.day}"),
     TagData("소비 금액", "${item.amount}원"),
-    TagData("소비 순위", "${order}위")
+    TagData("이 카테고리의 소비 순위", "${order}위")
 )
 
 

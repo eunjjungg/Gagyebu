@@ -37,13 +37,6 @@ import com.intern.gagyebu.summary.monthly.dpToSp
 import com.intern.gagyebu.summary.util.MonthlyDetailInfoWithState
 import com.intern.gagyebu.ui.theme.cardBackgroundColor
 
-/**
- * data class MonthlyDetailInfo(
- *      val item: ItemEntity,
- *      val percentage: Int
- * )
- */
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ComposeCards(_viewModel: PieChartViewModel) {
@@ -225,20 +218,6 @@ fun TextTitle(
         style = MaterialTheme.typography.headlineMedium.copy(
             color = colorResource(id = R.color.pieChartText),
             fontSize = dpToSp(14.dp)
-        )
-    )
-}
-
-@Composable
-fun TextSubTitle(
-    text: String,
-) {
-    Text(
-        text = text,
-        modifier = Modifier.padding(vertical = 4.dp),
-        style = MaterialTheme.typography.bodyLarge.copy(
-            color = colorResource(id = R.color.pieChartText),
-            fontSize = dpToSp(6.dp)
         )
     )
 }

@@ -14,6 +14,10 @@ import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.PieElement
 import com.intern.gagyebu.summary.yearly.YearlySummaryViewModel.Companion.months
 
+/**
+ * 리팩토링 하지 않은 클래스
+ */
+
 class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
     R.layout.activity_monthly_summary
 ) {
@@ -69,15 +73,6 @@ class MonthlySummaryActivity : BaseActivity<ActivityMonthlySummaryBinding>(
 
     private fun setListener() {
         binding.btnDetail.setOnClickListener {
-            /*Intent(this@MonthlySummaryActivity, MonthlyDetailActivity::class.java)
-                .apply {
-                    for(i in viewModel.pieChartData.value!!.indices) {
-                        putExtra("elementInfo$i", viewModel.pieChartData.value!![i])
-                    }
-                    putExtra("elementInfoSize", viewModel.pieChartData.value!!.size)
-                    putExtra("dateInfo", DateInfo(year, month))
-                }
-                .also { startActivity(it) }*/
 
             Intent(this@MonthlySummaryActivity, ComposeActivity::class.java)
                 .apply {
