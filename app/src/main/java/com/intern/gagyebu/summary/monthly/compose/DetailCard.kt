@@ -73,23 +73,26 @@ fun MakeCard(
             shouldSnackbarOpen.value = !shouldSnackbarOpen.value
             snackbarMessage.value = msg
         }
-
     }
 
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        modifier = modifier
-            .padding( start = 24.dp, end = 24.dp, bottom = 48.dp)
+    val cardShape = remember { RoundedCornerShape(8.dp) }
+    val cardMod = remember {
+        modifier
+            .padding(start = 24.dp, end = 24.dp, bottom = 48.dp)
             .animateContentSize(
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
                 )
-            ),
+            )
+    }
+
+    Card(
+        shape = cardShape,
+        modifier = cardMod,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
         ),
-        //TODO
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.pieChartBackground)
         )
@@ -116,8 +119,8 @@ fun MakeCard(
                     SnackbarResult.ActionPerformed -> Log.d("TAG", "MYSnackBar: 스낵바 확인 버튼 클릭")
                 }
             }
-
         }
+
         if(snackbarMessage.value != "") {
             SnackbarHost(
                 hostState = snackBarState,
@@ -144,9 +147,6 @@ private fun CardTextContent(
     }
 }
 
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CardTitle(monthlyDetailInfoWithState: MonthlyDetailInfoWithState) {
     Row(
@@ -157,24 +157,31 @@ private fun CardTitle(monthlyDetailInfoWithState: MonthlyDetailInfoWithState) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextTitle(text = monthlyDetailInfoWithState.item.category)
-        FilterChip(
-            onClick = {
-                      monthlyDetailInfoWithState.isOpen.value = !monthlyDetailInfoWithState.isOpen.value
-            } ,
-            label = { Text("open") },
-            modifier = Modifier
-                .padding(end = 8.dp),
-            selected = monthlyDetailInfoWithState.isOpen.value,
-            trailingIcon = {
-                Icon(
-                    imageVector = monthlyDetailInfoWithState.isOpen.value.getLeadingIcon(),
-                    contentDescription = null
-                )
-            },
-            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0x2A000000))
-        )
+        OpenableChip(monthlyDetailInfoWithState)
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OpenableChip(monthlyDetailInfoWithState: MonthlyDetailInfoWithState) {
+    FilterChip(
+        onClick = {
+            monthlyDetailInfoWithState.isOpen.value = !monthlyDetailInfoWithState.isOpen.value
+        },
+        label = { Text("open") },
+        modifier = Modifier
+            .padding(end = 8.dp),
+        selected = monthlyDetailInfoWithState.isOpen.value,
+        trailingIcon = {
+            Icon(
+                imageVector = monthlyDetailInfoWithState.isOpen.value.getLeadingIcon(),
+                contentDescription = null
+            )
+        },
+        colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0x2A000000))
+    )
+}
+
 
 @Composable
 private fun Boolean.getLeadingIcon(): ImageVector {
