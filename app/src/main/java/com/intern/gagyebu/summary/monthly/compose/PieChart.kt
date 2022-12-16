@@ -25,7 +25,6 @@ import com.intern.gagyebu.summary.util.PieChartUtils
 @Composable
 fun PieChartTopLevel(viewModel: PieChartViewModel) {
     val pieChartViewModel = remember { viewModel }
-    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -33,7 +32,6 @@ fun PieChartTopLevel(viewModel: PieChartViewModel) {
                 horizontal = 0.dp,
                 vertical = 48.dp
             )
-            .verticalScroll(scrollState),
     ) {
         PieChartRow(pieChartViewModel)
     }
