@@ -36,15 +36,16 @@ class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository
     private suspend fun getTopCostItemList(categoryList: MutableList<PieElement>): MutableList<MonthlyDetailInfo> =
         withContext(Dispatchers.IO) {
             val detailInfo = mutableListOf<MonthlyDetailInfo>()
-            for (pieElement in categoryList) {
-                detailInfo.add(
-                    MonthlyDetailInfo(
-                        itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name),
-                        pieElement.percentage.toPercentageInt()
+            detailInfo.apply {
+                for (pieElement in categoryList) {
+                    add(
+                        MonthlyDetailInfo(
+                            itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name),
+                            pieElement.percentage.toPercentageInt()
+                        )
                     )
-                )
+                }
             }
-            detailInfo
         }
 
 
