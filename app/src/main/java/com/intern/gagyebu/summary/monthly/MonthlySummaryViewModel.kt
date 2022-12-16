@@ -22,7 +22,7 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
     /*fun getMonthlyReportData(year: Int, month: Int){
         viewModelScope.launch(Dispatchers.IO) {
             val result = itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
-            result.sortedByDescending { it.sum }
+                .sortedByDescending { it.sum }
 
             withContext(Dispatchers.Main) {
                 pieChartData.value = applyDataToPieElement(result)
