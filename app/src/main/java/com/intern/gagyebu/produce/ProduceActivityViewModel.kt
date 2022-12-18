@@ -145,15 +145,15 @@ class ProduceActivityViewModel : ViewModel() {
                  * 5초 이내 저장이 완료되는 경우 Event.Done 방출 -> activity 종료
                  * 알수없는 오류 또는 저장에 실패하는 경우 -> Event.Error 방출 -> 재시도
                  */
-                withTimeout(5000) {
+                withTimeout(3000) {
                     launch {
-                        //delay(4000)
+                        delay(4000)
                         ItemRepo.saveItem(itemEntity)
                         event(Event.Done("저장 완료"))
                     }
                 }
             } catch (e: TimeoutCancellationException) {
-                isSaving.value = false
+                isSaving.postValue(false)
                 event(Event.Error("저장 실패"))
             }
         }
@@ -174,7 +174,7 @@ class ProduceActivityViewModel : ViewModel() {
                     }
                 }
             } catch (e: TimeoutCancellationException) {
-                isSaving.value = false
+                isSaving.postValue(false)
                 event(Event.Error("수정 실패"))
             }
         }
