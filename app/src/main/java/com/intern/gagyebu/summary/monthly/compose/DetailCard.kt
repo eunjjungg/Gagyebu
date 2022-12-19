@@ -78,7 +78,7 @@ fun MakeCard(
     val cardShape = remember { RoundedCornerShape(8.dp) }
     val cardMod = remember {
         modifier
-            .padding(start = 24.dp, end = 24.dp, bottom = 48.dp)
+            .padding( start = 24.dp, end = 24.dp, bottom = 48.dp)
             .animateContentSize(
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -86,6 +86,7 @@ fun MakeCard(
                 )
             )
     }
+
 
     Card(
         shape = cardShape,

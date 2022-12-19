@@ -1,9 +1,7 @@
 package com.intern.gagyebu.summary.monthly.compose
 
 import android.util.Log
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,7 +62,7 @@ fun PieChart(
     pieChartData: PieChartData,
     modifier: Modifier = Modifier,
     // <T : Any?> TweenSpec(durationMillis: Int, delay: Int, easing: Easing)
-    animation: AnimationSpec<Float> = TweenSpec<Float>(durationMillis = 500),
+    animation: AnimationSpec<Float> = TweenSpec<Float>(durationMillis = 500, easing = EaseInBack),
     pieDrawer: SliceDrawer = PieSliceDrawer()
 ) {
     // remember 중 key (여기서는 pieChartData.slices) 값이 변경했을 때 { } calculation을 다시 수행함.
