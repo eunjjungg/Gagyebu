@@ -40,13 +40,15 @@ class ProduceActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent {
-            val viewModel: ProduceActivityViewModel by viewModels()
-            InitUpdate(viewModel = viewModel, intent = intent)
+        val viewModel: ProduceActivityViewModel by viewModels()
 
-            lifecycleScope.launch {
-                viewModel.eventFlow.collect { event -> handleEvent(event) }
-            }
+        lifecycleScope.launch {
+            viewModel.eventFlow.collect { event -> handleEvent(event) }
+        }
+
+        setContent {
+
+            InitUpdate(viewModel = viewModel, intent = intent)
 
             val source = remember {
                 MutableInteractionSource()

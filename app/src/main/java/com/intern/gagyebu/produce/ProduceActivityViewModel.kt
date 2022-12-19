@@ -183,6 +183,7 @@ class ProduceActivityViewModel : ViewModel() {
     //이밴트를 받아 방출하는 함수
     private fun event(event: Event) {
         viewModelScope.launch {
+            Log.d("viewmodel_emit", event.toString())
             _eventFlow.emit(event)
         }
     }
