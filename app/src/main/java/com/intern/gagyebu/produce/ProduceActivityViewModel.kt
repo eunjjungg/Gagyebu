@@ -9,6 +9,7 @@ import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
 /** addActivity-ViewModel **/
@@ -55,7 +56,8 @@ class ProduceActivityViewModel : ViewModel() {
         _date.value = date
     }
 
-    private val _eventFlow = MutableSharedFlow<Event>()
+    private val _eventFlow : MutableSharedFlow<Event> =
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 0)
 
     val eventFlow = _eventFlow.asSharedFlow()
 
