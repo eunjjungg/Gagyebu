@@ -9,6 +9,7 @@ import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.room.data.UpdateDate
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
 /** addActivity-ViewModel **/
@@ -39,6 +40,7 @@ class ProduceActivityViewModel : ViewModel() {
 
     fun updateTitle(title: String) {
         _title.value = title
+        Log.d("title", "${_title.value}")
         //_title.postValue()
     }
 
@@ -54,7 +56,8 @@ class ProduceActivityViewModel : ViewModel() {
         _date.value = date
     }
 
-    private val _eventFlow = MutableSharedFlow<Event>()
+    private val _eventFlow : MutableSharedFlow<Event> =
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 0)
 
     val eventFlow = _eventFlow.asSharedFlow()
 
@@ -144,15 +147,15 @@ class ProduceActivityViewModel : ViewModel() {
                  * 5초 이내 저장이 완료되는 경우 Event.Done 방출 -> activity 종료
                  * 알수없는 오류 또는 저장에 실패하는 경우 -> Event.Error 방출 -> 재시도
                  */
-                withTimeout(5000) {
+                withTimeout(3000) {
                     launch {
-                        //delay(4000)
+                        delay(4000)
                         ItemRepo.saveItem(itemEntity)
                         event(Event.Done("저장 완료"))
                     }
                 }
             } catch (e: TimeoutCancellationException) {
-                isSaving.value = false
+                isSaving.postValue(false)
                 event(Event.Error("저장 실패"))
             }
         }
@@ -173,7 +176,7 @@ class ProduceActivityViewModel : ViewModel() {
                     }
                 }
             } catch (e: TimeoutCancellationException) {
-                isSaving.value = false
+                isSaving.postValue(false)
                 event(Event.Error("수정 실패"))
             }
         }
@@ -182,6 +185,7 @@ class ProduceActivityViewModel : ViewModel() {
     //이밴트를 받아 방출하는 함수
     private fun event(event: Event) {
         viewModelScope.launch {
+            Log.d("viewmodel_emit", event.toString())
             _eventFlow.emit(event)
         }
     }

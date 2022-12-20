@@ -27,6 +27,10 @@ import com.intern.gagyebu.summary.util.MonthlyDetailInfo
 import com.intern.gagyebu.ui.theme.cardBackgroundColor
 import com.intern.gagyebu.ui.theme.cardTextColor
 
+/**
+ * 리팩토링 하지 않은 클래스
+ */
+
 @Composable
 fun MonthlyDetailCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
     val topCostDetailList = monthlyDetailViewModel.topCostDetailList.observeAsState()
@@ -38,10 +42,8 @@ fun MonthlyDetailCompose(monthlyDetailViewModel: MonthlyDetailViewModel) {
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         )
     }
-
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CardContent(
     detail: MonthlyDetailInfo,

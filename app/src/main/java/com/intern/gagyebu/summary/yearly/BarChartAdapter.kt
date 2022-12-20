@@ -3,7 +3,9 @@ package com.intern.gagyebu.summary.yearly
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.ui.res.colorResource
 import androidx.recyclerview.widget.RecyclerView
+import com.intern.gagyebu.R
 import com.intern.gagyebu.databinding.RecyclerBarChartBinding
 import com.intern.gagyebu.summary.util.BarChartInfo
 
@@ -38,6 +40,17 @@ class BarChartAdapter : RecyclerView.Adapter<BarChartAdapter.ViewHolder>() {
             //해당 연도에 데이터가 있는 월이 하나라도 있어서 쭉 나열은 되지만
             //데이터가 없는 월에는 클릭 리스너를 달아주고 싶지 않아서
             //item.percentage > 0f일 때만 클릭이 되도록 설정
+            /**
+             * 수정 이전 코드
+             * if (position != RecyclerView.NO_POSITION && item.percentage > 0f) {
+             *     itemView.setOnClickListener {
+             *         listener?.onItemClicked(item)
+             *     }
+             * }
+             *
+             * 그리고 YearlySummaryActivity에서 if(item.percentage > 0f){ ... }로 체크해주는 코드가 없을 때
+             * 없는 아이템에 대해 클릭이 되는 오류 발생
+             */
             if (position != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
                     listener?.onItemClicked(item)

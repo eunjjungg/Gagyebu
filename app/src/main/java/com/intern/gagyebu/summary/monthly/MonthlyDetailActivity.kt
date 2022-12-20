@@ -10,6 +10,9 @@ import com.intern.gagyebu.summary.util.BaseActivity
 import com.intern.gagyebu.summary.util.DateInfo
 import com.intern.gagyebu.summary.util.PieElement
 
+/**
+ * 리팩토링 하지 않은 클래스
+ */
 class MonthlyDetailActivity : BaseActivity<ActivityMonthlyDetailBinding>(R.layout.activity_monthly_detail) {
     override val viewModel by lazy {
         ViewModelProvider(

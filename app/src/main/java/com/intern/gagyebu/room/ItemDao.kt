@@ -63,7 +63,7 @@ interface ItemDao{
 
     //input: 연도, 월
     //output: 특정 월의 소비 내역을 카테고리로 묶어서 각 카테고리와 해당 카테고리 소비 금액을 내림차순으로 정렬한 결과
-    @Query("SELECT category, sum(amount) FROM ItemEntity WHERE year = :year AND month = :month AND category != '수입' GROUP BY category ORDER BY sum(amount) desc")
+    @Query("SELECT * FROM (SELECT category, sum(amount) FROM ItemEntity WHERE year = :year AND month = :month AND category != '수입' GROUP BY category ORDER BY sum(amount) desc) LIMIT 5")
     fun getCategoryAndSumWhenYearAndMonthSet(year: Int, month: Int) : List<CategoryInfoOfMonth>
 
     //해당월 지출 전체

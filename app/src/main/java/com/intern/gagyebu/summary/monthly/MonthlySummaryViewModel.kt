@@ -1,6 +1,5 @@
 package com.intern.gagyebu.summary.monthly
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,42 +7,50 @@ import androidx.lifecycle.viewModelScope
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.util.CategoryInfoOfMonth
 import com.intern.gagyebu.summary.util.PieElement
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+
+/**
+ * 코루틴 제외 리팩토링 하지 않은 클래스
+ */
 
 class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
 
-    //view에서 불려지는 함수
-    fun getMonthlyReportData(year: Int, month: Int) {
-        viewModelScope.launch {
-            val data = getDataFromRepository(year, month)
-            applyDataToPieElement(data)
-        }
-    }
-
+    // TODO : coroutine 고치기 일단은 완료
     //직접 db에 접근해서 데이터를 가져오는 함수
-    private suspend fun getDataFromRepository(year: Int, month: Int): List<CategoryInfoOfMonth> {
-        var rawData = listOf<CategoryInfoOfMonth>()
-        val job = viewModelScope.async {
-            withContext(Dispatchers.IO) {
-                val result = itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
-                result.sortedByDescending { it.sum }
-                rawData = result
+    /*fun getMonthlyReportData(year: Int, month: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
+                .sortedByDescending { it.sum }
+
+            withContext(Dispatchers.Main) {
+                pieChartData.value = applyDataToPieElement(result)
             }
         }
-        job.await()
-        return rawData
-    }
+    }*/
+
+    //직접 db에 접근해서 데이터를 가져오는 함수 - 2번째 구현 방법
+    fun getMonthlyReportData(year: Int, month: Int) =
+        viewModelScope.launch {
+            pieChartData.value = applyDataToPieElement(getDataFromRepository(year, month).sortedByDescending { it.sum })
+        }
+
+    private suspend fun getDataFromRepository(year: Int, month: Int): List<CategoryInfoOfMonth> =
+        withContext(Dispatchers.IO) {
+            itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
+        }
 
     //db에서 가져온 데이터를 pieElement에 맞도록 보정해주는 부분
-    private fun applyDataToPieElement(data: List<CategoryInfoOfMonth>) {
-        val _data = if (data.size > 5)
+    private fun applyDataToPieElement(data: List<CategoryInfoOfMonth>) : MutableList<PieElement> {
+        val _data = if (data.size > 5) {
             data.subList(0, 5)
-        else data
+        }
+        else {
+            data
+        }
+
+        val pieElementList = mutableListOf<PieElement>()
 
         var sumOfEachAccount = 0
 
@@ -52,7 +59,6 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
 
         //각 부분이 차지하는 %를 구하여 PieElement에 할당
         //소숫점 셋째 자리 이하 버리기 사용
-        val pieElementList = mutableListOf<PieElement>()
         for (i in _data.indices)
             pieElementList.add(
                 PieElement(
@@ -75,11 +81,11 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
             }
         }
         var check = 0f
-        for (i in 0..pieElementList.size - 1)
+        for (i in 0..pieElementList.size - 1) {
             check += pieElementList[i].percentage
+        }
 
-        //라이브 데이터 적용
-        pieChartData.value = pieElementList
+        return pieElementList
     }
 
     class MonthlySummaryViewModelFactory(private val repository: ItemRepo.ItemRepository) :
@@ -90,3 +96,4 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
         }
     }
 }
+
