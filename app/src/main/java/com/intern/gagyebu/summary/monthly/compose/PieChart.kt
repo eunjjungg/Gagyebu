@@ -1,17 +1,15 @@
 package com.intern.gagyebu.summary.monthly.compose
 
 import android.util.Log
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -25,15 +23,13 @@ import com.intern.gagyebu.summary.util.PieChartUtils
 @Composable
 fun PieChartTopLevel(viewModel: PieChartViewModel) {
     val pieChartViewModel = remember { viewModel }
-    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .padding(
                 horizontal = 0.dp,
-                vertical = 48.dp
+                vertical = 24.dp
             )
-            .verticalScroll(scrollState),
     ) {
         PieChartRow(pieChartViewModel)
     }
@@ -45,7 +41,12 @@ private fun PieChartRow(pieChartViewModel: PieChartViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .padding(vertical = 8.dp)
+            .padding(vertical = 8.dp, horizontal = 24.dp)
+            .background(
+                color = colorResource(id = R.color.pieChartBackground),
+                shape = RoundedCornerShape(12.dp)
+            )
+
     ) {
         PieChart(
             pieChartData = pieChartViewModel.pieChartData,
@@ -61,7 +62,7 @@ fun PieChart(
     pieChartData: PieChartData,
     modifier: Modifier = Modifier,
     // <T : Any?> TweenSpec(durationMillis: Int, delay: Int, easing: Easing)
-    animation: AnimationSpec<Float> = TweenSpec<Float>(durationMillis = 500),
+    animation: AnimationSpec<Float> = TweenSpec<Float>(durationMillis = 500, easing = EaseInBack),
     pieDrawer: SliceDrawer = PieSliceDrawer()
 ) {
     // remember 중 key (여기서는 pieChartData.slices) 값이 변경했을 때 { } calculation을 다시 수행함.
@@ -81,7 +82,9 @@ fun PieChart(
     // 왜냐하면 remember의 Animatable 값이 바뀔때마다 리컴포지션 되기 때문임.
     DrawChart(
         pieChartData = pieChartData,
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp),
         progress = transitionProgress.value,
         pieDrawer = pieDrawer
     )

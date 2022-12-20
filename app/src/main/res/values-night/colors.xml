@@ -23,7 +23,7 @@
     <color name="pieChart4">#FCFCFC</color>
 
     <!--item background-->
-    <color name="back">#4D4D4D</color>
+    <color name="back">#000000</color>
 
     <!--fab button-->
     <color name="fabIcon">#252525</color>

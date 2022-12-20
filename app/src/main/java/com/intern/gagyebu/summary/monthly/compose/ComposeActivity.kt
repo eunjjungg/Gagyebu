@@ -16,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.material.snackbar.Snackbar
+import com.intern.gagyebu.R
 import com.intern.gagyebu.room.AppDatabase
 import com.intern.gagyebu.room.ItemRepo
 import com.intern.gagyebu.summary.monthly.PieChartView
@@ -53,7 +55,7 @@ class ComposeActivity : ComponentActivity() {
 
 @Composable
 private fun TopActivity(viewModel: PieChartViewModel) {
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
+    Column(modifier = Modifier.background(color = colorResource(id = R.color.back))) {
         PieChartTopLevel(viewModel)
         ComposeCards(viewModel)
     }

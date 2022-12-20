@@ -35,14 +35,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.intern.gagyebu.room.ItemEntity
 import com.intern.gagyebu.summary.monthly.dpToSp
 import com.intern.gagyebu.summary.util.MonthlyDetailInfoWithState
+import com.intern.gagyebu.summary.util.TextContent
+import com.intern.gagyebu.summary.util.TextTitle
 import com.intern.gagyebu.ui.theme.cardBackgroundColor
-
-/**
- * data class MonthlyDetailInfo(
- *      val item: ItemEntity,
- *      val percentage: Int
- * )
- */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,38 +65,45 @@ fun MakeCard(
     monthlyDetailInfoWithState: MonthlyDetailInfoWithState,
     modifier: Modifier = Modifier
 ) {
-    val shouldSnackbarOpen = remember { mutableStateOf<Boolean>(true) }
-    val snackbarMessage = remember { mutableStateOf<String>("") }
-    val snackBarState = remember { SnackbarHostState() }
+    val shouldSnackbarOpen =remember{mutableStateOf<Boolean>(true)}
+    val snackbarMessage =remember{mutableStateOf<String>("")}
+    val snackBarState =remember{SnackbarHostState()}
     val chipClickInterface = object : ChipClickInterface {
         override fun onChipClick(msg: String) {
             shouldSnackbarOpen.value = !shouldSnackbarOpen.value
             snackbarMessage.value = msg
         }
-
     }
 
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        modifier = modifier
-            .padding( start = 24.dp, end = 24.dp, bottom = 48.dp)
+    val cardShape =remember{RoundedCornerShape(8.dp)}
+    val mod = remember{
+        modifier
             .animateContentSize(
-                animationSpec = spring(
+                animationSpec =spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
                 )
-            ),
+            )
+    }
+    val cardMod =remember{
+        mod
+            .padding(start = 24.dp, end = 24.dp, bottom = 48.dp)
+    }
+
+
+    Card(
+        shape = cardShape,
+        modifier = cardMod,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
         ),
-        //TODO
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.pieChartBackground)
+            containerColor =colorResource(id = R.color.pieChartBackground)
         )
-    ) {
-        Column {
+    ){
+        Column{
             Image(
-                painter = getPainterResource(category = monthlyDetailInfoWithState.item.category),
+                painter =getPainterResource(category = monthlyDetailInfoWithState.item.category),
                 contentDescription = null,
             )
             CardTextContent(
@@ -109,29 +111,28 @@ fun MakeCard(
                 chipClickInterface = chipClickInterface
             )
         }
-        LaunchedEffect(key1 = shouldSnackbarOpen.value) {
+        LaunchedEffect(key1 = shouldSnackbarOpen.value){
             val result = snackBarState.showSnackbar(
                 snackbarMessage.value,
                 "확인",
                 false,
                 SnackbarDuration.Short
-            ).let {
+            ).let{
                 when (it) {
-                    SnackbarResult.Dismissed -> Log.d("TAG", "스낵바 닫아짐")
-                    SnackbarResult.ActionPerformed -> Log.d("TAG", "MYSnackBar: 스낵바 확인 버튼 클릭")
+                    SnackbarResult.Dismissed-> Log.d("TAG", "스낵바 닫아짐")
+                    SnackbarResult.ActionPerformed-> Log.d("TAG", "MYSnackBar: 스낵바 확인 버튼 클릭")
                 }
             }
-
         }
+
         if(snackbarMessage.value != "") {
             SnackbarHost(
                 hostState = snackBarState,
-                modifier = Modifier
+                modifier = mod
             )
         }
     }
 }
-
 @Composable
 private fun CardTextContent(
     monthlyDetailInfoWithState: MonthlyDetailInfoWithState,
@@ -149,9 +150,6 @@ private fun CardTextContent(
     }
 }
 
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CardTitle(monthlyDetailInfoWithState: MonthlyDetailInfoWithState) {
     Row(
@@ -162,24 +160,31 @@ private fun CardTitle(monthlyDetailInfoWithState: MonthlyDetailInfoWithState) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextTitle(text = monthlyDetailInfoWithState.item.category)
-        FilterChip(
-            onClick = {
-                      monthlyDetailInfoWithState.isOpen.value = !monthlyDetailInfoWithState.isOpen.value
-            } ,
-            label = { Text("open") },
-            modifier = Modifier
-                .padding(end = 8.dp),
-            selected = monthlyDetailInfoWithState.isOpen.value,
-            trailingIcon = {
-                Icon(
-                    imageVector = monthlyDetailInfoWithState.isOpen.value.getLeadingIcon(),
-                    contentDescription = null
-                )
-            },
-            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0x2A000000))
-        )
+        OpenableChip(monthlyDetailInfoWithState)
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OpenableChip(monthlyDetailInfoWithState: MonthlyDetailInfoWithState) {
+    FilterChip(
+        onClick = {
+            monthlyDetailInfoWithState.isOpen.value = !monthlyDetailInfoWithState.isOpen.value
+        },
+        label = { Text("open") },
+        modifier = Modifier
+            .padding(end = 8.dp),
+        selected = monthlyDetailInfoWithState.isOpen.value,
+        trailingIcon = {
+            Icon(
+                imageVector = monthlyDetailInfoWithState.isOpen.value.getLeadingIcon(),
+                contentDescription = null
+            )
+        },
+        colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(0x2A000000))
+    )
+}
+
 
 @Composable
 private fun Boolean.getLeadingIcon(): ImageVector {
@@ -213,48 +218,6 @@ private fun CardDetailContent(monthlyDetailInfo: MonthlyDetailInfoWithState) {
         }
 
     }
-}
-
-@Composable
-fun TextTitle(
-    text: String,
-) {
-    Text(
-        text = text,
-        modifier = Modifier.padding(vertical = 8.dp),
-        style = MaterialTheme.typography.headlineMedium.copy(
-            color = colorResource(id = R.color.pieChartText),
-            fontSize = dpToSp(14.dp)
-        )
-    )
-}
-
-@Composable
-fun TextSubTitle(
-    text: String,
-) {
-    Text(
-        text = text,
-        modifier = Modifier.padding(vertical = 4.dp),
-        style = MaterialTheme.typography.bodyLarge.copy(
-            color = colorResource(id = R.color.pieChartText),
-            fontSize = dpToSp(6.dp)
-        )
-    )
-}
-
-@Composable
-fun TextContent(
-    text: String,
-) {
-    Text(
-        text = text,
-        modifier = Modifier.padding(bottom = 12.dp),
-        style = MaterialTheme.typography.bodyMedium.copy(
-            color = colorResource(id = R.color.pieChartText),
-            fontSize = dpToSp(11.dp)
-        )
-    )
 }
 
 @Composable

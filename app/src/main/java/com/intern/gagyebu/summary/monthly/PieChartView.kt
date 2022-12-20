@@ -13,6 +13,10 @@ import com.intern.gagyebu.R
 import com.intern.gagyebu.summary.util.PieElement
 import kotlin.math.roundToInt
 
+/**
+ * 리팩토링 하지 않은 클래스
+ */
+
 class PieChartView : View {
     constructor(context: Context?) : super(context) {
         initPaint()

@@ -9,6 +9,10 @@ import com.intern.gagyebu.summary.util.CategoryInfoOfMonth
 import com.intern.gagyebu.summary.util.PieElement
 import kotlinx.coroutines.*
 
+/**
+ * 코루틴 제외 리팩토링 하지 않은 클래스
+ */
+
 class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     //view에서 파이차트를 그리기 위한 각 pieElement live data
     val pieChartData = MutableLiveData<MutableList<PieElement>>()
@@ -18,7 +22,7 @@ class MonthlySummaryViewModel(private val itemRepository: ItemRepo.ItemRepositor
     /*fun getMonthlyReportData(year: Int, month: Int){
         viewModelScope.launch(Dispatchers.IO) {
             val result = itemRepository.getCategoryAndSumWhenYearAndMonthSet(year, month)
-            result.sortedByDescending { it.sum }
+                .sortedByDescending { it.sum }
 
             withContext(Dispatchers.Main) {
                 pieChartData.value = applyDataToPieElement(result)

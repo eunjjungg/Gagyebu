@@ -12,6 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * 코루틴 제외 리팩토링 하지 않은 클래스
+ */
+
 class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository) : ViewModel() {
     var dateInfo = DateInfo(0, 0)
     val topCostDetailList = MutableLiveData(mutableListOf<MonthlyDetailInfo>())
@@ -32,15 +36,16 @@ class MonthlyDetailViewModel(private val itemRepository: ItemRepo.ItemRepository
     private suspend fun getTopCostItemList(categoryList: MutableList<PieElement>): MutableList<MonthlyDetailInfo> =
         withContext(Dispatchers.IO) {
             val detailInfo = mutableListOf<MonthlyDetailInfo>()
-            for (pieElement in categoryList) {
-                detailInfo.add(
-                    MonthlyDetailInfo(
-                        itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name),
-                        pieElement.percentage.toPercentageInt()
+            detailInfo.apply {
+                for (pieElement in categoryList) {
+                    add(
+                        MonthlyDetailInfo(
+                            itemRepository.getTopCostItem(dateInfo.year, dateInfo.month, pieElement.name),
+                            pieElement.percentage.toPercentageInt()
+                        )
                     )
-                )
+                }
             }
-            detailInfo
         }
 
 

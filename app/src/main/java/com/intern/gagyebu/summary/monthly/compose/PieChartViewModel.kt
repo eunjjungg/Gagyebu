@@ -26,18 +26,6 @@ class PieChartViewModel(private val itemRepository: ItemRepo.ItemRepository) : V
         )
     )
 
-    /*
-    data class MonthlyDetailInfo(
-        val item: ItemEntity,
-        val percentage: Int
-    )
-
-    data class MonthlyDetailInfoWithState(
-        val item: ItemEntity,
-        val percentage: Int,
-        var isOpen: MutableState<Boolean> = mutableStateOf(false)
-    )
-     */
     var cardData by mutableStateOf(
         mutableListOf<MonthlyDetailInfoWithState>()
     )
@@ -61,7 +49,6 @@ class PieChartViewModel(private val itemRepository: ItemRepo.ItemRepository) : V
             )
         }
         cardData = list
-        Log.d("ccheck set", cardData.toString())
     }
 
     private suspend fun getCardListFromDB(dateInfo: DateInfo): List<ItemEntity> =
