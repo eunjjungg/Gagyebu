@@ -65,9 +65,9 @@ fun MakeCard(
     monthlyDetailInfoWithState: MonthlyDetailInfoWithState,
     modifier: Modifier = Modifier
 ) {
-    val shouldSnackbarOpen = remember { mutableStateOf<Boolean>(true) }
-    val snackbarMessage = remember { mutableStateOf<String>("") }
-    val snackBarState = remember { SnackbarHostState() }
+    val shouldSnackbarOpen =remember{mutableStateOf<Boolean>(true)}
+    val snackbarMessage =remember{mutableStateOf<String>("")}
+    val snackBarState =remember{SnackbarHostState()}
     val chipClickInterface = object : ChipClickInterface {
         override fun onChipClick(msg: String) {
             shouldSnackbarOpen.value = !shouldSnackbarOpen.value
@@ -75,16 +75,19 @@ fun MakeCard(
         }
     }
 
-    val cardShape = remember { RoundedCornerShape(8.dp) }
-    val cardMod = remember {
+    val cardShape =remember{RoundedCornerShape(8.dp)}
+    val mod = remember{
         modifier
-            .padding( start = 24.dp, end = 24.dp, bottom = 48.dp)
             .animateContentSize(
-                animationSpec = spring(
+                animationSpec =spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
                 )
             )
+    }
+    val cardMod =remember{
+        mod
+            .padding(start = 24.dp, end = 24.dp, bottom = 48.dp)
     }
 
 
@@ -95,12 +98,12 @@ fun MakeCard(
             defaultElevation = 0.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.pieChartBackground)
+            containerColor =colorResource(id = R.color.pieChartBackground)
         )
-    ) {
-        Column {
+    ){
+        Column{
             Image(
-                painter = getPainterResource(category = monthlyDetailInfoWithState.item.category),
+                painter =getPainterResource(category = monthlyDetailInfoWithState.item.category),
                 contentDescription = null,
             )
             CardTextContent(
@@ -108,16 +111,16 @@ fun MakeCard(
                 chipClickInterface = chipClickInterface
             )
         }
-        LaunchedEffect(key1 = shouldSnackbarOpen.value) {
+        LaunchedEffect(key1 = shouldSnackbarOpen.value){
             val result = snackBarState.showSnackbar(
                 snackbarMessage.value,
                 "확인",
                 false,
                 SnackbarDuration.Short
-            ).let {
+            ).let{
                 when (it) {
-                    SnackbarResult.Dismissed -> Log.d("TAG", "스낵바 닫아짐")
-                    SnackbarResult.ActionPerformed -> Log.d("TAG", "MYSnackBar: 스낵바 확인 버튼 클릭")
+                    SnackbarResult.Dismissed-> Log.d("TAG", "스낵바 닫아짐")
+                    SnackbarResult.ActionPerformed-> Log.d("TAG", "MYSnackBar: 스낵바 확인 버튼 클릭")
                 }
             }
         }
@@ -125,12 +128,11 @@ fun MakeCard(
         if(snackbarMessage.value != "") {
             SnackbarHost(
                 hostState = snackBarState,
-                modifier = Modifier
+                modifier = mod
             )
         }
     }
 }
-
 @Composable
 private fun CardTextContent(
     monthlyDetailInfoWithState: MonthlyDetailInfoWithState,
