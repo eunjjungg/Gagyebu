@@ -76,7 +76,7 @@ fun MakeCard(
     }
 
     val cardShape =remember{RoundedCornerShape(8.dp)}
-    val mod = remember{
+    val snackbarMod = remember{
         modifier
             .animateContentSize(
                 animationSpec =spring(
@@ -86,8 +86,14 @@ fun MakeCard(
             )
     }
     val cardMod =remember{
-        mod
+        modifier
             .padding(start = 24.dp, end = 24.dp, bottom = 48.dp)
+            .animateContentSize(
+                animationSpec =spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
     }
 
 
@@ -128,7 +134,7 @@ fun MakeCard(
         if(snackbarMessage.value != "") {
             SnackbarHost(
                 hostState = snackBarState,
-                modifier = mod
+                modifier = modifier
             )
         }
     }
